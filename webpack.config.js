@@ -1,4 +1,5 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
@@ -23,6 +24,9 @@ module.exports = {
     filename: 'main.js',
     /**
      * 为项目中的所有资源指定一个基础路径
+     * 不仅会影响虚拟目录的取值，
+     * 还会影响利用html-webpack-plugin插件生成的index.html中引用的js、css、img等资源的引用路径
+     * 在浏览器上运行时，dist中的所有文件都会在assets文件夹下
      */
     publicPath: '/assets/',
   },
@@ -96,7 +100,17 @@ module.exports = {
   /**
    * 插件，自定义webpack构建过程
    */
-  plugins: [new VueLoaderPlugin()],
+  plugins: [
+    new VueLoaderPlugin(),
+    /**
+     * 因为在package.json中配置了 --hot 所以不用在这里显式地初始化该插件
+     */
+    // new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: './index.html',
+    }),
+  ],
 
   devServer: {
     port: 1009,
@@ -105,6 +119,16 @@ module.exports = {
      * 中间件，当404时重定向到默认的index.html（默认为主目录的index.html）
      */
     historyApiFallback: true,
+
+    /**
+     * 告诉服务器从哪里提供内容，即执行哪里的 index.html。（也就是服务器启动的根目录，默认为当前执行目录 __dirname)
+     */
+    contentBase: path.resolve(__dirname, 'dist'),
+
+    /**
+     * 热更新
+     */
+    hot: true,
 
     /**
      * 是否在浏览器中显示编译时的错误和警告
