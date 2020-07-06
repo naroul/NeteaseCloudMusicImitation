@@ -1,13 +1,13 @@
 <template>
-  <div id="home" @click="handleClick">Homes</div>
+  <div id="recommend" @click="handleClick">login</div>
 </template>
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Recommend',
   methods: {
     handleClick() {
-      this.$router.push('/');
+      this.$router.push('/login');
     },
   },
 };

@@ -1,0 +1,2947 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "OpenDoc_API-文档访问-EFAST-管理者",
+        "version": "1.0.0",
+        "description": "API to access AnyShare\r\n\r\n如有任何疑问，可到开发者社区提问：https://developers.aishu.cn"
+    },
+    "servers": [
+        {
+            "url": "http://{host}:{port}/api",
+            "description": "必须使用HTTPS，才能保证报文安全，除非调试接口，否则严禁使用HTTP",
+            "variables": {
+                "host": {
+                    "default": "host",
+                    "description": "AnyShare服务器IP"
+                },
+                "port": {
+                    "default": "80",
+                    "description": "http默认端口80"
+                }
+            }
+        },
+        {
+            "url": "https://{host}:{port}/api",
+            "description": "必须使用HTTPS，才能保证报文安全，除非调试接口，否则严禁使用HTTP",
+            "variables": {
+                "host": {
+                    "default": "host",
+                    "description": "AnyShare服务器IP"
+                },
+                "port": {
+                    "default": "443",
+                    "description": "https默认端口443"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/efast/v1/doc-lib/custom/{id}": {
+            "get": {
+                "tags": [
+                    "自定义文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "自定义文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomDoc"
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404"
+                    }
+                },
+                "summary": "获取指定的自定义文档库信息"
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EditCustomDocParam"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "自定义文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "自定义文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd400ForUser"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403ForQuota"
+                    }
+                },
+                "summary": "编辑自定义文档库"
+            },
+            "delete": {
+                "tags": [
+                    "自定义文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "自定义文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404"
+                    }
+                },
+                "summary": "删除自定义文档库"
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "description": "部门文档库id",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/efast/v1/doc-lib/user/{id}": {
+            "get": {
+                "tags": [
+                    "个人文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "个人文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDoc"
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404"
+                    }
+                },
+                "summary": "获取指定的个人文档库信息"
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EditUserDocPara"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "个人文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "个人文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403ForQuota"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404"
+                    }
+                },
+                "summary": "编辑个人文档库"
+            },
+            "delete": {
+                "tags": [
+                    "个人文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "个人文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404"
+                    }
+                },
+                "summary": "删除个人文档库"
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "description": "部门文档库id",
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/efast/v1/async-task/batch-creation/user/{id}": {
+            "get": {
+                "tags": [
+                    "个人文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "批量创建个人文档库的任务id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BatchAddDocResult"
+                                    }
+                                },
+                                "examples": {
+                                    "example": {
+                                        "value": [
+                                            {
+                                                "id": "ac1f7ec5-231f-35f5-a495-9194b661da45",
+                                                "status": 200,
+                                                "body": {
+                                                    "name": "文档库1"
+                                                }
+                                            },
+                                            {
+                                                "id": "12ac7ec5-231f-35f5-a495-9194b661da45",
+                                                "status": 202,
+                                                "body": {
+                                                    "name": "文档库2"
+                                                }
+                                            },
+                                            {
+                                                "id": "3eba7ec5-231f-35f5-a495-9194b661da45",
+                                                "status": 500,
+                                                "body": {
+                                                    "code": 500000000,
+                                                    "message": "内部错误",
+                                                    "cause": "... 设置配额失败 ...",
+                                                    "detail": {
+                                                        "name": "文档库3"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd404ForBatchCreation"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404ForBatchCreation"
+                    }
+                },
+                "summary": "查询批量新建个人文档库结果"
+            }
+        },
+        "/efast/v1/async-task/batch-creation/department/{id}": {
+            "get": {
+                "tags": [
+                    "部门文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "批量创建部门文档库的任务id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BatchAddDocResult"
+                                    }
+                                },
+                                "examples": {
+                                    "example": {
+                                        "value": [
+                                            {
+                                                "id": "ac1f7ec5-231f-35f5-a495-9194b661da45",
+                                                "status": 200,
+                                                "body": {
+                                                    "name": "文档库1"
+                                                }
+                                            },
+                                            {
+                                                "id": "12ac7ec5-231f-35f5-a495-9194b661da45",
+                                                "status": 202,
+                                                "body": {
+                                                    "name": "文档库2"
+                                                }
+                                            },
+                                            {
+                                                "id": "3eba7ec5-231f-35f5-a495-9194b661da45",
+                                                "status": 500,
+                                                "body": {
+                                                    "code": 500000000,
+                                                    "message": "内部错误",
+                                                    "cause": "... 设置配额失败 ...",
+                                                    "detail": {
+                                                        "name": "文档库3"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404ForBatchCreation"
+                    }
+                },
+                "summary": "查询批量新建部门文档库结果"
+            }
+        },
+        "/efast/v1/doc-lib/department/{id}": {
+            "get": {
+                "tags": [
+                    "部门文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "部门文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DepartmentDoc"
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404"
+                    }
+                },
+                "summary": "获取指定的部门文档库信息"
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EditDepartmentDocParam"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "部门文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "部门文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "204": {
+                        "description": "接口调用成功"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd400ForUser"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403ForQuota"
+                    }
+                },
+                "summary": "编辑部门文档库"
+            },
+            "delete": {
+                "tags": [
+                    "部门文档库"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "部门文档库id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "204": {
+                        "description": "接口调用成功"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/RespStd404"
+                    }
+                },
+                "summary": "删除部门文档库"
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "description": "部门文档库id",
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/efast/v1/doc-lib/department": {
+            "get": {
+                "tags": [
+                    "部门文档库"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "example": {
+                                "value": "\"name\""
+                            }
+                        },
+                        "name": "sort",
+                        "description": "排序类型（sort和direction必须都传或都不传，都不传为默认排序方式）：\n- doc_lib_name：文档库名称。\n- owner_name：所有者名称。\n- quota_allocated：配额大小。",
+                        "schema": {
+                            "enum": [
+                                "doc_lib_name",
+                                "owner_name",
+                                "quota_allocated"
+                            ],
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "examples": {
+                            "example": {
+                                "value": "\"asc\""
+                            }
+                        },
+                        "name": "direction",
+                        "description": "排序结果方向，当sort参数存在时为required。\n- asc：升序。\n- desc：降序。",
+                        "schema": {
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ],
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "field",
+                        "description": "搜索类型：\n- doc_lib_name：文档库名称。\n- department_name：关联部门名称。\n- owner_name：所有者名称。",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "enum": [
+                                    "doc_lib_name",
+                                    "department_name",
+                                    "owner_name"
+                                ],
+                                "type": "string"
+                            }
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "keyword",
+                        "description": "搜索内容 (数组大小应与field相等)，若不传参数表示返回搜索范围下所有文档库",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "search_in",
+                        "description": "搜索范围 (部门id数组)。若不传参数表示范围为\"所有部门文档库\"",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "is_contain_child",
+                        "description": "当 \"search_in\" 参数存在时为 required。\n- false：仅查看所选部门。\n- true：查看所选部门及层级子部门。",
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "offset",
+                        "description": "开始响应的项目的偏移量, 0表示从第一条记录开始",
+                        "schema": {
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "description": "返回的项目数(即每页显示的项目数),配合 \"offset\" 参数达到分页效果。范围为[1,300]",
+                        "schema": {
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DepartmentDocs"
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    }
+                },
+                "summary": "获取部门文档库信息",
+                "description": ""
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddDepartmentDocParam"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "部门文档库"
+                ],
+                "responses": {
+                    "201": {
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "format": "uri",
+                                    "type": "string"
+                                },
+                                "description": "获取/修改/删除部门文档库 `/api/efast/v1/doc-lib/department/{id}`"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocId"
+                                },
+                                "examples": {
+                                    "example": {
+                                        "value": {
+                                            "id": "gns://AC94C0A235F54557AB02CCBE7E17A046"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "创建成功 (返回创建成功的部门文档库id)"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403ForQuota"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400ForUser"
+                    }
+                },
+                "summary": "创建部门文档库"
+            }
+        },
+        "/efast/v1/doc-lib/custom": {
+            "get": {
+                "tags": [
+                    "自定义文档库"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "example": {
+                                "value": "\"name\""
+                            }
+                        },
+                        "name": "sort",
+                        "description": "排序类型（sort和direction必须都传或都不传，都不传为默认排序方式）：\n- doc_lib_name：文档库名称。\n- owner_name：所有者名称。\n- quota_allocated：配额大小。",
+                        "schema": {
+                            "enum": [
+                                "doc_lib_name",
+                                "owner_name",
+                                "quota_allocated"
+                            ],
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "examples": {
+                            "example": {
+                                "value": "\"asc\""
+                            }
+                        },
+                        "name": "direction",
+                        "description": "排序结果方向，当sort参数存在时为required。\n- asc：升序。\n- desc：降序。",
+                        "schema": {
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ],
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "field",
+                        "description": "搜索类型：\n- doc_lib_name：文档库名称。\n- owner_name：所有者名称。",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "enum": [
+                                    "doc_lib_name",
+                                    "owner_name"
+                                ],
+                                "type": "string"
+                            }
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "keyword",
+                        "description": "搜索内容 (数组大小应与field相等)，若不传参数表示返回搜索范围下所有文档库",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "offset",
+                        "description": "开始响应的项目的偏移量, 0表示从第一条记录开始",
+                        "schema": {
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "description": "返回的项目数(即每页显示的项目数)，配合 \"offset\" 参数达到分页效果。范围为[1,300]",
+                        "schema": {
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomDocs"
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    }
+                },
+                "summary": "获取自定义文档库信息",
+                "description": ""
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddCustomDocParam"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "自定义文档库"
+                ],
+                "responses": {
+                    "201": {
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "format": "uri",
+                                    "type": "string"
+                                },
+                                "description": "获取/修改/删除自定义文档库 `/api/efast/v1/doc-lib/custom/{id}`"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocId"
+                                },
+                                "examples": {
+                                    "example": {
+                                        "value": {
+                                            "id": "gns://AC94C0A235F54557AB02CCBE7E17A046"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "创建成功 (返回创建成功的部门文档库id)"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400ForUser"
+                    }
+                },
+                "summary": "创建自定义文档库"
+            }
+        },
+        "/efast/v1/doc-lib/user": {
+            "get": {
+                "tags": [
+                    "个人文档库"
+                ],
+                "parameters": [
+                    {
+                        "examples": {
+                            "example": {
+                                "value": "\"name\""
+                            }
+                        },
+                        "name": "sort",
+                        "description": "排序类型（sort和direction必须都传或都不传，都不传为默认排序方式）：\n- doc_lib_name：文档库名称。\n- owner_name：所有者名称。\n- quota_allocated：配额大小。",
+                        "schema": {
+                            "enum": [
+                                "doc_lib_name",
+                                "owner_name",
+                                "quota_allocated"
+                            ],
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "examples": {
+                            "example": {
+                                "value": "\"asc\""
+                            }
+                        },
+                        "name": "direction",
+                        "description": "排序结果方向，当sort参数存在时为required。\n- asc：升序。\n- desc：降序。",
+                        "schema": {
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ],
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "keyword",
+                        "description": "搜索内容。即个人文档库名称，同时也是所有者名称。若不传参数表示返回搜索范围下所有文档库",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "search_in",
+                        "description": "搜索范围 (部门id或用户id数组)。若不填写表示范围为\"所有个人文档库\"",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "offset",
+                        "description": "开始响应的项目的偏移量, 0表示从第一条记录开始",
+                        "schema": {
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "description": "返回的项目数(即每页显示的项目数),配合 \"offset\" 参数达到分页效果。范围为[1,300]",
+                        "schema": {
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDocs"
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403"
+                    }
+                },
+                "summary": "获取个人文档库信息",
+                "description": ""
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddUserDocParam"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "个人文档库"
+                ],
+                "responses": {
+                    "201": {
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "format": "uri",
+                                    "type": "string"
+                                },
+                                "description": "获取/修改/删除个人文档库 `/api/efast/v1/doc-lib/user/{id}`"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocId"
+                                },
+                                "examples": {
+                                    "example": {
+                                        "value": {
+                                            "id": "gns://AC94C0A235F54557AB02CCBE7E17A046"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "创建成功 (返回创建成功的个人文档库id)"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403ForQuota"
+                    }
+                },
+                "summary": "创建个人文档库"
+            }
+        },
+        "/efast/v1/async-task/batch-creation/department": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BatchAddDepartmentDocParam"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "部门文档库"
+                ],
+                "responses": {
+                    "201": {
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "format": "uri",
+                                    "type": "string"
+                                },
+                                "description": "获取批量创建部门文档库结果 `/api/efast/v1/async-task/batch-creation/department/{id}`"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TaskId"
+                                }
+                            }
+                        },
+                        "description": "成功创建请求任务"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403ForQuota"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400ForDepartment"
+                    }
+                },
+                "summary": "建立批量创建部门文档库任务"
+            }
+        },
+        "/efast/v1/async-task/batch-creation/user": {
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BatchAddUserDocPara"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "个人文档库"
+                ],
+                "responses": {
+                    "201": {
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "format": "uri",
+                                    "type": "string"
+                                },
+                                "description": "获取批量创建个人文档库结果 `/api/efast/v1/async-task/batch-creation/user/{id}`"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TaskId"
+                                }
+                            }
+                        },
+                        "description": "成功创建请求任务"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/RespStd401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/RespStd500"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/RespStd403ForQuota"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/RespStd400ForUserAndDepartment"
+                    }
+                },
+                "summary": "建立批量创建个人文档库任务"
+            }
+        },
+        "/efast/v1/doc-lib/{ids}": {
+            "get": {
+                "tags": [
+                    "入口文档库"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EntryDoc"
+                                }
+                            }
+                        },
+                        "description": "接口调用成功"
+                    }
+                },
+                "summary": "批量获取文档库信息"
+            },
+            "parameters": [
+                {
+                    "name": "ids",
+                    "description": "文档库id组",
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        }
+    },
+    "components": {
+        "schemas": {
+            "Error": {
+                "description": "如果接口调用返回的http状态码为非200系列，则表示发生异常，会返回错误码信息，具体参见错误码说明章节",
+                "required": [
+                    "code",
+                    "message",
+                    "cause"
+                ],
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "format": "int64",
+                        "description": "业务错误码，前三位为 HTTP标准状态码，后三位为自定义状态码",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "description": "可以直接展示给终端用户的错误信息\r\n",
+                        "type": "string"
+                    },
+                    "cause": {
+                        "description": "供开发者查看的错误信息\r\n",
+                        "type": "string"
+                    },
+                    "detail": {
+                        "description": "错误详细信息",
+                        "type": "object",
+                        "additionalProperties": true
+                    }
+                }
+            },
+            "DocId": {
+                "description": "文档库id",
+                "required": [
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "文档库id",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "id": "gns://E0529377F00D4F3295C87E7D83E923C7"
+                }
+            },
+            "TaskId": {
+                "description": "线程信息",
+                "required": [
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "任务id",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "id": "a1ca7ec5-231f-35f5-a495-9194b66193e4"
+                }
+            },
+            "ObjectStorage": {
+                "description": "对象存储信息",
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "对象存储id",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "对象存储名称",
+                        "type": "string"
+                    },
+                    "site": {
+                        "$ref": "#/components/schemas/Site",
+                        "description": "归属站点信息"
+                    }
+                },
+                "example": {
+                    "id": "8CFF1A05F851452C9EE140819B931155",
+                    "name": "EOSS",
+                    "site": {
+                        "name": "master_site",
+                        "type": "master"
+                    }
+                }
+            },
+            "Perm": {
+                "description": "权限信息",
+                "required": [
+                    "value",
+                    "expires_at"
+                ],
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "format": "int32",
+                        "description": "权限值（请求时为十进制）:\n- `0x00000001` 显示\n- `0x00000002` 预览\n- `0x00000004` 读取\n- `0x00000008` 新建\n- `0x00000010` 修改\n- `0x00000020` 删除",
+                        "type": "integer"
+                    },
+                    "expires_at": {
+                        "format": "date-time",
+                        "description": "到期时间，RFC3339格式，UNIX TIME时间纪元(1970-01-01T00:00:00Z)表示永久有效",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "value": 31,
+                    "expires_at": "1970-01-01T00:00:00Z"
+                }
+            },
+            "Quota": {
+                "description": "配额信息",
+                "required": [
+                    "allocated",
+                    "used"
+                ],
+                "type": "object",
+                "properties": {
+                    "used": {
+                        "format": "int64",
+                        "description": "已用空间",
+                        "type": "integer"
+                    },
+                    "allocated": {
+                        "format": "int64",
+                        "description": "分配空间",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "allocated": 580000000,
+                    "used": 240000000
+                }
+            },
+            "EditUserDocPara": {
+                "description": "编辑个人文档库信息",
+                "required": [
+                    "storage_position",
+                    "quota_allocated"
+                ],
+                "type": "object",
+                "properties": {
+                    "quota_allocated": {
+                        "format": "int64",
+                        "description": "配额大小",
+                        "type": "integer"
+                    },
+                    "storage_position": {
+                        "$ref": "#/components/schemas/CommonStoragePosition",
+                        "description": "对象存储id（存储位置）"
+                    }
+                },
+                "example": {
+                    "storage_position": {
+                        "type": "specified",
+                        "storage_id": "8CFF1A05F851452C9EE140819B931155"
+                    },
+                    "quota_allocated": 960545445
+                }
+            },
+            "User": {
+                "description": "用户信息",
+                "required": [
+                    "id",
+                    "name",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "用户id",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "用户显示名",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "用户类型，当前固定为user",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                    "name": "张三",
+                    "type": "user"
+                }
+            },
+            "Department": {
+                "description": "部门文档信息",
+                "required": [
+                    "name",
+                    "id",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "部门名",
+                        "type": "string"
+                    },
+                    "id": {
+                        "description": "部门id",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "资源类型，固定为department",
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "name": "研发部",
+                    "id": "e12f7ec5-231f-35f5-a495-9194b661da45",
+                    "type": "department"
+                }
+            },
+            "EntryDoc": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/UserDoc"
+                    },
+                    {
+                        "$ref": "#/components/schemas/DepartmentDoc"
+                    },
+                    {
+                        "$ref": "#/components/schemas/CustomDoc"
+                    }
+                ],
+                "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                        "user_doc_lib": "#/components/schemas/UserDoc",
+                        "department_doc_lib": "#/components/schemas/DepartmentDoc",
+                        "custom_doc_lib": "#/components/schemas/CustomDoc"
+                    }
+                },
+                "description": "入口文档库信息",
+                "type": "object"
+            },
+            "CustomDoc": {
+                "description": "自定义文档库信息",
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/EntryDocBase"
+                    }
+                ],
+                "example": {
+                    "name": "hello",
+                    "created_by": {
+                        "id": "c1af7ec5-231f-35f5-a495-9194b6619d21",
+                        "name": "admin",
+                        "type": "user"
+                    },
+                    "quota": {
+                        "allocated": 580000000,
+                        "used": 240000000
+                    },
+                    "owned_by": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        }
+                    ],
+                    "storage": {
+                        "id": "8CFF1A05F851452C9EE140819B931155",
+                        "name": "EOSS",
+                        "site": {
+                            "name": "master_site",
+                            "type": "master"
+                        }
+                    },
+                    "created_at": "2018-02-10T09:21:30Z",
+                    "type": "custom_doc_lib"
+                }
+            },
+            "EntryDocBase": {
+                "description": "基本文档信息",
+                "required": [
+                    "created_at",
+                    "created_by",
+                    "id",
+                    "type",
+                    "name",
+                    "quota_info",
+                    "storage_info",
+                    "owned_by",
+                    "quota"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "文档库名称",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "format": "date-time",
+                        "description": "目录创建的服务端时间",
+                        "type": "string"
+                    },
+                    "created_by": {
+                        "$ref": "#/components/schemas/User",
+                        "description": "创建者信息"
+                    },
+                    "owned_by": {
+                        "description": "所有者信息(若为个人文档所有者数量仅能为1)",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "type": {
+                        "description": "文档库类型：\r\n- user_doc_lib：个人文档库 \r\n- department_doc_lib：部门文档库 \r\n- custom_doc_lib：自定义文档库",
+                        "enum": [
+                            "user_doc_lib",
+                            "department_doc_lib",
+                            "custom_doc_lib"
+                        ],
+                        "type": "string"
+                    },
+                    "id": {
+                        "description": "文档库id",
+                        "type": "string"
+                    },
+                    "quota": {
+                        "$ref": "#/components/schemas/Quota",
+                        "description": "配额信息"
+                    },
+                    "storage": {
+                        "$ref": "#/components/schemas/ObjectStorage",
+                        "description": "存储信息"
+                    }
+                },
+                "example": {
+                    "name": "hello",
+                    "created_by": {
+                        "id": "c1af7ec5-231f-35f5-a495-9194b6619d21",
+                        "name": "admin",
+                        "type": "user"
+                    },
+                    "owned_by": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        }
+                    ],
+                    "id": "gns://E0529377F00D4F3295C87E7D83E923C7",
+                    "type": "custom_doc_lib",
+                    "quota": {
+                        "allocated": 580000000,
+                        "used": 240000000
+                    },
+                    "storage": {
+                        "id": "8CFF1A05F851452C9EE140819B931155",
+                        "name": "EOSS"
+                    },
+                    "created_at": "2018-02-10T09:30:54Z"
+                }
+            },
+            "DepartmentDoc": {
+                "description": "部门文档库信息",
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/EntryDocBase"
+                    },
+                    {
+                        "required": [
+                            "department"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "department": {
+                                "$ref": "#/components/schemas/Department",
+                                "description": "关联部门文档信息"
+                            }
+                        }
+                    }
+                ],
+                "example": {
+                    "name": "hello",
+                    "created_by": {
+                        "id": "c1af7ec5-231f-35f5-a495-9194b6619d21",
+                        "name": "admin",
+                        "type": "user"
+                    },
+                    "id": "gns://E0529377F00D4F3295C87E7D83E923C7",
+                    "quota": {
+                        "allocated": 580000000,
+                        "used": 240000000
+                    },
+                    "owned_by": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        }
+                    ],
+                    "storage": {
+                        "id": "8CFF1A05F851452C9EE140819B931155",
+                        "name": "EOSS",
+                        "site": {
+                            "name": "master_site",
+                            "type": "master"
+                        }
+                    },
+                    "department": {
+                        "name": "研发部",
+                        "id": "e12f7ec5-231f-35f5-a495-9194b661da45",
+                        "type": "department"
+                    },
+                    "created_at": "2018-02-10T09:30:12Z",
+                    "type": "department_doc_lib"
+                }
+            },
+            "UserDoc": {
+                "description": "个人文档库类型",
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/EntryDocBase"
+                    }
+                ],
+                "example": {
+                    "name": "张三",
+                    "created_by": {
+                        "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                        "name": "张三",
+                        "type": "user"
+                    },
+                    "id": "gns://E0529377F00D4F3295C87E7D83E923C7",
+                    "quota": {
+                        "allocated": 580000000,
+                        "used": 240000000
+                    },
+                    "owned_by": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        }
+                    ],
+                    "storage": {
+                        "id": "8CFF1A05F851452C9EE140819B931155",
+                        "name": "EOSS",
+                        "site": {
+                            "name": "master_site",
+                            "type": "master"
+                        }
+                    },
+                    "created_at": "2018-02-10T09:30:14Z",
+                    "type": "user_doc_lib"
+                }
+            },
+            "UserDocs": {
+                "description": "个人文档库列表",
+                "required": [
+                    "entries",
+                    "total_count"
+                ],
+                "type": "object",
+                "properties": {
+                    "entries": {
+                        "description": "个人文档库条目列表",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserDoc"
+                        }
+                    },
+                    "total_count": {
+                        "format": "int64",
+                        "description": "总条目数(忽略offset和limit)",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "entries": [
+                        {
+                            "name": "张三",
+                            "created_by": {
+                                "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                                "name": "张三",
+                                "type": "user"
+                            },
+                            "id": "gns://E0529377F00D4F3295C87E7D83E923C7",
+                            "quota": {
+                                "allocated": 580000000,
+                                "used": 240000000
+                            },
+                            "owned_by": [
+                                {
+                                    "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                                    "name": "张三",
+                                    "type": "user"
+                                }
+                            ],
+                            "storage": {
+                                "id": "8CFF1A05F851452C9EE140819B931155",
+                                "name": "EOSS",
+                                "site": {
+                                    "name": "master_site",
+                                    "type": "master"
+                                }
+                            },
+                            "created_at": "2018-02-10T09:30:14Z",
+                            "type": "user_doc_lib"
+                        }
+                    ],
+                    "total_count": 45
+                }
+            },
+            "CustomDocs": {
+                "description": "自定义文档库列表",
+                "required": [
+                    "entries",
+                    "total_count"
+                ],
+                "type": "object",
+                "properties": {
+                    "entries": {
+                        "description": "自定义文档库条目列表",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CustomDoc"
+                        }
+                    },
+                    "total_count": {
+                        "format": "int64",
+                        "description": "总条目数(忽略offset和limit)",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "entries": [
+                        {
+                            "name": "hello",
+                            "created_by": {
+                                "id": "c1af7ec5-231f-35f5-a495-9194b6619d21",
+                                "name": "admin",
+                                "type": "user"
+                            },
+                            "quota": {
+                                "allocated": 580000000,
+                                "used": 240000000
+                            },
+                            "owned_by": [
+                                {
+                                    "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                                    "name": "张三",
+                                    "type": "user"
+                                }
+                            ],
+                            "storage": {
+                                "id": "8CFF1A05F851452C9EE140819B931155",
+                                "name": "EOSS",
+                                "site": {
+                                    "name": "master_site",
+                                    "type": "master"
+                                }
+                            },
+                            "created_at": "2018-02-10T09:21:30Z",
+                            "type": "custom_doc_lib"
+                        }
+                    ],
+                    "total_count": 45
+                }
+            },
+            "DepartmentDocs": {
+                "description": "部门文档库列表",
+                "required": [
+                    "entries",
+                    "total_count"
+                ],
+                "type": "object",
+                "properties": {
+                    "entries": {
+                        "description": "部门文档库条目列表",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DepartmentDoc"
+                        }
+                    },
+                    "total_count": {
+                        "format": "int64",
+                        "description": "总条目数(忽略offset和limit)",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "entries": [
+                        {
+                            "name": "hello",
+                            "created_by": {
+                                "id": "c1af7ec5-231f-35f5-a495-9194b6619d21",
+                                "name": "admin",
+                                "type": "user"
+                            },
+                            "id": "gns://E0529377F00D4F3295C87E7D83E923C7",
+                            "quota": {
+                                "allocated": 580000000,
+                                "used": 240000000
+                            },
+                            "owned_by": [
+                                {
+                                    "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                                    "name": "张三",
+                                    "type": "user"
+                                }
+                            ],
+                            "storage": {
+                                "id": "8CFF1A05F851452C9EE140819B931155",
+                                "name": "EOSS",
+                                "site": {
+                                    "name": "master_site",
+                                    "type": "master"
+                                }
+                            },
+                            "department": {
+                                "name": "研发部",
+                                "id": "e12f7ec5-231f-35f5-a495-9194b661da45",
+                                "type": "department"
+                            },
+                            "created_at": "2018-02-10T09:30:12Z",
+                            "type": "department_doc_lib"
+                        }
+                    ],
+                    "total_count": 45
+                }
+            },
+            "BatchAddUserDocPara": {
+                "description": "批量新建个人文档库信息",
+                "required": [
+                    "user_ids",
+                    "quota_allocated",
+                    "department_ids",
+                    "department_names",
+                    "user_names",
+                    "users",
+                    "departments",
+                    "storage_position"
+                ],
+                "type": "object",
+                "properties": {
+                    "quota_allocated": {
+                        "format": "int64",
+                        "description": "配额大小",
+                        "type": "integer"
+                    },
+                    "departments": {
+                        "description": "部门信息（为部门下的所有用户创建个人文档）",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Department"
+                        }
+                    },
+                    "users": {
+                        "description": "用户信息（为这些用户创建个人文档）",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "storage_position": {
+                        "$ref": "#/components/schemas/UserStoragePosition",
+                        "description": "存储位置\n"
+                    }
+                },
+                "example": {
+                    "storage_position": {
+                        "type": "same_as_user"
+                    },
+                    "quota_allocated": 3325451,
+                    "users": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        },
+                        {
+                            "id": "f46d296a-0c66-35e4-b23c-77e2d304a7a8",
+                            "name": "李四",
+                            "type": "user"
+                        }
+                    ],
+                    "departments": [
+                        {
+                            "name": "研发部",
+                            "id": "e12f7ec5-231f-35f5-a495-9194b661da45",
+                            "type": "department"
+                        },
+                        {
+                            "name": "测试部",
+                            "id": "c1af7ec5-231f-35f5-a495-9194b661ac1a",
+                            "type": "department"
+                        }
+                    ]
+                }
+            },
+            "BatchAddDocResultError": {
+                "description": "批量创建文档库单次处理失败结果",
+                "required": [
+                    "id",
+                    "status",
+                    "body"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "资源id",
+                        "type": "string"
+                    },
+                    "status": {
+                        "format": "int32",
+                        "description": "HTTP状态码\n- 201 创建成功\n- 202 处理中\n- ...",
+                        "type": "integer"
+                    },
+                    "body": {
+                        "$ref": "#/components/schemas/Error",
+                        "description": "详细信息"
+                    }
+                }
+            },
+            "BatchCreationErrorBody": {
+                "description": "批量新建错误结果body",
+                "type": "object"
+            },
+            "BatchCreationNormolBody": {
+                "description": "批量新建正常结果body",
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "文档名",
+                        "type": "string"
+                    }
+                }
+            },
+            "BatchAddDocResultNormol": {
+                "description": "批量创建文档库单次处理成功结果",
+                "required": [
+                    "id",
+                    "status",
+                    "body"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "资源id",
+                        "type": "string"
+                    },
+                    "status": {
+                        "format": "int32",
+                        "description": "HTTP状态码\n- 201 创建成功\n- 202 处理中\n- ...",
+                        "type": "integer"
+                    },
+                    "body": {
+                        "$ref": "#/components/schemas/BatchCreationNormolBody",
+                        "description": "详细信息"
+                    }
+                }
+            },
+            "AddCustomDocParam": {
+                "description": "新建自定义文档库信息",
+                "required": [
+                    "name",
+                    "quota_allocated",
+                    "storage_position",
+                    "owners"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "文档库名称",
+                        "type": "string"
+                    },
+                    "quota_allocated": {
+                        "format": "int64",
+                        "description": "配额大小",
+                        "type": "integer"
+                    },
+                    "owners": {
+                        "description": "所有者",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "storage_position": {
+                        "$ref": "#/components/schemas/CommonStoragePosition",
+                        "description": "存储位置\n"
+                    }
+                },
+                "example": {
+                    "name": "hello",
+                    "owners": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        },
+                        {
+                            "id": "f46d296a-0c66-35e4-b23c-77e2d304a7a8",
+                            "name": "李四",
+                            "type": "user"
+                        }
+                    ],
+                    "storage_position": {
+                        "type": "specified",
+                        "storage_id": "8CFF1A05F851452C9EE140819B931155"
+                    },
+                    "quota_allocated": 1325456
+                }
+            },
+            "AddDepartmentDocParam": {
+                "description": "新建部门文档库信息",
+                "required": [
+                    "name",
+                    "department_id",
+                    "owner_ids",
+                    "quota_allocated",
+                    "owner_names",
+                    "owners",
+                    "storage_position"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "文档名",
+                        "type": "string"
+                    },
+                    "owners": {
+                        "description": "所有者",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "perm": {
+                        "$ref": "#/components/schemas/Perm",
+                        "description": "权限信息\n"
+                    },
+                    "quota_allocated": {
+                        "format": "int64",
+                        "description": "配额大小",
+                        "type": "integer"
+                    },
+                    "department_id": {
+                        "description": "关联部门id",
+                        "type": "string"
+                    },
+                    "storage_position": {
+                        "$ref": "#/components/schemas/CommonStoragePosition",
+                        "description": "存储位置"
+                    }
+                },
+                "example": {
+                    "name": "study",
+                    "department_id": "e12f7ec5-231f-35f5-a495-9194b661da45",
+                    "owners": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        },
+                        {
+                            "id": "f46d296a-0c66-35e4-b23c-77e2d304a7a8",
+                            "name": "李四",
+                            "type": "user"
+                        }
+                    ],
+                    "perm": {
+                        "value": 31,
+                        "expires_at": "1970-01-01T00:00:00Z"
+                    },
+                    "storage_position": {
+                        "type": "specified",
+                        "storage_id": "8CFF1A05F851452C9EE140819B931155"
+                    },
+                    "quota_allocated": 3325456
+                }
+            },
+            "BatchAddDepartmentDocParam": {
+                "description": "批量新建部门文档库信息",
+                "required": [
+                    "quota_allocated",
+                    "rule",
+                    "departments",
+                    "storage_position"
+                ],
+                "type": "object",
+                "properties": {
+                    "owner_id": {
+                        "description": "所有者id。\n- 不传该参数表示 \"对应部门管理员\"。",
+                        "type": "string"
+                    },
+                    "perm": {
+                        "$ref": "#/components/schemas/Perm",
+                        "description": "权限信息\n"
+                    },
+                    "quota_allocated": {
+                        "format": "int64",
+                        "description": "配额大小",
+                        "type": "integer"
+                    },
+                    "departments": {
+                        "description": "部门信息",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Department"
+                        }
+                    },
+                    "storage_position": {
+                        "$ref": "#/components/schemas/DepartmentStoragePosition",
+                        "description": "存储位置\n\n"
+                    },
+                    "rule": {
+                        "$ref": "#/components/schemas/BatchCreationDepartmentRule",
+                        "description": "创建规则"
+                    }
+                },
+                "example": {
+                    "perm": {
+                        "value": 31,
+                        "expires_at": "1970-01-01T00:00:00Z"
+                    },
+                    "storage_position": {
+                        "type": "same_as_department"
+                    },
+                    "quota_allocated": 3325456,
+                    "departments": [
+                        {
+                            "name": "研发部",
+                            "id": "e12f7ec5-231f-35f5-a495-9194b661da45",
+                            "type": "department"
+                        },
+                        {
+                            "name": "测试部",
+                            "id": "c1af7ec5-231f-35f5-a495-9194b661ac1a",
+                            "type": "department"
+                        }
+                    ],
+                    "owner_id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                    "rule": {
+                        "type": "departments_only"
+                    }
+                }
+            },
+            "AddUserDocParam": {
+                "description": "新建个人文档库信息",
+                "required": [
+                    "user_id",
+                    "quota_allocated",
+                    "storage_position"
+                ],
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "description": "关联用户id，同时也是库所有者id",
+                        "type": "string"
+                    },
+                    "quota_allocated": {
+                        "format": "int64",
+                        "description": "配额大小",
+                        "type": "integer"
+                    },
+                    "storage_position": {
+                        "$ref": "#/components/schemas/UserStoragePosition",
+                        "description": "存储位置\n\n"
+                    }
+                },
+                "example": {
+                    "user_id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                    "storage_position": {
+                        "type": "unspecified"
+                    },
+                    "quota_allocated": 1325456
+                }
+            },
+            "EditCustomDocParam": {
+                "description": "编辑自定义文档库信息",
+                "required": [
+                    "name",
+                    "owner_ids",
+                    "storage_position",
+                    "quota_allocated",
+                    "owners"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "文档库名称",
+                        "type": "string"
+                    },
+                    "owners": {
+                        "description": "所有者",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "quota_allocated": {
+                        "format": "int64",
+                        "description": "配额大小",
+                        "type": "integer"
+                    },
+                    "storage_position": {
+                        "$ref": "#/components/schemas/CommonStoragePosition",
+                        "description": "对象存储id（存储位置）"
+                    }
+                },
+                "example": {
+                    "name": "hello",
+                    "owners": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        },
+                        {
+                            "id": "f46d296a-0c66-35e4-b23c-77e2d304a7a8",
+                            "name": "李四",
+                            "type": "user"
+                        }
+                    ],
+                    "storage_position": {
+                        "type": "specified",
+                        "storage_id": "8CFF1A05F851452C9EE140819B931155"
+                    },
+                    "quota_allocated": 1325456
+                }
+            },
+            "EditDepartmentDocParam": {
+                "description": "编辑部门文档库信息",
+                "required": [
+                    "name",
+                    "owner_ids",
+                    "storage_position",
+                    "quota_allocated",
+                    "owners"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "文档库名称",
+                        "type": "string"
+                    },
+                    "owners": {
+                        "description": "所有者",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    },
+                    "quota_allocated": {
+                        "format": "int64",
+                        "description": "配额大小",
+                        "type": "integer"
+                    },
+                    "storage_position": {
+                        "$ref": "#/components/schemas/CommonStoragePosition",
+                        "description": "对象存储id（存储位置）"
+                    }
+                },
+                "example": {
+                    "name": "study",
+                    "owners": [
+                        {
+                            "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                            "name": "张三",
+                            "type": "user"
+                        },
+                        {
+                            "id": "f46d296a-0c66-35e4-b23c-77e2d304a7a8",
+                            "name": "李四",
+                            "type": "user"
+                        }
+                    ],
+                    "storage_position": {
+                        "type": "specified",
+                        "storage_id": "8CFF1A05F851452C9EE140819B931155"
+                    },
+                    "quota_allocated": 4325456
+                }
+            },
+            "DepartmentStoragePosition1": {
+                "description": "存储位置",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "存储方式\n- unspecified 未指定（跟随文件上传者的指定存储位置）\n- specified 指定对象存储id\n- same_as_department 使用对应部门的存储位置",
+                        "enum": [
+                            "unspecified",
+                            "specified",
+                            "same_as_department"
+                        ],
+                        "type": "string"
+                    }
+                }
+            },
+            "DepartmentStoragePosition2": {
+                "description": "存储位置",
+                "required": [
+                    "type",
+                    "storage_id"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "存储方式\n- unspecified 未指定（跟随文件上传者的指定存储位置）\n- specified 指定对象存储id\n- same_as_department 使用对应部门的存储位置",
+                        "enum": [
+                            "unspecified",
+                            "specified",
+                            "same_as_department"
+                        ],
+                        "type": "string"
+                    },
+                    "storage_id": {
+                        "description": "对象存储id",
+                        "type": "string"
+                    }
+                }
+            },
+            "UserStoragePosition1": {
+                "description": "存储位置",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "存储方式\n- unspecified 未指定（跟随文件上传者的指定存储位置）\n- specified 指定对象存储id\n- same_as_user 使用对应用户的存储位置",
+                        "enum": [
+                            "unspecified",
+                            "specified",
+                            "same_as_user"
+                        ],
+                        "type": "string"
+                    }
+                }
+            },
+            "UserStoragePosition2": {
+                "description": "存储位置",
+                "required": [
+                    "type",
+                    "storage_id"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "存储方式\n- unspecified 未指定（跟随文件上传者的指定存储位置）\n- specified 指定对象存储id\n- same_as_user 使用对应用户的存储位置",
+                        "enum": [
+                            "unspecified",
+                            "specified",
+                            "same_as_user"
+                        ],
+                        "type": "string"
+                    },
+                    "storage_id": {
+                        "description": "对象存储id",
+                        "type": "string"
+                    }
+                }
+            },
+            "CommonStoragePosition1": {
+                "description": "存储位置",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "存储方式\n- unspecified 未指定（跟随文件上传者的指定存储位置）\n- specified 指定对象存储id",
+                        "enum": [
+                            "unspecified",
+                            "specified"
+                        ],
+                        "type": "string"
+                    }
+                }
+            },
+            "CommonStoragePosition2": {
+                "description": "存储位置",
+                "required": [
+                    "type",
+                    "storage_id"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "存储方式\n- unspecified 未指定（跟随文件上传者的指定存储位置）\n- specified 指定对象存储id",
+                        "enum": [
+                            "unspecified",
+                            "specified"
+                        ],
+                        "type": "string"
+                    },
+                    "storage_id": {
+                        "description": "对象存储id",
+                        "type": "string"
+                    }
+                }
+            },
+            "UserStoragePosition": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/UserStoragePosition1"
+                    },
+                    {
+                        "$ref": "#/components/schemas/UserStoragePosition2"
+                    }
+                ],
+                "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                        "unspecified": "#/components/schemas/UserStoragePosition1",
+                        "specified": "#/components/schemas/UserStoragePosition2",
+                        "same_as_user": "#/components/schemas/UserStoragePosition1"
+                    }
+                },
+                "description": "存储位置\n",
+                "type": "object"
+            },
+            "DepartmentStoragePosition": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/DepartmentStoragePosition1"
+                    },
+                    {
+                        "$ref": "#/components/schemas/DepartmentStoragePosition2"
+                    }
+                ],
+                "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                        "unspecified": "#/components/schemas/DepartmentStoragePosition1",
+                        "specified": "#/components/schemas/DepartmentStoragePosition2",
+                        "same_as_department": "#/components/schemas/DepartmentStoragePosition1"
+                    }
+                },
+                "description": "存储位置\n",
+                "type": "object"
+            },
+            "CommonStoragePosition": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/CommonStoragePosition1"
+                    },
+                    {
+                        "$ref": "#/components/schemas/CommonStoragePosition2"
+                    }
+                ],
+                "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                        "unspecified": "#/components/schemas/CommonStoragePosition1",
+                        "specified": "#/components/schemas/CommonStoragePosition2"
+                    }
+                },
+                "description": "存储位置",
+                "type": "object"
+            },
+            "Site": {
+                "description": "站点信息",
+                "required": [
+                    "name",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "名称",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "站点类型\n- master 总站点\n- slave 分站点",
+                        "enum": [
+                            "master",
+                            "slave"
+                        ],
+                        "type": "string"
+                    }
+                }
+            },
+            "BatchAddDocResult": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/BatchAddDocResultNormol"
+                    },
+                    {
+                        "$ref": "#/components/schemas/BatchAddDocResultError"
+                    }
+                ],
+                "discriminator": {
+                    "propertyName": "status",
+                    "mapping": {
+                        "201": "#/components/schemas/BatchAddDocResultNormol",
+                        "202": "#/components/schemas/BatchAddDocResultNormol",
+                        "400": "#/components/schemas/BatchAddDocResultError",
+                        "401": "#/components/schemas/BatchAddDocResultError",
+                        "403": "#/components/schemas/BatchAddDocResultError",
+                        "500": "#/components/schemas/BatchAddDocResultError"
+                    }
+                },
+                "description": "批量创建文档库单次处理结果",
+                "type": "object"
+            },
+            "BatchCreationDepartmentRule": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/BatchCreationDepartmentRule1"
+                    },
+                    {
+                        "$ref": "#/components/schemas/BatchCreationDepartmentRule2"
+                    }
+                ],
+                "discriminator": {
+                    "propertyName": "type",
+                    "mapping": {
+                        "custom_level": "#/components/schemas/BatchCreationDepartmentRule2",
+                        "departments_only": "#/components/schemas/BatchCreationDepartmentRule1",
+                        "subdepartments_only": "#/components/schemas/BatchCreationDepartmentRule1",
+                        "departments_and_subdepartments": "#/components/schemas/BatchCreationDepartmentRule1",
+                        "deepest_departments": "#/components/schemas/BatchCreationDepartmentRule1"
+                    }
+                },
+                "description": "批量创建部门文档库规则",
+                "type": "object"
+            },
+            "BatchCreationDepartmentRule1": {
+                "description": "",
+                "required": [
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "规则类型\n- custom_level：为所选部门下的\"自定义层级\"新建文档库，数值表示第几层级。\n- departments_only：为所选部门新建文档库。\n- departments_and_subdepartments：为所选部门及其所有层级子部门新建文档库。\n- subdepartments_only：为所选部门下的所有层级子部门（不包含所选部门）新建文档库。\n- deepest_departments：为所选部门下的\"最下级子部门\"新建文档库。",
+                        "enum": [
+                            "custom_level",
+                            "departments_only",
+                            "subdepartments_only",
+                            "departments_and_subdepartments",
+                            "deepest_departments"
+                        ],
+                        "type": "string"
+                    }
+                }
+            },
+            "BatchCreationDepartmentRule2": {
+                "description": "",
+                "required": [
+                    "type",
+                    "level"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "规则类型\n- custom_level：为所选部门下的\"自定义层级\"新建文档库，数值表示第几层级。\n- departments_only：为所选部门新建文档库。\n- departments_and_subdepartments：为所选部门及其所有层级子部门新建文档库。\n- subdepartments_only：为所选部门下的所有层级子部门（不包含所选部门）新建文档库。\n- deepest_departments：为所选部门下的\"最下级子部门\"新建文档库。",
+                        "enum": [
+                            "custom_level",
+                            "departments_only",
+                            "subdepartments_only",
+                            "departments_and_subdepartments",
+                            "deepest_departments"
+                        ],
+                        "type": "string"
+                    },
+                    "level": {
+                        "description": "层级 (大于0)",
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "responses": {
+            "RespStd403ForQuota": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "example": {
+                                "value": {
+                                    "code": 403002001,
+                                    "message": "空间配额不足",
+                                    "cause": "...",
+                                    "detail": {
+                                        "allocated": 500000,
+                                        "used": 100000,
+                                        "free": 400000
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "针对配额不足的情况"
+            },
+            "RespStd404": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err404": {
+                                "value": {
+                                    "code": 404002005,
+                                    "message": "入口文档记录不存在",
+                                    "cause": "..."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "资源不存在"
+            },
+            "RespStd400": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err400": {
+                                "value": {
+                                    "code": 400000000,
+                                    "message": "非法参数",
+                                    "cause": "..."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "非法请求"
+            },
+            "RespStd401": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err401": {
+                                "value": {
+                                    "code": 401001001,
+                                    "message": "Access Token校验失败",
+                                    "cause": "..."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "未授权"
+            },
+            "RespStd403": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err403": {
+                                "value": {
+                                    "code": 403001002,
+                                    "message": "没有权限执行此操作",
+                                    "cause": "..."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "无法执行此操作"
+            },
+            "RespStd500": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err500": {
+                                "value": {
+                                    "code": 500000000,
+                                    "message": "内部错误",
+                                    "cause": "..."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "服务器错误"
+            },
+            "RespStd404ForBatchCreation": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err404": {
+                                "value": {
+                                    "code": 404002020,
+                                    "message": "不存在的批量创建任务",
+                                    "cause": "..."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "资源不存在"
+            },
+            "RespStd400ForDepartment": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err404": {
+                                "value": {
+                                    "code": 400001020,
+                                    "message": "部门不存在",
+                                    "cause": "...",
+                                    "detail": {
+                                        "departments": [
+                                            {
+                                                "name": "研发部",
+                                                "id": "e12f7ec5-231f-35f5-a495-9194b661da45",
+                                                "type": "department"
+                                            },
+                                            {
+                                                "name": "测试部",
+                                                "id": "c1af7ec5-231f-35f5-a495-9194b661ac1a",
+                                                "type": "department"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "资源不存在"
+            },
+            "RespStd400ForUserAndDepartment": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err404": {
+                                "value": {
+                                    "code": 400001019,
+                                    "message": "用户或部门不存在",
+                                    "cause": "...",
+                                    "detail": {
+                                        "departments": [
+                                            {
+                                                "name": "研发部",
+                                                "id": "e12f7ec5-231f-35f5-a495-9194b661da45",
+                                                "type": "department"
+                                            },
+                                            {
+                                                "name": "测试部",
+                                                "id": "c1af7ec5-231f-35f5-a495-9194b661ac1a",
+                                                "type": "department"
+                                            }
+                                        ],
+                                        "users": [
+                                            {
+                                                "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                                                "name": "张三",
+                                                "type": "user"
+                                            },
+                                            {
+                                                "id": "f46d296a-0c66-35e4-b23c-77e2d304a7a8",
+                                                "name": "李四",
+                                                "type": "user"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "资源不存在"
+            },
+            "RespStd400ForUser": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "Err404": {
+                                "value": {
+                                    "code": 400001021,
+                                    "message": "用户不存在",
+                                    "cause": "...",
+                                    "detail": {
+                                        "users": [
+                                            {
+                                                "id": "d22f7ec5-231f-35f5-a495-9194b66193e4",
+                                                "name": "张三",
+                                                "type": "user"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "资源不存在"
+            }
+        },
+        "securitySchemes": {
+            "OAuth2": {
+                "flows": {
+
+                },
+                "type": "oauth2"
+            }
+        }
+    },
+    "security": [
+        {
+            "OAuth2": [
+            ]
+        }
+    ],
+    "tags": [
+        {
+            "name": "部门文档库",
+            "description": ""
+        },
+        {
+            "name": "个人文档库",
+            "description": ""
+        },
+        {
+            "name": "自定义文档库",
+            "description": ""
+        }
+    ]
+}

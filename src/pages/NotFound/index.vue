@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import image from '@/assets/images/404.jpg';
+import image from '#/NotFound/404.jpg';
 
 export default {
   data() {
