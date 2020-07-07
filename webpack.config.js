@@ -44,14 +44,14 @@ module.exports = {
        */
       vue$: 'vue/dist/vue.esm.js',
       '@': path.resolve(__dirname, './src'),
-      '#': path.resolve(__dirname, './src/assets/images'),
+      '#': path.resolve(__dirname, './src/assets'),
       '^': path.resolve(__dirname, './src/util'),
     },
 
     /**
      * 导入时自动解析后缀
      */
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', 'scss'],
   },
 
   /**

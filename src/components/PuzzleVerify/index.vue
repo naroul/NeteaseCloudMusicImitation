@@ -29,9 +29,9 @@
 
 <script>
 import { getRandomInt } from '^/getRandomInt';
-import lute from '#/PuzzleVerify/lute.jpg';
-import coffe from '#/PuzzleVerify/coffe.png';
-import piano from '#/PuzzleVerify/piano.jpg';
+import lute from '#/images/PuzzleVerify/lute.jpg';
+import coffe from '#/images/PuzzleVerify/coffe.png';
+import piano from '#/images/PuzzleVerify/piano.jpg';
 
 export default {
   data() {

@@ -1,0 +1,26 @@
+@mixin input-placeholder {
+  input::-webkit-input-placeholder {
+    color: #8a8a8a;
+  }
+  input::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #8a8a8a;
+  }
+  input:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #8a8a8a;
+  }
+  input:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #8a8a8a;
+  }
+}
+
+// 禁用 灰色
+$disabled-color: #919191;
+
+// 灰白色
+$white-color: #dad8d8;
+
+// 边长颜色
+$border-color: #d3d4db;
