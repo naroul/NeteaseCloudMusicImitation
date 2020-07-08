@@ -1,8 +1,8 @@
 <template>
-  <div class="wrapper">
+  <div class="login-wrapper">
     <div class="header">
       <label>登录</label>
-      <span class="font-close">x</span>
+      <MyButton width="30" class="close-button">x</MyButton>
     </div>
     <div class="form">
       <label>账号</label>
@@ -45,7 +45,7 @@ export default {
 <style lang="scss" scoped>
 @import '#/scss/global.scss';
 
-.wrapper {
+.login-wrapper {
   position: fixed;
   top: 0;
   right: 0;
@@ -72,8 +72,11 @@ export default {
     color: $white-color;
     font-size: 16px;
 
-    .font-close {
+    .close-button {
       float: right;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
     }
   }
 

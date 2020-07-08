@@ -3,23 +3,19 @@
     :class="{ disabled }"
     @input="handleInput"
     v-bind="{
-      ...{
-        value,
-        type,
-        disabled,
-        placeholder,
-        readonly,
-      },
+      value,
+      type,
+      disabled,
+      placeholder,
+      readonly,
     }"
     v-on="{
-      ...{
-        change: onchange,
-        click: onclick,
-        keydown: onkeydown,
-        focus: onfocus,
-        blur: onblur,
-        paste: onpaste,
-      },
+      change: onchange,
+      click: onclick,
+      keydown: onkeydown,
+      focus: onfocus,
+      blur: onblur,
+      paste: onpaste,
     }"
   />
 </template>
@@ -80,7 +76,7 @@ export default {
      * 只读属性
      */
     readonly: {
-      type: Boolean,
+      type: [Boolean, String],
       required: false,
     },
 

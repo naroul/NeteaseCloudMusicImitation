@@ -1,5 +1,5 @@
 <template>
-  <div v-once class="wrapper">
+  <div v-once class="notfound-wrapper">
     <canvas ref="canvas"></canvas>
     <img :src="url" class="image" />
   </div>
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
+.notfound-wrapper {
   position: absolute;
   top: -200px;
   right: 0;

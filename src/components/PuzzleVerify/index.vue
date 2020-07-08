@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="puzzle-wrapper">
     <div class="puzzle-zone">
       <!-- 整个拼图背景图 -->
       <canvas ref="puzzle" />
@@ -307,7 +307,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
+.puzzle-wrapper {
   display: inline-block;
   padding: 10px;
   border-radius: 5px;

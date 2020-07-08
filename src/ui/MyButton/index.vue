@@ -3,16 +3,12 @@
     :class="{ disabled }"
     :style="{ width: `${width}px`, height: `${height}px` }"
     v-bind="{
-      ...{
-        disabled,
-      },
+      disabled,
     }"
     v-on="{
-      ...{
-        click: onclick,
-        focus: onfocus,
-        blur: onblur,
-      },
+      click: onclick,
+      focus: onfocus,
+      blur: onblur,
     }"
   >
     <slot></slot>
@@ -28,7 +24,7 @@ export default {
      * 宽
      */
     width: {
-      type: Number,
+      type: [Number, String],
       required: false,
       default: 80,
     },
@@ -37,7 +33,7 @@ export default {
      * 高
      */
     height: {
-      type: Number,
+      type: [Number, String],
       required: false,
       default: 30,
     },
@@ -46,7 +42,7 @@ export default {
      * 禁用状态
      */
     disabled: {
-      type: Boolean,
+      type: [Boolean, String],
       required: false,
       default: false,
     },
