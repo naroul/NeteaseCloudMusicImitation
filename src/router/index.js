@@ -7,19 +7,28 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 /**
- * 主页 推荐页
+ * 推荐页
  */
-const Recommend = (resolve) => {
-  import('@/pages/Recommend').then((module) => {
+const Header = (resolve) => {
+  import('@/components/Header').then((module) => {
     resolve(module);
   });
 };
 
 /**
- * 登录页
+ * 推荐页
  */
-const Login = (resolve) => {
-  import('@/pages/Login').then((module) => {
+const Home = (resolve) => {
+  import('@/pages/Home').then((module) => {
+    resolve(module);
+  });
+};
+
+/**
+ * 推荐页
+ */
+const Recommend = (resolve) => {
+  import('@/pages/Recommend').then((module) => {
     resolve(module);
   });
 };
@@ -36,19 +45,18 @@ const NotFound = (resolve) => {
 const routes = [
   {
     path: '/',
-    redirect: '/recommend',
+    // redirect: '/home',
+    component: Header,
   },
   {
-    path: '/recommend',
-    component: Recommend,
-    /**
-     * 别名
-     */
-    // alias: '/recom',
-  },
-  {
-    path: '/login',
-    component: Login,
+    path: '/home',
+    component: Home,
+    children: [
+      {
+        path: 'recommend',
+        component: Recommend,
+      },
+    ],
   },
   {
     /**

@@ -2,11 +2,12 @@
  * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
  * http://cssreset.com
  */
-html,
-body {
+body,
+html {
   margin: 0;
   padding: 0;
   border: 0;
+  width: 100%;
 }
 
 html,
@@ -161,11 +162,6 @@ li {
   width: 5px;
   background-color: rgba(125, 125, 125, 0.7);
   -webkit-border-radius: 6px;
-}
-
-html,
-body {
-  width: 100%;
 }
 
 body {

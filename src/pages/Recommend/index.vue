@@ -1,16 +1,9 @@
 <template>
-  <div id="recommend" @click="handleClick">login</div>
+  <div id="recommend"></div>
 </template>
 
 <script>
-export default {
-  name: 'Recommend',
-  methods: {
-    handleClick() {
-      this.$router.push('/login');
-    },
-  },
-};
+export default {};
 </script>
 
 <style lang="scss" scoped></style>

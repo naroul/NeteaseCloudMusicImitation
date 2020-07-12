@@ -94,13 +94,13 @@ button {
   cursor: pointer;
 
   &:hover {
-    border-color: $border-color;
+    border-color: $border-grey-white;
     color: $white-color;
     background-color: rgba(228, 230, 237, 0.25);
   }
 
   &:active {
-    border-color: $border-color;
+    border-color: $border-grey-white;
     color: $white-color;
     background-color: rgba(228, 230, 237, 0.45);
   }

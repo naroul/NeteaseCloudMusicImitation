@@ -14,14 +14,13 @@
       />
       <label>密码</label>
       <MyInput class="input" type="password" placeholder="请输入密码" />
-      <MyButton class="login-button">登录</MyButton>
-      <MyButton class="cancel-button">取消</MyButton>
+      <MyButton :width="120" class="login-button">登录</MyButton>
+      <MyButton :width="120" class="cancel-button">取消</MyButton>
     </div>
   </div>
 </template>
 
 <script>
-import PuzzleVerify from '@/components/PuzzleVerify';
 import MyInput from '@/ui/MyInput';
 import MyButton from '@/ui/MyButton';
 
@@ -35,7 +34,6 @@ export default {
   methods: {},
 
   components: {
-    PuzzleVerify,
     MyInput,
     MyButton,
   },
@@ -103,14 +101,13 @@ export default {
 
     .login-button {
       position: relative;
-      left: 12px;
+      left: 52px;
       justify-self: self-end;
     }
 
     .cancel-button {
       position: relative;
-      left: -30px;
-      justify-self: center;
+      justify-self: self-end;
     }
   }
 }

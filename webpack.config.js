@@ -78,7 +78,10 @@ module.exports = {
         use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax'],
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
+        /**
+         * 支持解析字体文件
+         */
+        test: /\.(png|jpg|gif|ttf|eot|woff|woff2|svg)$/,
         loader: 'file-loader',
         options: {
           /**
@@ -115,7 +118,7 @@ module.exports = {
   ],
 
   devServer: {
-    port: 1010,
+    port: 1009,
 
     /**
      * 中间件，当404时重定向到默认的index.html（默认为主目录的index.html）
