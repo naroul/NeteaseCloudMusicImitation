@@ -6,23 +6,30 @@
         <li
           :class="['tab', { 'tab-active': index === tabIndexActive }]"
           v-for="(tab, index) in this.tabs"
-          @click="tabClicked(index)"
+          @click="tabClicked(index, tab.url)"
         >
-          {{ tab }}
+          {{ tab.title }}
           <div
             class="selected-arrow-font"
             v-if="index === tabIndexActive"
           ></div>
         </li>
+        <div class="filler"></div>
+        <div class="search-wrapper">
+          <SearchBox placeholder="音乐/视频/用户"></SearchBox>
+        </div>
+        <div class="login-wrapper">
+          <span class="login-text">登录</span>
+        </div>
       </div>
     </div>
-    <div class="navs-wrapper">
-      <li class="iconfont icon-cry-fill"></li>
-    </div>
+    <div class="navs-wrapper"></div>
   </div>
 </template>
 
 <script>
+import SearchBox from '@/ui/SearchBox';
+
 export default {
   data() {
     return {
@@ -35,18 +42,27 @@ export default {
 
   methods: {
     /**
-     * 更改为选中的tab的index
+     * 更改为选中的tab的index并跳转到对应页面url
      */
-    tabClicked(index) {
+    tabClicked(index, url) {
       this.tabIndexActive = index;
+      this.$router.push(url);
     },
   },
 
   created() {
     /**
-     * 存储tabs的内容
+     * 存储tabs的文本和跳转地址
      */
-    this.tabs = ['发现音乐', '我的音乐', '商城'];
+    this.tabs = [
+      { title: '发现音乐', url: '/' },
+      { title: '我的音乐', url: '/my-music' },
+      { title: '商城', url: '/shop' },
+    ];
+  },
+
+  components: {
+    SearchBox,
   },
 };
 </script>
@@ -104,6 +120,29 @@ export default {
 
       .tab-active {
         background: #000;
+      }
+
+      .filler {
+        flex: 1;
+      }
+
+      .search-wrapper {
+        align-self: center;
+      }
+
+      .login-wrapper {
+        align-self: center;
+        margin: auto 23px;
+        font-size: 12px;
+        color: #787878;
+
+        .login-text {
+          cursor: pointer;
+
+          &:hover {
+            color: #999;
+          }
+        }
       }
     }
   }

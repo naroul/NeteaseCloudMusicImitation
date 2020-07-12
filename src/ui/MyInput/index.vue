@@ -11,7 +11,6 @@
     }"
     v-on="{
       change: onchange,
-      click: onclick,
       keydown: onkeydown,
       focus: onfocus,
       blur: onblur,
@@ -84,15 +83,6 @@ export default {
      * change事件回调
      */
     onchange: {
-      type: Function,
-      required: false,
-      default: noop,
-    },
-
-    /**
-     * click事件回调
-     */
-    onclick: {
       type: Function,
       required: false,
       default: noop,
