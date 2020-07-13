@@ -9,15 +9,6 @@ Vue.use(VueRouter);
 /**
  * 推荐页
  */
-const Header = (resolve) => {
-  import('@/components/Header').then((module) => {
-    resolve(module);
-  });
-};
-
-/**
- * 推荐页
- */
 const Home = (resolve) => {
   import('@/pages/Home').then((module) => {
     resolve(module);
@@ -45,8 +36,7 @@ const NotFound = (resolve) => {
 const routes = [
   {
     path: '/',
-    // redirect: '/home',
-    component: Header,
+    redirect: '/home/recommend',
   },
   {
     path: '/home',
