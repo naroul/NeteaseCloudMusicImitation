@@ -9,8 +9,8 @@
           <div class="text">{{ data.name }}</div>
         </router-link>
         <div class="fonts">
-          <i class="iconfont icon-play" />
-          <i class="iconfont icon-add" />
+          <i class="iconfont icon-play" title="播放" />
+          <i class="iconfont icon-add" title="收藏" />
         </div>
       </div>
     </div>
@@ -35,7 +35,9 @@
         >
           {{ index + 1 }}
         </div>
-        <div class="item-name">{{ item.name }}</div>
+        <router-link to="">
+          <div class="item-name">{{ item.name }}</div>
+        </router-link>
       </div>
       <div class="look-all">
         <router-link to="">查看全部></router-link>
@@ -91,7 +93,7 @@ export default {
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: 14px;
-        color: 333;
+        color: #333;
         font-weight: bold;
         cursor: pointer;
       }
@@ -103,6 +105,12 @@ export default {
           position: relative;
           font-size: 30px;
           left: -3px;
+          color: #828282;
+
+          &:hover,
+          &:active {
+            color: #333;
+          }
         }
 
         .icon-add {

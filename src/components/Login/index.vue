@@ -2,40 +2,117 @@
   <div class="login-wrapper">
     <div class="header">
       <label>登录</label>
-      <MyButton width="30" class="close-button">x</MyButton>
+      <MyButton width="30" class="close-button" :onclick="closeLoginDialog">
+        <i class="iconfont icon-close"></i>
+      </MyButton>
     </div>
     <div class="form">
       <label>账号</label>
       <MyInput
         class="input"
-        v-model="tel"
+        v-model="phone"
         type="tel"
         placeholder="请输入电话号码"
       />
       <label>密码</label>
-      <MyInput class="input" type="password" placeholder="请输入密码" />
-      <MyButton :width="120" class="login-button">登录</MyButton>
-      <MyButton :width="120" class="cancel-button">取消</MyButton>
+      <MyInput
+        class="input"
+        v-model="password"
+        type="password"
+        placeholder="请输入密码"
+      />
+      <MyButton :width="120" class="login-button" :onclick="confirmLogin">
+        登录
+      </MyButton>
+      <MyButton :width="120" class="cancel-button" :onclick="closeLoginDialog">
+        取消
+      </MyButton>
     </div>
+    <PuzzleVerify
+      class="puzzle-verify"
+      v-if="isShowPuzzleVerify"
+      @verified="verified"
+    />
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+import { loginByPhone } from '@/apis/login';
+import PuzzleVerify from '../PuzzleVerify';
 import MyInput from '@/ui/MyInput';
 import MyButton from '@/ui/MyButton';
 
 export default {
   data() {
     return {
-      tel: '',
+      /**
+       * 电话号码
+       */
+      phone: '',
+
+      /**
+       * 密码
+       */
+      password: '',
+
+      /**
+       * 是否显示图形验证码
+       */
+      isShowPuzzleVerify: false,
     };
   },
 
-  methods: {},
+  methods: {
+    /**
+     * 关闭登录框
+     */
+    closeLoginDialog() {
+      this.setLoginDialogStatus(false);
+    },
+
+    /**
+     * 验证通过时的回调
+     * 验证通过后执行登录操作
+     */
+    verified() {
+      this.login();
+    },
+
+    /**
+     * 登录按钮回调
+     * 验证账号 密码输入值 如果都不为空，则显示图形验证框
+     */
+    confirmLogin() {
+      if (this.phone && this.password) {
+        this.isShowPuzzleVerify = true;
+      } else {
+        alert('账号或密码为空');
+      }
+    },
+
+    /**
+     * 登录
+     */
+    login() {
+      this.isShowPuzzleVerify = false;
+
+      loginByPhone(this.phone, this.password)
+        .then((res) => {
+          console.log(res);
+          this.setLoginStatus(true);
+          this.setLoginDialogStatus(false);
+        })
+        .catch((e) => console.log(e));
+    },
+
+    ...mapMutations(['setLoginStatus', 'setLoginDialogStatus']),
+  },
 
   components: {
     MyInput,
     MyButton,
+    PuzzleVerify,
   },
 };
 </script>
@@ -67,14 +144,28 @@ export default {
     line-height: 50px;
     background: #5b5b5b;
     border-radius: 2px;
-    color: $white-color;
+
     font-size: 16px;
+
+    label {
+      color: $white-color;
+    }
 
     .close-button {
       float: right;
       position: relative;
       top: 50%;
       transform: translateY(-50%);
+      background: #5b5b5b;
+
+      .icon-close {
+        color: $white-color;
+
+        &:hover,
+        &:active {
+          color: #fff;
+        }
+      }
     }
   }
 
@@ -109,6 +200,12 @@ export default {
       position: relative;
       justify-self: self-end;
     }
+  }
+
+  .puzzle-verify {
+    position: relative;
+    left: 40px;
+    top: -280px;
   }
 }
 </style>

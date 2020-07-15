@@ -14,6 +14,12 @@
     </div>
 
     <div class="operator-zone">
+      <div
+        class="failed-tip"
+        v-if="verifiedStatus === this.VerifyStatus.Failed"
+      >
+        验证失败，请再试一次
+      </div>
       <div class="operator-bar"></div>
       <div
         class="operator-block"
@@ -47,6 +53,11 @@ export default {
          */
         operatorBlockLeft: 0,
       },
+
+      /**
+       * 验证状态，初始化为未验证
+       */
+      verifiedStatus: 0,
     };
   },
 
@@ -185,6 +196,7 @@ export default {
           isDragging: true,
           initX: e.offsetX,
         };
+        this.verifiedStatus = this.VerifyStatus.Unverified;
       }
     },
 
@@ -248,6 +260,7 @@ export default {
 
       /**
        * 当拼图碎片被移到接近位置时，设置验证状态为通过，并抛出验证状态
+       * 验证未通过时，初始化位置，提示验证失败，并重新验证
        */
       if (
         operatorBlockLeft > -initPuzzlePiecesLeft - 5 &&
@@ -255,6 +268,17 @@ export default {
       ) {
         this.verified();
         this.$emit('verified', this.verifiedStatus);
+      } else {
+        this.verifyFailed();
+        /**
+         * 将拼图碎片位置初始化
+         */
+        this.position.puzzlePiecesLeft = this.initPuzzlePiecesLeft;
+
+        /**
+         * 将操作块位置初始化
+         */
+        this.position.operatorBlockLeft = 0;
       }
     },
 
@@ -269,12 +293,17 @@ export default {
     },
 
     /**
-     * 验证通过（暂时未实现验证不通过的处理）
+     * 验证通过
      */
     verified() {
-      this.verifiedStatus = new Promise((resolve) => {
-        resolve();
-      });
+      this.verifiedStatus = this.VerifyStatus.Verified;
+    },
+
+    /**
+     * 验证失败
+     */
+    verifyFailed() {
+      this.verifiedStatus = this.VerifyStatus.Failed;
     },
   },
 
@@ -295,9 +324,29 @@ export default {
     };
 
     /**
-     * 验证状态，初始化为处理中
+     * 拼图碎片的初始偏移量 会在draw()中得到初始值
      */
-    this.verifiedStatus = new Promise((resolve) => {});
+    this.initPuzzlePiecesLeft = 0;
+
+    /**
+     * 验证状态
+     */
+    this.VerifyStatus = {
+      /**
+       * 未验证
+       */
+      Unverified: 0,
+
+      /**
+       * 验证通过
+       */
+      Verified: 1,
+
+      /**
+       * 验证失败
+       */
+      Failed: 2,
+    };
   },
 
   mounted() {
@@ -332,6 +381,16 @@ export default {
     width: 400px;
     height: 40px;
     box-sizing: border-box;
+
+    .failed-tip {
+      position: absolute;
+      top: -25px;
+      height: 20px;
+      padding-left: 10px;
+      font-size: 12px;
+      line-height: 20px;
+      color: red;
+    }
 
     .operator-bar {
       position: relative;

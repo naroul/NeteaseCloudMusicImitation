@@ -20,7 +20,7 @@
         </div>
         <div class="login-wrapper">
           <i v-if="isLogged" class="iconfont icon-usercenter" />
-          <span class="login-text" v-else>登录</span>
+          <span class="login-text" @click="openLoginDialog" v-else>登录</span>
         </div>
       </div>
     </div>
@@ -91,6 +91,13 @@ export default {
     },
 
     /**
+     * 打开登录框
+     */
+    openLoginDialog() {
+      this.setLoginDialogStatus(true);
+    },
+
+    /**
      * 获取登录状态并保存到state中
      */
     async _getLoginStatus() {
@@ -99,7 +106,7 @@ export default {
         .catch((e) => this.setLoginStatus(false));
     },
 
-    ...mapMutations(['setLoginStatus']),
+    ...mapMutations(['setLoginStatus', 'setLoginDialogStatus']),
   },
 
   created() {
