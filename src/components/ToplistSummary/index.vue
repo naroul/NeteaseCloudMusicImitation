@@ -35,7 +35,7 @@
         >
           {{ index + 1 }}
         </div>
-        <router-link to="">
+        <router-link class="text-wrap" to="">
           <div class="item-name">{{ item.name }}</div>
         </router-link>
       </div>
@@ -143,6 +143,9 @@ export default {
         height: 32px;
         line-height: 32px;
         font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 

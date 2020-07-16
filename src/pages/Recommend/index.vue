@@ -43,7 +43,7 @@
           <div class="title-text">榜单</div>
         </div>
         <div class="grid-content">
-          <RanklistSummary
+          <ToplistSummary
             :class="['summary', 'rank-summary']"
             v-if="ranklistData.length"
             v-for="data of ranklistData"
@@ -66,7 +66,8 @@ import {
 import { getPlaylistDetail } from '@/apis/playlist';
 import Banner from '@/components/Banner';
 import PlaylistSummary from '@/components/PlaylistSummary';
-import RanklistSummary from '@/components/RanklistSummary';
+import ToplistSummary from '@/components/ToplistSummary';
+import Toast from '@/plugins/Toast';
 
 export default {
   data() {
@@ -182,7 +183,7 @@ export default {
   components: {
     Banner,
     PlaylistSummary,
-    RanklistSummary,
+    ToplistSummary,
   },
 };
 </script>

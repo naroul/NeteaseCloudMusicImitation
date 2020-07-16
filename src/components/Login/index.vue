@@ -87,7 +87,7 @@ export default {
       if (this.phone && this.password) {
         this.isShowPuzzleVerify = true;
       } else {
-        alert('账号或密码为空');
+        this.$toast.failed('账号或密码为空，请输入');
       }
     },
 
