@@ -2,7 +2,12 @@
   <div class="login-wrapper">
     <div class="header">
       <label>登录</label>
-      <MyButton width="30" class="close-button" :onclick="closeLoginDialog">
+      <MyButton
+        width="30"
+        :height="30"
+        class="close-button"
+        :onclick="closeLoginDialog"
+      >
         <i class="iconfont icon-close"></i>
       </MyButton>
     </div>
@@ -21,10 +26,20 @@
         type="password"
         placeholder="请输入密码"
       />
-      <MyButton :width="120" class="login-button" :onclick="confirmLogin">
+      <MyButton
+        :width="120"
+        :height="30"
+        class="login-button"
+        :onclick="confirmLogin"
+      >
         登录
       </MyButton>
-      <MyButton :width="120" class="cancel-button" :onclick="closeLoginDialog">
+      <MyButton
+        :width="120"
+        :height="30"
+        class="cancel-button"
+        :onclick="closeLoginDialog"
+      >
         取消
       </MyButton>
     </div>
@@ -94,16 +109,18 @@ export default {
     /**
      * 登录
      */
-    login() {
+    async login() {
       this.isShowPuzzleVerify = false;
 
-      loginByPhone(this.phone, this.password)
+      await loginByPhone(this.phone, this.password)
         .then((res) => {
-          console.log(res);
+          this.$toast.success('登陆成功', 1000);
           this.setLoginStatus(true);
           this.setLoginDialogStatus(false);
         })
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          this.$toast.failed('账号或密码错误，请重新输入');
+        });
     },
 
     ...mapMutations(['setLoginStatus', 'setLoginDialogStatus']),

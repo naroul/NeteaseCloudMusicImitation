@@ -139,6 +139,12 @@ export default {
         color: #c10d0c;
       }
 
+      a {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       .item-name {
         height: 32px;
         line-height: 32px;

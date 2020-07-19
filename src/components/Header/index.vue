@@ -18,9 +18,22 @@
         <div class="search-wrapper">
           <SearchBox placeholder="音乐/视频/用户"></SearchBox>
         </div>
-        <div class="login-wrapper">
+        <div
+          class="login-wrapper"
+          @mouseover.prevent="showOptions"
+          @mouseleave.prevent="hiddenOptions"
+        >
+          <!-- 已登陆 显示用户图标 -->
           <i v-if="isLogged" class="iconfont icon-usercenter" />
+
+          <!-- 未登录 提示登录 -->
           <span class="login-text" @click="openLoginDialog" v-else>登录</span>
+
+          <!-- 已登陆时，用户可操作的选项浮窗 -->
+          <div v-if="isLogged && isShowOptions" class="logged-options">
+            <div class="top-arrow"></div>
+            <div :class="['option', 'first-option']" @click="_logout">登出</div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,7 +58,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import SearchBox from '@/ui/SearchBox';
-import { getLoginStatus } from '@/apis/header';
+import { getLoginStatus, logout } from '@/apis/header';
 
 export default {
   data() {
@@ -58,7 +71,12 @@ export default {
       /**
        * 目前被选中的nav（推荐、排行榜等）的index
        */
-      navIndexActive: 0,
+      navIndexActive: NaN,
+
+      /**
+       * 悬停在用户标时 显示操作项
+       */
+      isShowOptions: false,
     };
   },
 
@@ -98,15 +116,63 @@ export default {
     },
 
     /**
+     * 鼠标悬停在用户标时 显示操作项
+     */
+    showOptions() {
+      this.isShowOptions = true;
+    },
+
+    /**
+     * 鼠标离开用户标时 隐藏操作项
+     */
+    hiddenOptions() {
+      this.isShowOptions = false;
+    },
+
+    /**
+     * 登出
+     */
+    _logout() {
+      logout()
+        .then((res) => {
+          this.setLoginStatus(false);
+        })
+        .catch((e) => {
+          this.$toast.failed('登出时遇到错误，请重试');
+        });
+    },
+
+    /**
      * 获取登录状态并保存到state中
      */
-    async _getLoginStatus() {
+    _getLoginStatus() {
       getLoginStatus()
-        .then((res) => this.setLoginStatus(true))
-        .catch((e) => this.setLoginStatus(false));
+        .then((res) => {
+          this.setLoginStatus(true);
+        })
+        .catch((e) => {
+          this.setLoginStatus(false);
+        });
     },
 
     ...mapMutations(['setLoginStatus', 'setLoginDialogStatus']),
+  },
+
+  watch: {
+    /**
+     * 监听route变化，根据变化更新nav
+     */
+    $route(to, from) {
+      this.navs.reduce(
+        (prev, cur, index) => {
+          if (cur.url === to.path) {
+            this.navIndexActive = index;
+          }
+          return cur;
+        },
+        { url: '/' }
+      );
+    },
   },
 
   created() {
@@ -120,11 +186,25 @@ export default {
     ];
 
     this.navs = [
-      { title: '推荐', url: '/recommend' },
-      { title: '排行榜', url: '/toplist' },
+      { title: '推荐', url: '/home/recommend' },
+      { title: '排行榜', url: '/home/toplist' },
       { title: '歌单', url: '/home/playlist' },
       { title: '歌手', url: '/home/singer' },
     ];
+
+    /**
+     * 刷新时，根据url设置active的nav，
+     * 由于初始值是NaN，所以当url不是navs中的一个时，则不会设置active
+     */
+    this.navs.reduce(
+      (prev, cur, index) => {
+        if (cur.url === this.$route.path) {
+          this.navIndexActive = index;
+        }
+        return cur;
+      },
+      { url: '/' }
+    );
 
     this._getLoginStatus();
   },
@@ -200,10 +280,47 @@ export default {
       }
 
       .login-wrapper {
+        position: relative;
         align-self: center;
         margin: auto 23px;
         font-size: 12px;
         color: #787878;
+
+        .logged-options {
+          position: absolute;
+          top: 40px;
+          left: -32px;
+          width: 100px;
+          height: 100px;
+          border-radius: 4px;
+
+          .top-arrow {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -8px;
+            border-bottom: 8px solid #000;
+            border-right: 8px solid transparent;
+            border-left: 8px solid transparent;
+          }
+
+          .option {
+            height: 34px;
+            line-height: 34px;
+            text-align: center;
+            background: #000;
+            color: #ccc;
+            cursor: pointer;
+
+            &:hover {
+              color: #fff;
+            }
+          }
+
+          .first-option {
+            border-radius: 4px 4px 0 0;
+          }
+        }
 
         .login-text {
           cursor: pointer;

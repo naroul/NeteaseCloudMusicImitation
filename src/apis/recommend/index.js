@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Host, Types } from '../config.js';
+import { getAllToplist } from '../toplist';
 
 /**
  * 获取轮播图数据
@@ -40,9 +41,5 @@ export const getPersonalized = () => {
  * 获取推荐榜单摘要数据
  */
 export const getToplistSummary = () => {
-  const url = Host + '/toplist/detail';
-
-  return axios.get(url);
+  return getAllToplist();
 };
-
-

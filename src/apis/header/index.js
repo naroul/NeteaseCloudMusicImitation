@@ -6,5 +6,17 @@ import { Host } from '../config.js';
  */
 export const getLoginStatus = () => {
   const url = Host + '/login/status';
-  return axios.get(url);
+  return axios.get(url, {
+    withCredentials: true,
+  });
+};
+
+/**
+ * 登出
+ */
+export const logout = () => {
+  const url = Host + '/logout';
+  return axios.get(url, {
+    withCredentials: true,
+  });
 };

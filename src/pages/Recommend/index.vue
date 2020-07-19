@@ -1,3 +1,5 @@
+<!-- 推荐页 -->
+
 <template>
   <div class="recommend">
     <!-- 轮播图 -->

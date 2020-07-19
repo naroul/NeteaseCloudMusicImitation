@@ -7,6 +7,14 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 /**
+ * 解决重复点击跳转相同url时会报错的问题
+ */
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err);
+};
+
+/**
  * 推荐页
  */
 const Home = (resolve) => {
@@ -20,6 +28,15 @@ const Home = (resolve) => {
  */
 const Recommend = (resolve) => {
   import('@/pages/Recommend').then((module) => {
+    resolve(module);
+  });
+};
+
+/**
+ * 排行榜页
+ */
+const Toplist = (resolve) => {
+  import('@/pages/Toplist').then((module) => {
     resolve(module);
   });
 };
@@ -45,6 +62,10 @@ const routes = [
       {
         path: 'recommend',
         component: Recommend,
+      },
+      {
+        path: 'toplist',
+        component: Toplist,
       },
     ],
   },

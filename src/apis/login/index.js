@@ -6,8 +6,11 @@ import { Host } from '../config.js';
  */
 export const loginByPhone = (phone, password) => {
   const url = Host + '/login/cellphone';
-  return axios.post(url, {
-    phone,
-    password,
+  return axios.get(url, {
+    params: {
+      phone,
+      password,
+    },
+    withCredentials: true,
   });
 };

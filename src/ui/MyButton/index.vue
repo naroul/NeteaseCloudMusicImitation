@@ -26,7 +26,6 @@ export default {
     width: {
       type: [Number, String],
       required: false,
-      default: 80,
     },
 
     /**
@@ -35,7 +34,6 @@ export default {
     height: {
       type: [Number, String],
       required: false,
-      default: 30,
     },
 
     /**
