@@ -2,16 +2,47 @@
 
 <template>
   <div class="song-list" :style="{ width: `${width}px` }">
+    <!-- 歌单表头 参数说明 -->
     <div v-if="type === 'playlist'" class="song-list-title">
-			<div class="title-rank"></div>
-			<div class="title-cover"></div>
-			<div class=""></div>
-		</div>
-    <li v-for="item of songList">{{ item.name }}</li>
+      <div class="title-content list-rank"></div>
+      <div class="title-content list-cover">标题</div>
+      <div class="title-content list-duration">时长</div>
+      <div class="title-content list-singer">歌手</div>
+    </div>
+    <div
+      v-for="(item, index) of songList"
+      :key="item.id"
+      :class="[
+        'song-list-item',
+        {
+          'bak-grey': index % 2 === 1,
+          'top-three': index < 3 && type === 'playlist',
+        },
+      ]"
+      @mouseover="showOperators(index)"
+      @mouseleave="hideOperators"
+    >
+      <div class="item-rank item-normal">{{ index + 1 }}</div>
+      <div class="item-cover item-normal">
+        <img :src="item.al.picUrl" v-if="index < 3 && type === 'playlist'" />
+        <i class="iconfont icon-play" />
+        <div>{{ item.name }}</div>
+      </div>
+      <div class="item-duration item-normal">
+        <div v-if="indexHover === index">
+          <i class="iconfont icon-add-select"></i>
+          <i class="iconfont icon-collection"></i>
+        </div>
+        <span v-else>{{ _formatMsToDuration(item.dt) }}</span>
+      </div>
+      <div class="item-singer item-normal">{{ item.ar[0].name }}</div>
+    </div>
   </div>
 </template>
 
 <script>
+import { formatMsToDuration } from '^/formatMsToDuration';
+
 export default {
   props: {
     /**
@@ -41,7 +72,141 @@ export default {
       required: false,
     },
   },
+
+  data() {
+    return {
+      indexHover: NaN,
+    };
+  },
+
+  methods: {
+    /**
+     * 将毫秒转换成分秒
+     */
+    _formatMsToDuration(ms) {
+      return formatMsToDuration(ms);
+    },
+
+    /**
+     * 设置鼠标悬浮的歌曲项  显示操作按钮
+     */
+    showOperators(index) {
+      this.indexHover = index;
+    },
+
+    /**
+     * 隐藏操作按钮
+     */
+    hideOperators() {
+      this.indexHover = NaN;
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '#/scss/global.scss';
+
+.song-list {
+  border: 1px solid #ccc;
+
+  .song-list-title {
+    display: flex;
+
+    .title-content {
+      padding: 8px 10px;
+      height: 18px;
+      line-height: 18px;
+      border: 1px solid #ccc;
+      border-bottom: 2px solid #ccc;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .list-rank {
+      border-left: 0;
+      width: 50px;
+      color: #999;
+    }
+
+    .list-cover {
+      flex: 1;
+    }
+
+    .list-duration {
+      width: 90px;
+    }
+
+    .list-singer {
+      width: 170px;
+      border-right: 0;
+    }
+
+    .list-normal {
+      height: 30px;
+    }
+  }
+
+  .song-list-item {
+    height: 30px;
+    display: flex;
+    background: #f5f5f5;
+    font-size: 12px;
+
+    .item-normal {
+      padding: 6px 10px;
+      height: 18px;
+      line-height: 18px;
+    }
+
+    .item-rank {
+      width: 50px;
+      text-align: center;
+      color: #999;
+    }
+
+    .item-cover {
+      flex: 1;
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 50px;
+        height: 50px;
+        margin-right: 14px;
+      }
+
+      .iconfont {
+        font-size: 18px;
+        margin-right: 10px;
+      }
+    }
+
+    .item-duration {
+      width: 90px;
+
+      .iconfont {
+        font-size: 18px;
+      }
+    }
+
+    .item-singer {
+      width: 170px;
+    }
+  }
+
+  .bak-grey {
+    background: #e6e6e6;
+  }
+
+  .top-three {
+    height: 67px;
+
+    .item-normal {
+      padding: 6px 10px;
+      height: 55px;
+      line-height: 55px;
+    }
+  }
+}
+</style>
