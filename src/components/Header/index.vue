@@ -136,6 +136,7 @@ export default {
       logout()
         .then((res) => {
           this.setLoginStatus(false);
+          this.$router.push('/home/recommend');
         })
         .catch((e) => {
           this.$toast.failed('登出时遇到错误，请重试');

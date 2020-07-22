@@ -96,6 +96,7 @@
           :type="'playlist'"
           :width="670"
         />
+        <Comment v-if="this.id" :id="this.id" :type="'playlist'" />
       </div>
     </div>
   </div>
@@ -106,6 +107,7 @@ import { getAllToplist, getToplistCur } from '@/apis/toplist';
 import { formatMsToDate } from '^/formatMsToDate';
 import MyButton from '@/ui/MyButton';
 import SongList from '@/components/SongList';
+import Comment from '@/components/Comment';
 
 export default {
   data() {
@@ -114,6 +116,11 @@ export default {
        * 所有榜单数据
        */
       toplistDataAll: [],
+
+      /**
+       * 当前页对应歌单id
+       */
+      id: NaN,
 
       /**
        * 当前页显示的榜单数据
@@ -180,7 +187,6 @@ export default {
      */
     async _getToplistCur(id) {
       await getToplistCur(id).then(({ data: { playlist } }) => {
-        console.log(playlist);
         this.toplistDataCur = playlist;
       });
     },
@@ -206,6 +212,11 @@ export default {
        * 如果url中有id，则加载该id的歌单信息
        */
       this._getToplistCur(this.$route.query.id);
+
+      /**
+       * 根据路由设置当前对应歌单id
+       */
+      this.id = Number(this.$route.query.id);
     }
   },
 
@@ -234,6 +245,11 @@ export default {
       this._getToplistCur(to.query.id);
 
       /**
+       * 根据路由设置当前对应歌单id
+       */
+      this.id = Number(to.query.id);
+
+      /**
        * 调用next后，守卫才能resolve，等待中的路由才能变化
        */
       next();
@@ -248,6 +264,7 @@ export default {
   components: {
     MyButton,
     SongList,
+    Comment,
   },
 };
 </script>
