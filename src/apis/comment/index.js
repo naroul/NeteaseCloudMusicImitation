@@ -18,6 +18,7 @@ export const getCommentPlaylist = ({ id, limit, offset, before }) => {
       offset,
       before,
     },
+    withCredentials: true,
   });
 };
 
@@ -37,6 +38,7 @@ export const getHotCommentPlaylist = ({ id, before }) => {
       offset: 0,
       before,
     },
+    withCredentials: true,
   });
 };
 
@@ -56,6 +58,7 @@ export const getHotCommentMusic = ({ id, before }) => {
       offset: 0,
       before,
     },
+    withCredentials: true,
   });
 };
 
@@ -72,6 +75,7 @@ export const getCommentMusic = ({ id, limit, offset, before }) => {
       offset,
       before,
     },
+    withCredentials: true,
   });
 };
 

@@ -31,12 +31,12 @@
     </div>
 
     <!-- 最新热评 -->
-    <div class="hot-cmts" v-if="hotCmts && hotCmts.data.hotComments.length">
+    <div v-if="hotCmts && hotCmts.data.hotComments.length">
       <div class="cmts-label">最新热评</div>
 
       <!-- 用户评论 -->
       <div
-        class="hot-cmt"
+        class="cmt-wrapper"
         v-for="hotCmt of hotCmts.data.hotComments"
         :key="hotCmt.commentId"
       >
@@ -65,15 +65,38 @@
             <span>{{ _formatMsToDate(hotCmt.time) }}</span>
             <div class="opts">
               <i
-                :class="['iconfont', 'icon-good', { like: hotCmt.liked }]"
-                @click="_commentLike({ id, cid: hotCmt.commentId })"
+                :class="[
+                  'iconfont',
+                  'icon-good',
+                  {
+                    like: likedCids.includes(hotCmt.commentId) || hotCmt.liked,
+                  },
+                ]"
+                @click="
+                  likeClicked({
+                    cid: hotCmt.commentId,
+                    isLiked: comment.liked,
+                  })
+                "
               />
               <span
                 v-if="hotCmt.likedCount"
                 class="count-like"
-                @click="_commentLike({ id, cid: hotCmt.commentId })"
+                @click="
+                  likeClicked({
+                    cid: hotCmt.commentId,
+                    isLiked: comment.liked,
+                  })
+                "
               >
-                ({{ hotCmt.likedCount }})
+                (
+                {{
+                  getCountAfterLiked({
+                    cid: hotCmt.commentId,
+                    likedCount: hotCmt.likedCount,
+                  }) || hotCmt.likedCount
+                }}
+                )
               </span>
               <span
                 class="text-reply"
@@ -103,6 +126,106 @@
         </div>
       </div>
     </div>
+
+    <!-- 最新评论 -->
+    <div v-if="comments && comments.data.comments.length">
+      <div class="cmts-label">最新评论</div>
+
+      <!-- 用户评论 -->
+      <div
+        class="cmt-wrapper"
+        v-for="comment of comments.data.comments"
+        :key="comment.commentId"
+      >
+        <img :src="comment.user.avatarUrl" />
+        <div class="cmt-content">
+          <div class="cmt">
+            <span class="usr-name">
+              {{ comment.user.nickname }}<span>:</span>
+            </span>
+            <span class="usr-cmt">{{ comment.content }} </span>
+          </div>
+
+          <!-- 被回复的评论 -->
+          <div class="replied-cmt" v-if="comment.beReplied.length">
+            <div class="replied-arrow"></div>
+            <span class="replied-name">
+              {{ comment.beReplied[0].user.nickname }}<span>:</span>
+            </span>
+            <span class="replied-content">
+              {{ comment.beReplied[0].content }}
+            </span>
+          </div>
+
+          <!-- 评论的信息 -->
+          <div class="info">
+            <span>{{ _formatMsToDate(comment.time) }}</span>
+            <div class="opts">
+              <i
+                :class="[
+                  'iconfont',
+                  'icon-good',
+                  {
+                    like:
+                      likedCids.includes(comment.commentId) || comment.liked,
+                  },
+                ]"
+                @click="
+                  likeClicked({
+                    cid: comment.commentId,
+                    isLiked: comment.liked,
+                  })
+                "
+              />
+              <span
+                v-show="
+                  comment.likedCount || likedCids.includes(comment.commentId)
+                "
+                class="count-like"
+                @click="
+                  likeClicked({
+                    cid: comment.commentId,
+                    isLiked: comment.liked,
+                  })
+                "
+              >
+                (
+                {{
+                  getCountAfterLiked({
+                    cid: comment.commentId,
+                    likedCount: comment.likedCount,
+                  }) || comment.likedCount
+                }}
+                )
+              </span>
+              <span
+                class="text-reply"
+                @click="controlReply(comment.commentId, comment.user.nickname)"
+              >
+                回复
+              </span>
+            </div>
+          </div>
+
+          <!-- 回复框 -->
+          <div class="reply" v-if="comment.commentId === repliedId">
+            <div class="reply-arrow"></div>
+            <textarea class="input-reply" v-model="replyValue" type="text" />
+            <div class="info-reply">
+              <span :class="['remainder', { 'red-font': replyRemainder < 0 }]">
+                {{ replyRemainder }}
+              </span>
+              <MyButton
+                class="btn-reply"
+                :onclick="() => reply(comment.user.nickname)"
+              >
+                回复
+              </MyButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -121,6 +244,7 @@ import {
   commentUnlikeMusic,
   replyCommentMusic,
 } from '@/apis/comment';
+import { includes, uniqBy } from 'lodash';
 import { mapGetters, mapMutations } from 'vuex';
 import MyButton from '@/ui/MyButton';
 import { formatMsToDate } from '^/formatMsToDate';
@@ -173,6 +297,12 @@ export default {
        * 正在回复的评论id
        */
       repliedId: NaN,
+
+      /**
+       * 点过赞的评论id数组
+       * type: Array<{ cid: Number | String, count: Number }>
+       */
+      likedCids: [],
     };
   },
 
@@ -241,6 +371,11 @@ export default {
      * 点击文字“回复”后的回调
      */
     controlReply(commentId, nickname) {
+      if (!this.isLogged) {
+        this.$toast.failed('请登录后再评论');
+        return;
+      }
+
       if (this.repliedId && this.repliedId === commentId) {
         /**
          * 如果存在repliedId，且操作的是回复框展开状态的评论
@@ -263,6 +398,7 @@ export default {
      */
     reply(nickname) {
       if (!this.isLogged) {
+        this.$toast.failed('请登录后再回复');
         return;
       }
 
@@ -289,6 +425,45 @@ export default {
             this.replyValue = '';
             this.repliedId = NaN;
           });
+      }
+    },
+
+    /**
+     * 点赞回调
+     */
+    likeClicked({ cid, isLiked }) {
+      if (!this.isLogged) {
+        this.$toast.failed('请登录后再进行操作');
+        return;
+      }
+
+      const { likedCids } = this;
+
+      if (!isLiked && !includes(this.likedCids, cid)) {
+        /**
+         * 将点赞的评论id加入点赞的临时存储数组likedCids并去重
+         */
+        this._commentLike({ id: this.id, cid }).then((res) => {
+          this.likedCids = [...new Set([...this.likedCids, cid])];
+        });
+      } else {
+        /**
+         * 当点击已点赞的情况,取消点赞
+         */
+        this._commentUnlike({ id: this.id, cid }).then((res) => {
+          this.likedCids.splice(likedCids.indexOf(cid), 1);
+        });
+      }
+    },
+
+    /**
+     * 返回点赞后 在原点赞数上 +1 的点赞数
+     */
+    getCountAfterLiked({ cid, likedCount }) {
+      if (includes(this.likedCids, cid)) {
+        return likedCount + 1;
+      } else {
+        return NaN;
       }
     },
 
@@ -380,7 +555,6 @@ export default {
        */
       this._getHotComments({ id }).then((res) => {
         this.hotCmts = res;
-        console.log(this.hotCmts);
       });
 
       /**
@@ -488,171 +662,168 @@ export default {
     }
   }
 
-  .hot-cmts {
-    .cmts-label {
-      height: 20px;
-      border-bottom: 1px solid #cfcfcf;
-      line-height: 20px;
-      font-size: 12px;
-      font-weight: bold;
+  .cmts-label {
+    margin-top: 30px;
+    height: 20px;
+    border-bottom: 1px solid #cfcfcf;
+    line-height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .cmt-wrapper {
+    min-height: 50px;
+    padding: 15px 0;
+    display: flex;
+    border-top: 1px solid #cfcfcf;
+
+    img {
+      width: 50px;
+      height: 50px;
     }
 
-    .hot-cmt {
-      min-height: 50px;
-      padding: 15px 0;
+    .cmt-content {
+      flex: 1;
       display: flex;
-      border: 1px solid #cfcfcf;
-      border-left: none;
-      border-right: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2px 0 2px 10px;
 
-      img {
-        width: 50px;
-        height: 50px;
+      .cmt {
+        .usr-name {
+          color: #0c73c2;
+          font-size: 12px;
+        }
+
+        .usr-cmt {
+          margin-left: 5px;
+          font-size: 12px;
+        }
       }
 
-      .cmt-content {
-        flex: 1;
+      .replied-cmt {
+        position: relative;
+        margin-top: 10px;
+        padding: 8px 19px;
+        line-height: 20px;
+        background: #e5e5e5;
+        border: 1px solid #dedede;
+        color: #666;
+
+        .replied-arrow {
+          position: absolute;
+          top: -6px;
+          left: 3px;
+          border-bottom: 8px solid #e5e5e5;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
+        }
+
+        .replied-name {
+          color: #0c73c2;
+          font-size: 12px;
+        }
+
+        .replied-content {
+          margin-left: 5px;
+          font-size: 12px;
+        }
+      }
+
+      .info {
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        span {
+          font-size: 12px;
+          color: #999;
+        }
+
+        .opts {
+          display: flex;
+          align-items: center;
+
+          i {
+            font-size: 18px;
+            color: #4ebcf8;
+            cursor: pointer;
+          }
+
+          .count-like {
+            margin-right: 8px;
+            cursor: pointer;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+
+          .like {
+            color: red;
+          }
+
+          .text-reply {
+            margin-left: 8px;
+            cursor: pointer;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+
+      .reply {
+        position: relative;
+        margin-top: 15px;
+        padding: 15px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        padding: 2px 0 2px 10px;
+        background: #e5e5e5;
+        border: 1px solid #fcfcfc;
+        border-radius: 2px;
 
-        .cmt {
-          .usr-name {
-            color: #0c73c2;
-            font-size: 12px;
-          }
-
-          .usr-cmt {
-            margin-left: 5px;
-            font-size: 12px;
-          }
+        .reply-arrow {
+          position: absolute;
+          top: -6px;
+          right: 6px;
+          border-bottom: 8px solid #e5e5e5;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
         }
 
-        .replied-cmt {
-          position: relative;
-          margin-top: 10px;
-          padding: 8px 19px;
-          line-height: 20px;
-          background: #e5e5e5;
-          border: 1px solid #dedede;
-          color: #666;
-
-          .replied-arrow {
-            position: absolute;
-            top: -6px;
-            left: 3px;
-            border-bottom: 8px solid #e5e5e5;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-          }
-
-          .replied-name {
-            color: #0c73c2;
-            font-size: 12px;
-          }
-
-          .replied-content {
-            margin-left: 5px;
-            font-size: 12px;
-          }
+        .input-reply {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 5px 6px 6px;
+          font-size: 12px;
+          border: 1px solid #cdcdcd;
+          border-radius: 2px;
+          line-height: 19px;
+          resize: none;
         }
 
-        .info {
-          margin-top: 15px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+        .info-reply {
+          padding-top: 10px;
+          text-align: right;
 
           span {
             font-size: 12px;
-            color: #999;
+            margin-right: 10px;
           }
 
-          .opts {
-            display: flex;
-            align-items: center;
-
-            i {
-              font-size: 18px;
-              color: #4ebcf8;
-              cursor: pointer;
-            }
-
-            .count-like {
-              margin-right: 8px;
-              cursor: pointer;
-
-              &:hover {
-                text-decoration: underline;
-              }
-            }
-
-            .like {
-              color: $border-red;
-            }
-
-            .text-reply {
-              margin-left: 8px;
-              cursor: pointer;
-
-              &:hover {
-                text-decoration: underline;
-              }
-            }
-          }
-        }
-
-        .reply {
-          position: relative;
-          margin-top: 15px;
-          padding: 15px;
-          display: flex;
-          flex-direction: column;
-          background: #e5e5e5;
-          border: 1px solid #fcfcfc;
-          border-radius: 2px;
-
-          .reply-arrow {
-            position: absolute;
-            top: -6px;
-            right: 6px;
-            border-bottom: 8px solid #e5e5e5;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-          }
-
-          .input-reply {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 5px 6px 6px;
+          .btn-reply {
+            width: 46px;
+            height: 25px;
+            margin-right: 2px;
+            background: rgba(40, 120, 198, 1);
+            color: #fff;
             font-size: 12px;
-            border: 1px solid #cdcdcd;
-            border-radius: 2px;
-            line-height: 19px;
-            resize: none;
-          }
 
-          .info-reply {
-            padding-top: 10px;
-            text-align: right;
-
-            span {
-              font-size: 12px;
-              margin-right: 10px;
-            }
-
-            .btn-reply {
-              width: 46px;
-              height: 25px;
-              margin-right: 2px;
-              background: rgba(40, 120, 198, 1);
-              color: #fff;
-              font-size: 12px;
-
-              &:hover {
-                background: #4a93db;
-              }
+            &:hover {
+              background: #4a93db;
             }
           }
         }
