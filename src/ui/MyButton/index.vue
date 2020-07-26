@@ -106,5 +106,6 @@ button {
 
 .disabled {
   background: $disabled-color !important;
+  color: #bebebe !important;
 }
 </style>

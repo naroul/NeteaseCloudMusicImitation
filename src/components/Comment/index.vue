@@ -37,7 +37,7 @@
       <!-- 用户评论 -->
       <div
         class="cmt-wrapper"
-        v-for="hotCmt of hotCmts.data.hotComments"
+        v-for="(hotCmt, index) of hotCmts.data.hotComments"
         :key="hotCmt.commentId"
       >
         <img :src="hotCmt.user.avatarUrl" />
@@ -69,13 +69,18 @@
                   'iconfont',
                   'icon-good',
                   {
-                    like: likedCids.includes(hotCmt.commentId) || hotCmt.liked,
+                    like:
+                      !likedCids.unliked.includes(hotCmt.commentId) &&
+                      (likedCids.liked.includes(hotCmt.commentId) ||
+                        hotCmt.liked),
                   },
                 ]"
                 @click="
                   likeClicked({
+                    type: 'hotCmt',
+                    index,
                     cid: hotCmt.commentId,
-                    isLiked: comment.liked,
+                    isLiked: hotCmt.liked,
                   })
                 "
               />
@@ -84,18 +89,15 @@
                 class="count-like"
                 @click="
                   likeClicked({
+                    type: 'hotCmt',
+                    index,
                     cid: hotCmt.commentId,
-                    isLiked: comment.liked,
+                    isLiked: hotCmt.liked,
                   })
                 "
               >
                 (
-                {{
-                  getCountAfterLiked({
-                    cid: hotCmt.commentId,
-                    likedCount: hotCmt.likedCount,
-                  }) || hotCmt.likedCount
-                }}
+                {{ likedCounts.hotCmt[index] }}
                 )
               </span>
               <span
@@ -134,7 +136,7 @@
       <!-- 用户评论 -->
       <div
         class="cmt-wrapper"
-        v-for="comment of comments.data.comments"
+        v-for="(comment, index) of comments.data.comments"
         :key="comment.commentId"
       >
         <img :src="comment.user.avatarUrl" />
@@ -167,11 +169,15 @@
                   'icon-good',
                   {
                     like:
-                      likedCids.includes(comment.commentId) || comment.liked,
+                      !likedCids.unliked.includes(comment.commentId) &&
+                      (likedCids.liked.includes(comment.commentId) ||
+                        comment.liked),
                   },
                 ]"
                 @click="
                   likeClicked({
+                    type: 'cmt',
+                    index,
                     cid: comment.commentId,
                     isLiked: comment.liked,
                   })
@@ -179,23 +185,21 @@
               />
               <span
                 v-show="
-                  comment.likedCount || likedCids.includes(comment.commentId)
+                  comment.likedCount ||
+                    likedCids.liked.includes(comment.commentId)
                 "
                 class="count-like"
                 @click="
                   likeClicked({
+                    type: 'cmt',
+                    index,
                     cid: comment.commentId,
                     isLiked: comment.liked,
                   })
                 "
               >
                 (
-                {{
-                  getCountAfterLiked({
-                    cid: comment.commentId,
-                    likedCount: comment.likedCount,
-                  }) || comment.likedCount
-                }}
+                {{ likedCounts.cmt[index] }}
                 )
               </span>
               <span
@@ -223,6 +227,26 @@
               </MyButton>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 分页 -->
+      <div class="pg-wrapper">
+        <div class="pagination">
+          <MyButton class="btn-pg" :disabled="pgCur === 1">
+            <i class="iconfont icon-arrow-lift" />
+            <span>上一页</span>
+          </MyButton>
+          <div
+            :class="['page', { ellipsis: pg === 0, 'page-cur': pg === pgCur }]"
+            v-for="pg of pgList"
+          >
+            {{ pg === 0 ? '...' : pg }}
+          </div>
+          <MyButton class="btn-pg" :disabled="pgCur === pgSize">
+            <span>下一页</span>
+            <i class="iconfont icon-arrow-right" />
+          </MyButton>
         </div>
       </div>
     </div>
@@ -279,7 +303,7 @@ export default {
       comments: null,
 
       /**
-       * 15条热门评论
+       * 15条热门评论数据
        */
       hotCmts: null,
 
@@ -300,9 +324,20 @@ export default {
 
       /**
        * 点过赞的评论id数组
-       * type: Array<{ cid: Number | String, count: Number }>
+       * type: { liked: Array<Number | String>, unliked: Array<Number | String> }
        */
-      likedCids: [],
+      likedCids: { liked: [], unliked: [] },
+
+      /**
+       * 点过赞数
+       * type: { hotCmt: Array<Number>, cmt: Array<Number> }
+       */
+      likedCounts: { hotCmt: [], cmt: [] },
+
+      /**
+       * 当前 最新评论 的页码
+       */
+      pgCur: 1,
     };
   },
 
@@ -319,6 +354,56 @@ export default {
      */
     replyRemainder() {
       return 140 - this.replyValue.length;
+    },
+
+    /**
+     * 分页的总页数
+     */
+    pgSize() {
+      const pgSize = parseInt(this.comments.data.total / 20);
+      if (this.comments.total % 20 === 0) {
+        return pgSize;
+      } else {
+        return pgSize + 1;
+      }
+    },
+
+    /**
+     * 分页显示的9个页数的页数列表
+     */
+    pgList() {
+      if (this.pgSize <= 8) {
+        /**
+         * 总页数不满9页的情况
+         */
+        let pgLs = [];
+        for (i = 1; i <= this.pgSize; i++) {
+          pgLs = [...pgLs, i];
+        }
+        return pgLs;
+      } else {
+        /**
+         * 总页数超过9页的情况，但当前页小于5时
+         */
+        if (this.pgCur <= 5) {
+          /**
+           *  0代表省略号
+           */
+          return [1, 2, 3, 4, 5, 6, 7, 8, 0, this.pgSize];
+        } else if (this.pgCur > 5 && this.pgCur < this.pgSize) {
+          let pgLs = [];
+          for (i = this.pgCur - 3; i <= this.pgCur + 3; i++) {
+            pgLs = [...pgLs, i];
+          }
+          return [1, 0, ...pgLs, 0, this.pgSize];
+        } else {
+          let pgLs = [];
+          for (i = this.pgSize - 7; i <= this.pgSize; i++) {
+            pgLs = [...pgLs, i];
+          }
+          return [1, 0, ...pgLs];
+        }
+      }
     },
 
     ...mapGetters(['isLogged', 'isShowLoginDialog']),
@@ -431,39 +516,66 @@ export default {
     /**
      * 点赞回调
      */
-    likeClicked({ cid, isLiked }) {
+    likeClicked({ type, index, cid, isLiked }) {
       if (!this.isLogged) {
         this.$toast.failed('请登录后再进行操作');
         return;
       }
 
-      const { likedCids } = this;
+      let { liked, unliked } = this.likedCids;
+      let { hotCmt, cmt } = this.likedCounts;
 
-      if (!isLiked && !includes(this.likedCids, cid)) {
+      if (!includes(unliked, cid) && (includes(liked, cid) || isLiked)) {
         /**
+         * 取消点赞
+         */
+        this._commentUnlike({ id: this.id, cid }).then((res) => {
+          if (includes(liked, cid)) {
+            /**
+             * 当cid在点赞列表中存在时
+             */
+            liked.splice(liked.indexOf(cid), 1);
+            unliked = [...new Set([...unliked, cid])];
+            this.likedCids = { liked, unliked };
+          } else {
+            unliked = [...new Set([...unliked, cid])];
+            this.likedCids = { liked, unliked };
+          }
+
+          if (type === 'hotCmt') {
+            hotCmt[index] -= 1;
+            this.likedCounts = { ...this.likedCounts, hotCmt };
+          } else {
+            cmt[index] -= 1;
+            this.likedCounts = { ...this.likedCounts, cmt };
+          }
+        });
+      } else {
+        /**
+         * 点赞
          * 将点赞的评论id加入点赞的临时存储数组likedCids并去重
          */
         this._commentLike({ id: this.id, cid }).then((res) => {
-          this.likedCids = [...new Set([...this.likedCids, cid])];
-        });
-      } else {
-        /**
-         * 当点击已点赞的情况,取消点赞
-         */
-        this._commentUnlike({ id: this.id, cid }).then((res) => {
-          this.likedCids.splice(likedCids.indexOf(cid), 1);
-        });
-      }
-    },
+          if (includes(unliked, cid)) {
+            /**
+             * 当cid在取消点赞列表中存在时
+             */
+            unliked.splice(unliked.indexOf(cid), 1);
+            liked = [...new Set([...liked, cid])];
+            this.likedCids = { liked, unliked };
+          } else {
+            liked = [...new Set([...liked, cid])];
+            this.likedCids = { liked, unliked };
+          }
 
-    /**
-     * 返回点赞后 在原点赞数上 +1 的点赞数
-     */
-    getCountAfterLiked({ cid, likedCount }) {
-      if (includes(this.likedCids, cid)) {
-        return likedCount + 1;
-      } else {
-        return NaN;
+          if (type === 'hotCmt') {
+            hotCmt[index] += 1;
+            this.likedCounts = { ...this.likedCounts, hotCmt };
+          } else {
+            cmt[index] += 1;
+            this.likedCounts = { ...this.likedCounts, cmt };
+          }
+        });
       }
     },
 
@@ -555,6 +667,11 @@ export default {
        */
       this._getHotComments({ id }).then((res) => {
         this.hotCmts = res;
+        console.log(this.hotCmts);
+        this.likedCounts = {
+          ...this.likedCounts,
+          hotCmt: res.data.hotComments.map((item) => item.likedCount),
+        };
       });
 
       /**
@@ -562,6 +679,10 @@ export default {
        */
       this._getComments({ id }).then((res) => {
         this.comments = res;
+        this.likedCounts = {
+          ...this.likedCounts,
+          cmt: res.data.comments.map((item) => item.likedCount),
+        };
         console.log(this.comments);
       });
     },
@@ -839,6 +960,58 @@ export default {
 
   .red-font {
     color: red;
+  }
+
+  .pg-wrapper {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .pagination {
+      display: flex;
+      color: #333;
+
+      .btn-pg {
+        height: 26px;
+        margin: 0 2px;
+        line-height: 26px;
+        font-size: 12px;
+        background: #e5e5e5;
+        border: 1px solid #ccc;
+
+        &:hover {
+          background: #f4f4f4;
+          color: #505050;
+        }
+      }
+
+      .iconfont {
+        font-size: 10px;
+      }
+
+      .page {
+        margin: 0 2px;
+        padding: 0 8px;
+        height: 22px;
+        line-height: 22px;
+        font-size: 12px;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        cursor: pointer;
+      }
+
+      .page-cur {
+        background: rgb(196, 10, 15);
+        border-color: #a2161b;
+        color: #fff;
+      }
+
+      .ellipsis {
+        border: none;
+      }
+    }
   }
 }
 </style>
