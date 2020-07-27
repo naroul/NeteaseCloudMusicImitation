@@ -31,7 +31,7 @@
     </div>
 
     <!-- 最新热评 -->
-    <div v-if="hotCmts && hotCmts.data.hotComments.length">
+    <div v-if="hotCmts && hotCmts.data.hotComments.length && pgCur === 1">
       <div class="cmts-label">最新热评</div>
 
       <!-- 用户评论 -->
@@ -233,19 +233,40 @@
       <!-- 分页 -->
       <div class="pg-wrapper">
         <div class="pagination">
-          <MyButton class="btn-pg" :disabled="pgCur === 1">
-            <i class="iconfont icon-arrow-lift" />
-            <span>上一页</span>
+          <MyButton
+            class="btn-pg"
+            :disabled="pgCur === 1"
+            :onclick="pgChangePrev"
+          >
+            <i
+              :class="[
+                'iconfont',
+                'icon-arrow-lift',
+                { disabled: pgCur === 1 },
+              ]"
+            />
+            <span :class="{ disabled: pgCur === 1 }">上一页</span>
           </MyButton>
           <div
             :class="['page', { ellipsis: pg === 0, 'page-cur': pg === pgCur }]"
             v-for="pg of pgList"
+            @click="pgChange(pg)"
           >
             {{ pg === 0 ? '...' : pg }}
           </div>
-          <MyButton class="btn-pg" :disabled="pgCur === pgSize">
-            <span>下一页</span>
-            <i class="iconfont icon-arrow-right" />
+          <MyButton
+            class="btn-pg"
+            :disabled="pgCur === pgSize"
+            :onclick="pgChangeNext"
+          >
+            <span :class="{ disabled: pgCur === pgSize }">下一页</span>
+            <i
+              :class="[
+                'iconfont',
+                'icon-arrow-right',
+                { disabled: pgCur === pgSize },
+              ]"
+            />
           </MyButton>
         </div>
       </div>
@@ -390,15 +411,15 @@ export default {
            *  0代表省略号
            */
           return [1, 2, 3, 4, 5, 6, 7, 8, 0, this.pgSize];
-        } else if (this.pgCur > 5 && this.pgCur < this.pgSize) {
+        } else if (this.pgCur > 5 && this.pgCur <= this.pgSize - 5) {
           let pgLs = [];
-          for (i = this.pgCur - 3; i <= this.pgCur + 3; i++) {
+          for (let i = this.pgCur - 3; i <= this.pgCur + 3; i++) {
             pgLs = [...pgLs, i];
           }
           return [1, 0, ...pgLs, 0, this.pgSize];
         } else {
           let pgLs = [];
-          for (i = this.pgSize - 7; i <= this.pgSize; i++) {
+          for (let i = this.pgSize - 7; i <= this.pgSize; i++) {
             pgLs = [...pgLs, i];
           }
           return [1, 0, ...pgLs];
@@ -412,6 +433,23 @@ export default {
   watch: {
     id(newId, oldId) {
       this._initData(newId);
+    },
+
+    /**
+     * 页码改变，重新请求数据
+     */
+    pgCur(newPg, oldPg) {
+      this._getComments({
+        id: this.id,
+        limit: 20,
+        offset: (newPg - 1) * 20,
+      }).then((res) => {
+        this.comments = res;
+        this.likedCounts = {
+          ...this.likedCounts,
+          cmt: res.data.comments.map((item) => item.likedCount),
+        };
+      });
     },
   },
 
@@ -577,6 +615,27 @@ export default {
           }
         });
       }
+    },
+
+    /**
+     * 上一页
+     */
+    pgChangePrev() {
+      this.pgCur -= 1;
+    },
+
+    /**
+     * 页码点击 回调
+     */
+    pgChange(pg) {
+      this.pgCur = pg;
+    },
+
+    /**
+     * 下一页
+     */
+    pgChangeNext() {
+      this.pgCur += 1;
     },
 
     /**
@@ -984,6 +1043,10 @@ export default {
         &:hover {
           background: #f4f4f4;
           color: #505050;
+        }
+
+        .disabled {
+          color: #bebebe;
         }
       }
 
