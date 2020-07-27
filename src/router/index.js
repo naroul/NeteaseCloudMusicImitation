@@ -42,6 +42,15 @@ const Toplist = (resolve) => {
 };
 
 /**
+ * 歌单页
+ */
+const Playlist = (resolve) => {
+  import('@/pages/Playlist').then((module) => {
+    resolve(module);
+  });
+};
+
+/**
  * 404
  */
 const NotFound = (resolve) => {
@@ -66,6 +75,10 @@ const routes = [
       {
         path: 'toplist',
         component: Toplist,
+      },
+      {
+        path: 'playlist',
+        component: Playlist,
       },
     ],
   },

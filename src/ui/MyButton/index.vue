@@ -87,14 +87,14 @@ button {
   text-align: center;
   font-size: 15px;
   color: #404040;
-  background: $white-color;
+  background: $btn-grey-normal;
   outline: none;
   cursor: pointer;
 
   &:hover {
     border-color: $border-grey-white;
     color: $white-color;
-    background-color: rgba(228, 230, 237, 0.25);
+    background-color: $btn-white-hover;
   }
 
   &:active {
