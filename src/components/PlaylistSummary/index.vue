@@ -1,15 +1,19 @@
 <template>
   <div class="playlist-summary-wrapper">
     <div class="cover">
-      <img :src="data.picUrl" />
+      <img :src="data.picUrl || data.coverImgUrl" />
       <div class="cover-bottom-bar">
         <i class="iconfont icon-service"></i>
         <span class="play-count">{{ playCount }}</span>
         <i class="iconfont icon-play"></i>
       </div>
     </div>
-    <p class="name">
+    <p :class="['name', { elip: isElip }]">
       <router-link to="/">{{ data.name }}</router-link>
+    </p>
+    <p class="author" v-if="isShowAuthor">
+      <span>by</span>
+      <span class="author-name">{{ data.creator.nickname }}</span>
     </p>
   </div>
 </template>
@@ -26,6 +30,24 @@ export default {
       type: Object,
       required: true,
       default: {},
+    },
+
+    /**
+     * 是否要显示歌单作者
+     */
+    isShowAuthor: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+
+    /**
+     * 标题超出部分是否要显示省略号
+     */
+    isElip: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
 
@@ -46,7 +68,7 @@ export default {
   vertical-align: top;
   box-sizing: border-box;
   width: 140px;
-  height: 200px;
+  min-height: 200px;
 
   .cover {
     position: relative;
@@ -94,6 +116,30 @@ export default {
     margin: 8px 0 3px;
     line-height: 1.4;
     font-size: 14px;
+
+    a {
+      color: #000;
+    }
+  }
+
+  .elip {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .author {
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    span {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .author-name {
+      color: #666;
+    }
   }
 }
 </style>

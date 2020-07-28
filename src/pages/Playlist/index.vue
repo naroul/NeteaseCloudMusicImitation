@@ -7,16 +7,16 @@
 
         <!-- 选择下拉框 -->
         <div class="selector">
-          <MyButton class="cat-select">
+          <MyButton class="cat-select" :onclick="controlSelector">
             <span>选择分类</span>
             <i class="iconfont icon-arrow-down" />
           </MyButton>
 
           <!-- 下拉框 -->
-          <div class="select-content" v-if="catSubs">
+          <div class="select-content" v-if="catSubs && isShowSelector">
             <div class="arrorw-top"></div>
             <div class="all-style">
-              <MyButton class="btn-all">
+              <MyButton :onclick="allClicked" class="btn-all">
                 <span>全部风格</span>
               </MyButton>
             </div>
@@ -26,12 +26,40 @@
                 <span>{{ cat[0] }}</span>
               </div>
               <div class="cat-subs">
-                <span class="sub" v-for="sub of cat[1]">{{ sub }}</span>
+                <span
+                  class="sub"
+                  v-for="sub of cat[1]"
+                  @click="subClicked(sub)"
+                >
+                  {{ sub }}
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- 最多36个歌单的展示 -->
+      <div class="playlist-content">
+        <div
+          class="playlist-item"
+          v-if="playList.length"
+          v-for="data of playList"
+        >
+          <PlaylistSummary
+            :data="data"
+            :isShowAuthor="true"
+            :isElip="true"
+            :key="data.id"
+          />
+        </div>
+      </div>
+
+      <Pagination
+        :pgSize="pgSize"
+        :isPgReset="isPgReset"
+        @pgChange="onPgChange"
+      />
     </div>
   </div>
 </template>
@@ -42,7 +70,10 @@ import {
   getHotPlaylistCat,
   getTopPlaylist,
 } from '@/apis/playlist';
+import { includes } from 'lodash';
 import MyButton from '@/ui/MyButton';
+import PlaylistSummary from '@/components/PlaylistSummary';
+import Pagination from '@/components/Pagination';
 
 export default {
   data() {
@@ -61,10 +92,110 @@ export default {
        * 当前页所选的标签
        */
       catCur: '全部',
+
+      /**
+       * 是否显示下拉框
+       */
+      isShowSelector: false,
+
+      /**
+       * 目前所在页
+       */
+      pgCur: 1,
+
+      /**
+       * 当前标签拥有歌单页数
+       */
+      pgSize: NaN,
+
+      /**
+       * 是否重置页码
+       */
+      isPgReset: false,
     };
   },
 
+  watch: {
+    /**
+     * 监听当前标签 变化时重新请求数据
+     */
+    async catCur(newCat, oldCat) {
+      await this._getTopPlaylist({
+        limit: 36,
+        cat: newCat,
+      }).then(({ data: { playlists, total } }) => {
+        this.playList = playlists;
+        /**
+         * 当设置为true时，会更新页码(触发分页组件中的 watch)
+         */
+        this.isPgReset = true;
+        const pgSize = parseInt(total / 36);
+        this.pgSize = total % 36 === 0 ? pgSize : pgSize + 1;
+      });
+
+      /**
+       * 更新页码后，置为false，以便下一次触发watch
+       */
+      this.isPgReset = false;
+    },
+
+    /**
+     * 监听当前页数 变化时请求对应页数据
+     */
+    pgCur(newPg, oldPg) {
+      this._getTopPlaylist({
+        limit: 36,
+        offset: (newPg - 1) * 36,
+        cat: this.catCur,
+      }).then(({ data: { playlists, total } }) => {
+        this.playList = playlists;
+        const pgSize = parseInt(total / 36);
+        this.pgSize = total % 36 === 0 ? pgSize : pgSize + 1;
+      });
+    },
+  },
+
   methods: {
+    /**
+     * 控制下拉框
+     */
+    controlSelector() {
+      this.isShowSelector = !this.isShowSelector;
+    },
+
+    /**
+     * 全部风格 点击回调
+     */
+    allClicked() {
+      this.$router.push({
+        path: '/home/playlist',
+      });
+
+      this.isShowSelector = false;
+    },
+
+    /**
+     * 子标签点击 回调
+     */
+    subClicked(sub) {
+      this.$router.push({
+        path: '/home/playlist',
+        query: {
+          cat: sub,
+        },
+      });
+
+      this.isShowSelector = false;
+    },
+
+    /**
+     * 页数改变 回调
+     */
+    onPgChange(newPg) {
+      this.pgCur = newPg;
+      this.isShowSelector = false;
+    },
+
     /**
      * 获取歌单分类
      */
@@ -82,12 +213,15 @@ export default {
     /**
      * 获取精品歌单分类
      */
-    _getTopPlaylist({ cat, limit, before }) {
-      return getTopPlaylist({ cat, limit, before });
+    _getTopPlaylist({ cat, limit, offset, before }) {
+      return getTopPlaylist({ cat, limit, offset, before });
     },
 
-    _initData() {
-      this._getPlaylistCat().then(({ data: { categories, sub } }) => {
+    async _initData() {
+      /**
+       * 获取所有标签
+       */
+      await this._getPlaylistCat().then(({ data: { categories, sub } }) => {
         let cats = {};
         for (let cat of Object.values(categories)) {
           cats[cat] = [];
@@ -99,13 +233,31 @@ export default {
           ];
         });
         this.catSubs = cats;
-        console.log(cats);
       });
 
+      /**
+       * 按照标签获取精选歌单 默认标签为全部
+       */
+      const allCats = [...Object.values(this.catSubs).flat()];
+
+      /**
+       * 如果路由中存在标签，则设置 catCur
+       */
+      if (this.$route.query.cat && includes(allCats, this.$route.query.cat)) {
+        this.catCur = this.$route.query.cat;
+      } else {
+        this.catCur = '全部';
+      }
+
       this._getTopPlaylist({
-        limit: 35,
-      }).then(({ data: { playlists } }) => {
+        limit: 36,
+        cat: this.catCur,
+      }).then(({ data: { playlists, total } }) => {
         this.playList = playlists;
+        const pgSize = parseInt(total / 36);
+        this.pgSize = total % 36 === 0 ? pgSize : pgSize + 1;
+
+        console.log(playlists);
       });
     },
   },
@@ -122,8 +274,25 @@ export default {
     };
   },
 
+  beforeRouteUpdate(to, from, next) {
+    /**
+     * 按照标签获取精选歌单 默认标签为全部
+     */
+    const allCats = [...Object.values(this.catSubs).flat()];
+
+    if (to.query.cat && includes(allCats, to.query.cat)) {
+      this.catCur = to.query.cat;
+    } else {
+      this.catCur = '全部';
+    }
+
+    next();
+  },
+
   components: {
     MyButton,
+    PlaylistSummary,
+    Pagination,
   },
 };
 </script>
@@ -135,8 +304,8 @@ export default {
   background: $background-grey-white;
 
   .playlist-wrapper {
-    height: 1000px;
     width: 900px;
+    min-height: 650px;
     margin: 0 auto;
     padding: 40px;
     border: 1px solid #d3d3d3;
@@ -182,6 +351,8 @@ export default {
           border: 1px solid #ccc;
           box-shadow: -6px 6px 6px #ccc;
           border-radius: 6px;
+          background: #fff;
+          z-index: 1;
 
           .arrorw-top {
             position: absolute;
@@ -189,7 +360,7 @@ export default {
             left: 118px;
             width: 20px;
             height: 20px;
-            background: $background-grey-white;
+            background: #fff;
             transform: rotate(45deg);
             border-left: 1px solid #ccc;
             border-top: 1px solid #ccc;
@@ -220,7 +391,6 @@ export default {
               align-items: center;
               border-right: 1px solid #e6e6e6;
               border-bottom: 1px solid #e6e6e6;
-              cursor: pointer;
 
               i {
                 font-size: 30px;
@@ -247,6 +417,10 @@ export default {
                 padding: 0 15px;
                 margin: 15px 0;
                 cursor: pointer;
+
+                &:hover {
+                  color: #0c73c2;
+                }
               }
             }
           }
@@ -257,6 +431,16 @@ export default {
         margin-left: 20px;
         font-size: 12px;
         color: #666;
+      }
+    }
+
+    .playlist-content {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+
+      .playlist-item {
+        margin: 0 5px;
       }
     }
   }

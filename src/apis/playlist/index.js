@@ -21,15 +21,17 @@ export const getHotPlaylistCat = () => {
  * 获取精品歌单
  * @param order 可选值为 new 或 hot 默认hot
  * @param cat 分类 默认为全部
- * @param limit 歌单数量 默认20
+ * @param limit 歌单数量 默认50
+ * @param offset 偏移量
  */
-export const getTopPlaylist = ({ order, cat, limit, before }) => {
+export const getTopPlaylist = ({ order, cat, limit, offset, before }) => {
   const url = Host + '/top/playlist';
   return axios.get(url, {
     params: {
       order,
       cat,
       limit,
+      offset,
       before,
     },
   });

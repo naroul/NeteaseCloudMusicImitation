@@ -45,6 +45,15 @@ export default {
       type: Number,
       required: true,
     },
+
+    /**
+     * 是否重置页码 变成true时重置
+     */
+    isPgReset: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   data() {
@@ -102,6 +111,12 @@ export default {
      */
     pgCur(newPg, oldPg) {
       this.$emit('pgChange', newPg);
+    },
+
+    isPgReset(newIs, oldIs) {
+      if (newIs) {
+        this.pgCur = 1;
+      }
     },
   },
 
