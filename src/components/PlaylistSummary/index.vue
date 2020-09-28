@@ -5,7 +5,8 @@
       <div class="cover-bottom-bar">
         <i class="iconfont icon-service"></i>
         <span class="play-count">{{ playCount }}</span>
-        <i class="iconfont icon-play"></i>
+        <!-- 播放按钮 -->
+        <i class="iconfont icon-play" @click="play(data.id)"></i>
       </div>
     </div>
     <p :class="['name', { elip: isElip }]">
@@ -19,9 +20,13 @@
 </template>
 
 <script>
-import { formatPlayCount } from '^/formatPlayCount';
+import { playerMixin } from "@/mixins";
+import { getPlaylistDetail } from "@/apis/playlist";
+import { formatPlayCount } from "^/formatPlayCount";
 
 export default {
+  mixins: [playerMixin],
+
   props: {
     /**
      * 推荐歌单的数据
@@ -57,6 +62,45 @@ export default {
      */
     playCount() {
       return formatPlayCount(this.data.playCount);
+    },
+  },
+
+  methods: {
+    /**
+     * 将当前播放列表清空，并用歌单歌曲替代 并设置播放状态为 true
+     */
+    play(id) {
+      getPlaylistDetail({ id }).then(({ data: { playlist } }) => {
+        let list = [];
+        for (let track of playlist.tracks.values()) {
+          list = [
+            ...list,
+            {
+              id: track.id,
+              name: track.name,
+              coverUrl: track.al.picUrl,
+              picStr: track.al.pic_str,
+              source: {
+                id: playlist.id,
+                type: "歌单",
+              },
+              author: {
+                id: track.ar[0].id,
+                name: track.ar[0].name,
+              },
+              mv: track.mv,
+              dt: track.dt,
+            },
+          ];
+        }
+        this.replacePlaylistInfo(list);
+      });
+
+      /**
+       * 设置播放状态为true
+       */
+      this.setPlayStatus(true);
+      this.setVolConfigStatus(false);
     },
   },
 };
@@ -108,6 +152,10 @@ export default {
 
       .icon-play {
         font-size: 20px;
+
+        &:hover {
+          color: #fff;
+        }
       }
     }
   }

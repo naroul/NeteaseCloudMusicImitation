@@ -149,7 +149,7 @@ export default {
   border-radius: 2px;
   width: 500px;
   height: 400px;
-  background: url('~@/assets/images/Login/background.jpg');
+  background: url('~@/assets/images/Common/music.jpg');
   background-size: cover;
   background-position: center -20px;
 

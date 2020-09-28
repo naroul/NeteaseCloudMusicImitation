@@ -22,9 +22,7 @@
               to="/"
               v-for="(tag, index) of tags"
               :key="tag.id"
-            >
-              {{ tag.name }}
-            </router-link>
+            >{{ tag.name }}</router-link>
           </div>
         </div>
         <div class="grid-content">
@@ -64,12 +62,12 @@ import {
   getPlaylistHot,
   getPersonalized,
   getToplistSummary,
-} from '@/apis/recommend';
-import { getPlaylistDetail } from '@/apis/playlist';
-import Banner from '@/components/Banner';
-import PlaylistSummary from '@/components/PlaylistSummary';
-import ToplistSummary from '@/components/ToplistSummary';
-import Toast from '@/plugins/Toast';
+} from "@/apis/recommend";
+import { getPlaylistDetail } from "@/apis/playlist";
+import Banner from "@/components/Banner";
+import PlaylistSummary from "@/components/PlaylistSummary";
+import ToplistSummary from "@/components/ToplistSummary";
+import Toast from "@/plugins/Toast";
 
 export default {
   data() {
@@ -144,7 +142,7 @@ export default {
           data: {
             playlist: { tracks },
           },
-        } = await getPlaylistDetail(toplistItem.id);
+        } = await getPlaylistDetail({ id: toplistItem.id });
 
         /**
          * 包装数据
@@ -191,7 +189,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .recommend {
   background: $background-grey-white;

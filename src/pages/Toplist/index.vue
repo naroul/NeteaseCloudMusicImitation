@@ -51,29 +51,37 @@
       <!-- 当前榜单详情 -->
       <div class="toplist-content">
         <div class="content-title">
+          <!-- 封面描述 -->
           <img class="title-img" :src="toplistDataCur.coverImgUrl" />
+
+          <!-- 文字描述 -->
           <div class="title-label">
             <h2>{{ toplistDataCur.name }}</h2>
             <div class="update-freq">
               <i class="iconfont icon-clock" />
               <span>最近更新：{{ updatedTime }}</span>
             </div>
+
+            <!-- 按钮区 -->
             <div class="btns">
+              <!-- 播放按钮 -->
               <MyButton :width="70" :height="30" class="btn-play btn-flex">
                 <i class="iconfont icon-play" />
                 <span>播放</span>
               </MyButton>
-              <MyButton
-                :width="30"
-                :height="30"
-                class="btn-add btn-flex btn-space"
-              >
+
+              <!-- 添加到播放列表 -->
+              <MyButton :width="30" :height="30" class="btn-add btn-flex btn-space">
                 <i class="iconfont icon-add-select" />
               </MyButton>
+
+              <!-- 添加收藏 -->
               <MyButton :height="30" class="btn-collection btn-flex btn-space">
-                <i class="iconfont icon-collection" />
+                <i class="iconfont icon-addfile" />
                 <span>{{ toplistDataCur.subscribedCount }}</span>
               </MyButton>
+
+              <!-- 评论按钮 -->
               <MyButton :height="30" class="btn-comments btn-flex">
                 <i class="iconfont icon-comments" />
                 <span>{{ toplistDataCur.commentCount }}</span>
@@ -90,12 +98,16 @@
             <span>次</span>
           </span>
         </div>
+
+        <!-- 歌曲列表 -->
         <SongList
           v-if="toplistDataCur.tracks"
           :songList="toplistDataCur.tracks"
           :type="'playlist'"
           :width="670"
         />
+
+        <!-- 评论 -->
         <Comment v-if="this.id" :id="this.id" :type="'playlist'" />
       </div>
     </div>
@@ -103,11 +115,11 @@
 </template>
 
 <script>
-import { getAllToplist, getToplistCur } from '@/apis/toplist';
-import { formatMsToDate } from '^/formatMsToDate';
-import MyButton from '@/ui/MyButton';
-import SongList from '@/components/SongList';
-import Comment from '@/components/Comment';
+import { getAllToplist, getToplistCur } from "@/apis/toplist";
+import { formatMsToDate } from "^/formatMsToDate";
+import MyButton from "@/ui/MyButton";
+import SongList from "@/components/SongList";
+import Comment from "@/components/Comment";
 
 export default {
   data() {
@@ -204,7 +216,7 @@ export default {
      */
     if (!this.$route.query.id) {
       this.$router.push({
-        path: '/home/toplist',
+        path: "/home/toplist",
         query: { id: this.toplistDataAll[0].id },
       });
     } else {
@@ -255,7 +267,7 @@ export default {
       next();
     } else {
       next({
-        path: '/home/toplist',
+        path: "/home/toplist",
         query: { id: this.toplistDataAll[0].id },
       });
     }
@@ -270,7 +282,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .toplist {
   background: $background-grey-white;
@@ -419,7 +431,7 @@ export default {
               border: 1px solid #ccc;
               font-size: 12px;
 
-              .icon-collection {
+              .icon-addfile {
                 font-size: 20px;
                 margin-right: 3px;
               }

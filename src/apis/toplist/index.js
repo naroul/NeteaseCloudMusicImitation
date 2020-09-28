@@ -15,5 +15,5 @@ export const getAllToplist = () => {
  * 获取单个榜单数据
  */
 export const getToplistCur = (id) => {
-  return getPlaylistDetail(id);
+  return getPlaylistDetail({ id });
 };

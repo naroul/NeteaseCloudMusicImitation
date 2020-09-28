@@ -56,12 +56,13 @@ export const getHighPlaylist = ({ cat, limit, before }) => {
 /**
  * 根据id获取歌单详细信息
  */
-export const getPlaylistDetail = (id) => {
+export const getPlaylistDetail = ({ id }) => {
   const url = Host + '/playlist/detail';
   return axios.get(url, {
     params: {
       id,
     },
+    withCredentials: true,
   });
 };
 
@@ -75,5 +76,6 @@ export const getRelatedPlaylist = ({ id }) => {
     params: {
       id,
     },
+    withCredentials: true,
   });
 };

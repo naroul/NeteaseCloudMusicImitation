@@ -25,13 +25,15 @@
       <div class="item-rank item-normal">{{ index + 1 }}</div>
       <div class="item-cover item-normal">
         <img :src="item.al.picUrl" v-if="index < 3 && type === 'playlist'" />
-        <i class="iconfont icon-play" />
+
+        <!-- 播放按钮 -->
+        <i class="iconfont icon-play" @click="playSong(item)" />
         <div>{{ item.name }}</div>
       </div>
       <div class="item-duration item-normal">
         <div v-if="indexHover === index">
           <i class="iconfont icon-add-select"></i>
-          <i class="iconfont icon-collection"></i>
+          <i class="iconfont icon-addfile"></i>
         </div>
         <span v-else>{{ _formatMsToDuration(item.dt) }}</span>
       </div>
@@ -41,19 +43,22 @@
 </template>
 
 <script>
-import { formatMsToDuration } from '^/formatMsToDuration';
+import { playerMixin } from "@/mixins";
+import { formatMsToDuration } from "^/formatMsToDuration";
 
 export default {
+  mixins: [playerMixin],
+
   props: {
     /**
      * 歌曲清单的类型  歌单的歌曲清单 或者 歌手的歌曲清单
      */
     type: {
       validator(value) {
-        return ['playlist', 'singer'].includes(value);
+        return ["playlist", "singer"].includes(value);
       },
       required: true,
-      default: 'playlist',
+      default: "playlist",
     },
 
     /**
@@ -75,11 +80,42 @@ export default {
 
   data() {
     return {
+      /**
+       * 鼠标悬浮的列表项index
+       */
       indexHover: NaN,
     };
   },
 
   methods: {
+    /**
+     * 将歌曲添加到播放列表的顶部
+     */
+    playSong(song) {
+      this.addToPlaylistInfo({
+        id: song.id,
+        name: song.name,
+        coverUrl: song.al.picUrl,
+        picStr: song.al.pic_str,
+        author: {
+          id: song.ar[0].id,
+          name: song.ar[0].name,
+        },
+        mv: song.mv,
+        dt: song.dt,
+      });
+
+      /**
+       * 设置播放状态为true
+       */
+      this.setPlayStatus(true);
+
+      /**
+       * 收起音量条
+       */
+      this.setVolConfigStatus(false);
+    },
+
     /**
      * 将毫秒转换成分秒
      */
@@ -105,7 +141,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .song-list {
   border: 1px solid #ccc;
@@ -179,6 +215,10 @@ export default {
       .iconfont {
         font-size: 18px;
         margin-right: 10px;
+
+        &:hover {
+          color: #8b8b8b;
+        }
       }
     }
 

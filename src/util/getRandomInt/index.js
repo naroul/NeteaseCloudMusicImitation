@@ -1,7 +1,7 @@
 /**
  * 随机产生[min, max]的整数值
- * @param {*最小值} min
- * @param {*最大值} max
+ * @param { number } min 最小值
+ * @param { number } max 最大值
  */
 export const getRandomInt = (min, max) => {
   return (Math.random() * (max - min + 1) + min) | 0;

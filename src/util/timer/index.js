@@ -21,17 +21,23 @@ export function timer(callback, timeout = 1000) {
       ret.then(
         () => {
           if (timer !== null) {
+            clearTimeout(timer);
+            timer = null;
             timer = setTimeout(caller, timeout);
           }
         },
         () => {
           if (timer !== null) {
+            clearTimeout(timer);
+            timer = null;
             timer = setTimeout(caller, timeout);
           }
         }
       );
     } else {
       if (timer !== null) {
+        clearTimeout(timer);
+        timer = null;
         timer = setTimeout(caller, timeout);
       }
     }

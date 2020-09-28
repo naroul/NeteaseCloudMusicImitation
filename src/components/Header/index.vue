@@ -9,10 +9,7 @@
           @click="tabClicked(index, tab.url)"
         >
           {{ tab.title }}
-          <div
-            class="selected-arrow-font"
-            v-if="index === tabIndexActive"
-          ></div>
+          <div class="selected-arrow-font" v-if="index === tabIndexActive"></div>
         </li>
         <div class="filler"></div>
         <div class="search-wrapper">
@@ -46,8 +43,7 @@
               { 'nav-text-active': index === navIndexActive },
             ]"
             @click="navClicked(index, nav.url)"
-            >{{ nav.title }}</span
-          >
+          >{{ nav.title }}</span>
         </li>
       </div>
     </div>
@@ -56,9 +52,9 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
-import SearchBox from '@/ui/SearchBox';
-import { getLoginStatus, logout } from '@/apis/header';
+import { mapGetters, mapMutations } from "vuex";
+import SearchBox from "@/ui/SearchBox";
+import { getLoginStatus, logout } from "@/apis/header";
 
 export default {
   data() {
@@ -81,7 +77,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isLogged']),
+    ...mapGetters(["isLogged"]),
   },
 
   methods: {
@@ -93,7 +89,7 @@ export default {
        * 商城页暂不写，所以直接跳转到官方主页
        */
       if (index === 2) {
-        window.open('https://music.163.com/store/product');
+        window.open("https://music.163.com/store/product");
       } else {
         this.tabIndexActive = index;
         this.$router.push(url);
@@ -136,10 +132,10 @@ export default {
       logout()
         .then((res) => {
           this.setLoginStatus(false);
-          this.$router.push('/home/recommend');
+          this.$router.push("/home/recommend");
         })
         .catch((e) => {
-          this.$toast.failed('登出时遇到错误，请重试');
+          this.$toast.failed("登出时遇到错误，请重试");
         });
     },
 
@@ -156,7 +152,7 @@ export default {
         });
     },
 
-    ...mapMutations(['setLoginStatus', 'setLoginDialogStatus']),
+    ...mapMutations(["setLoginStatus", "setLoginDialogStatus"]),
   },
 
   watch: {
@@ -171,7 +167,7 @@ export default {
           }
           return cur;
         },
-        { url: '/' }
+        { url: "/" }
       );
     },
   },
@@ -181,16 +177,16 @@ export default {
      * 存储tabs的文本和跳转地址
      */
     this.tabs = [
-      { title: '发现音乐', url: '/' },
-      { title: '我的音乐', url: '/my-music' },
-      { title: '商城', url: '/store' },
+      { title: "发现音乐", url: "/" },
+      { title: "我的音乐", url: "/my-music" },
+      { title: "商城", url: "/store" },
     ];
 
     this.navs = [
-      { title: '推荐', url: '/home/recommend' },
-      { title: '排行榜', url: '/home/toplist' },
-      { title: '歌单', url: '/home/playlist' },
-      { title: '歌手', url: '/home/singer' },
+      { title: "推荐", url: "/home/recommend" },
+      { title: "排行榜", url: "/home/toplist" },
+      { title: "歌单", url: "/home/playlist" },
+      { title: "歌手", url: "/home/singer" },
     ];
 
     /**
@@ -204,7 +200,7 @@ export default {
         }
         return cur;
       },
-      { url: '/' }
+      { url: "/" }
     );
 
     this._getLoginStatus();
@@ -217,7 +213,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .header-wrapper {
   height: 105px;
@@ -235,11 +231,11 @@ export default {
 
       .logo {
         display: block;
-        margin-right: 20px;
-        width: 70px;
-        height: 70px;
-        background: url('~@/assets/images/Header/logo.jpg');
-        background-size: 70px 70px;
+        width: 176px;
+        height: 69px;
+        background: url("~@/assets/images/Common/topbar.png");
+
+        background-position: 0 0;
       }
 
       .tab {
@@ -249,6 +245,7 @@ export default {
         line-height: 70px;
         text-decoration: none;
         color: #fff;
+        cursor: pointer;
 
         &:hover,
         &:active {
@@ -368,6 +365,7 @@ export default {
           padding: 0 13px 2px 13px;
           font-size: 12px;
           color: #fff;
+          cursor: pointer;
 
           &:hover,
           &:active {

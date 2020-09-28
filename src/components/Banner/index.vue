@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { timer } from '^/timer';
+import { timer } from "^/timer";
 
 export default {
   props: {
@@ -46,7 +46,7 @@ export default {
      * 轮播图图片url
      */
     imgUrl() {
-      return this.banners[this.bannerIndex].imageUrl + '?imageView&quality=89';
+      return this.banners[this.bannerIndex].imageUrl + "?imageView&quality=89";
     },
 
     /**
@@ -54,11 +54,11 @@ export default {
      */
     backImgStyle() {
       return {
-        'background-image': `url(${
+        "background-image": `url(${
           this.banners[this.bannerIndex].imageUrl
         }?imageView&blur=40x20)`,
-        'background-size': '6000px',
-        'background-position': 'center center',
+        "background-size": "6000px",
+        "background-position": "center center",
       };
     },
   },
@@ -175,9 +175,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .banner-wrapper {
+  background: #ccc;
   transition: background 1.5s;
 
   .banner {

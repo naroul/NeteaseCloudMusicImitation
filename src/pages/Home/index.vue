@@ -3,6 +3,7 @@
     <Header />
     <router-view></router-view>
     <Login v-if="isShowLoginDialog" />
+    <PLayer />
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import { mapGetters } from 'vuex';
 import Header from '@/components/Header';
 import Login from '@/components/Login';
+import PLayer from '@/components/Player';
 
 export default {
   computed: {
@@ -19,6 +21,7 @@ export default {
   components: {
     Header,
     Login,
+    PLayer,
   },
 };
 </script>
