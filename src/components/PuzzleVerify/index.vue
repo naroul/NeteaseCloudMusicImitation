@@ -1,5 +1,10 @@
 <template>
-  <div class="puzzle-wrapper">
+  <div
+    class="puzzle-wrapper"
+    @mousemove.prevent="MsMovePuz"
+    @mouseup.prevent="MsUpPuz"
+    @mouseleave.prevent="MsLeavePuz"
+  >
     <div class="puzzle-zone">
       <!-- 整个拼图背景图 -->
       <canvas ref="puzzle" />
@@ -24,20 +29,17 @@
       <div
         class="operator-block"
         :style="{ left: `${position.operatorBlockLeft}px` }"
-        @mousedown.prevent="handleMouseDown"
-        @mousemove.prevent="handleMouseMove"
-        @mouseup.prevent="handleMouseUp"
-        @mouseleave.prevent="handleMouseLeave"
+        @mousedown.prevent="MsDownSlider"
       ></div>
     </div>
   </div>
 </template>
 
 <script>
-import { getRandomInt } from '^/getRandomInt';
-import lute from '#/images/PuzzleVerify/lute.jpg';
-import coffe from '#/images/PuzzleVerify/coffe.png';
-import piano from '#/images/PuzzleVerify/piano.jpg';
+import { getRandomInt } from "^/getRandomInt";
+import lute from "#/images/PuzzleVerify/lute.jpg";
+import coffe from "#/images/PuzzleVerify/coffe.png";
+import piano from "#/images/PuzzleVerify/piano.jpg";
 
 export default {
   data() {
@@ -103,10 +105,10 @@ export default {
       ctx.arc(x + r - 2, y + l / 2, r + 0.4, 2.76 * PI, 1.24 * PI, true);
       ctx.lineTo(x, y);
       ctx.lineWidth = 3;
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
       ctx.clip();
-      ctx.globalCompositeOperation = 'overlay';
+      ctx.globalCompositeOperation = "overlay";
     },
 
     /**
@@ -114,7 +116,7 @@ export default {
      */
     drawPuzzle() {
       const puzzleCanvas = this.$refs.puzzle;
-      const ctx1 = puzzleCanvas.getContext('2d');
+      const ctx1 = puzzleCanvas.getContext("2d");
 
       puzzleCanvas.width = 400;
       puzzleCanvas.height = 300;
@@ -126,7 +128,7 @@ export default {
      */
     drawPuzzlePieces(x, y) {
       const puzzlePiecesCanvas = this.$refs.puzzlePieces;
-      const ctx = puzzlePiecesCanvas.getContext('2d');
+      const ctx = puzzlePiecesCanvas.getContext("2d");
 
       puzzlePiecesCanvas.width = 400;
       puzzlePiecesCanvas.height = 300;
@@ -141,7 +143,7 @@ export default {
      */
     drawOcclusion(x, y) {
       const occlusionCanvas = this.$refs.occlusion;
-      const ctx = occlusionCanvas.getContext('2d');
+      const ctx = occlusionCanvas.getContext("2d");
 
       occlusionCanvas.width = 400;
       occlusionCanvas.height = 300;
@@ -184,7 +186,7 @@ export default {
     /**
      * 拖拽时 点击鼠标的第一下
      */
-    handleMouseDown(e) {
+    MsDownSlider(e) {
       /**
        * 设置拖拽状态和横坐标
        */
@@ -194,8 +196,18 @@ export default {
       ) {
         this.dragConfig = {
           isDragging: true,
-          initX: e.offsetX,
+          initX: e.clientX,
         };
+
+        /**
+         * 设置拖动时的初始值
+         */
+        this.puzStartLeft = this.position.puzzlePiecesLeft;
+        this.blockStartLeft = this.position.operatorBlockLeft;
+
+        /**
+         * 设置验证状态为未验证
+         */
         this.verifiedStatus = this.VerifyStatus.Unverified;
       }
     },
@@ -203,7 +215,7 @@ export default {
     /**
      * 鼠标移动
      */
-    handleMouseMove(e) {
+    MsMovePuz(e) {
       if (this.dragConfig.isDragging) {
         /**
          * 越界不可拖动
@@ -218,13 +230,13 @@ export default {
         /**
          * 拖动的距离
          */
-        const offsetX = e.offsetX - this.dragConfig.initX;
+        const deltaX = e.clientX - this.dragConfig.initX;
 
         /**
          * 移动操作块和拼图碎片
          */
-        this.position.puzzlePiecesLeft += offsetX;
-        this.position.operatorBlockLeft += offsetX;
+        this.position.puzzlePiecesLeft = this.puzStartLeft + deltaX;
+        this.position.operatorBlockLeft = this.blockStartLeft + deltaX;
 
         /**
          * 越出左边界处理
@@ -247,7 +259,7 @@ export default {
     /**
      * 拖拽完成后 松开鼠标
      */
-    handleMouseUp(e) {
+    MsUpPuz(e) {
       const {
         position: { operatorBlockLeft },
         initPuzzlePiecesLeft,
@@ -267,7 +279,7 @@ export default {
         operatorBlockLeft < -initPuzzlePiecesLeft + 5
       ) {
         this.verified();
-        this.$emit('verified', this.verifiedStatus);
+        this.$emit("verified", this.verifiedStatus);
       } else {
         this.verifyFailed();
         /**
@@ -283,9 +295,12 @@ export default {
     },
 
     /**
-     * 鼠标移出操作块
+     * 鼠标移出拼图区域
      */
-    handleMouseLeave(e) {
+    MsLeavePuz(e) {
+      /**
+       * 移出后重置拖动状态
+       */
       this.dragConfig = {
         isDragging: false,
         initX: 0,
@@ -322,6 +337,16 @@ export default {
        */
       initX: 0,
     };
+
+    /**
+     * 记录开始拖动时 puzzlePiecesLeft 的初始值
+     */
+    this.puzStartLeft = 0;
+
+    /**
+     * 记录开始拖动时 operatorBlockLeft 的初始值
+     */
+    this.blockStartLeft = 0;
 
     /**
      * 拼图碎片的初始偏移量 会在draw()中得到初始值

@@ -1,75 +1,87 @@
 <template>
-  <div class="login-wrapper">
-    <div class="header">
-      <label>登录</label>
-      <MyButton
-        width="30"
-        :height="30"
-        class="close-button"
-        :onclick="closeLoginDialog"
-      >
-        <i class="iconfont icon-close"></i>
-      </MyButton>
+  <div class="lg-wrp">
+    <!-- 登录框 -->
+    <div class="lg-dialog">
+      <!-- 登录标题 -->
+      <div class="lg-ttl">
+        <div class="zttl">登录</div>
+      </div>
+
+      <!-- 登录表单 -->
+      <div class="lg-cnt">
+        <div class="u-main">
+          <div class="u-opt u-mopt">
+            <i
+              :class="[
+                'u-mlg',
+                'u-mmlg',
+                {
+                  'u-tel': !mode,
+                  'u-mail': !!mode,
+                },
+              ]"
+            ></i>
+            {{ curModeInfo.name }}登录
+          </div>
+          <MyInput
+            class="u-ipt"
+            v-model="account"
+            type="tel"
+            :placeholder="`请输入${curModeInfo.name}`"
+          />
+          <MyInput
+            class="u-ipt"
+            v-model="password"
+            type="password"
+            placeholder="请输入密码"
+          />
+          <MyButton class="u-ipt u-lg" :onclick="confirmLogin"> 登录 </MyButton>
+        </div>
+        <div class="u-alt">
+          <div class="u-opt" @click="setMode(0)">
+            <i class="u-mlg u-tel"></i>
+            手机号登录
+          </div>
+
+          <div class="u-opt" @click="setMode(1)">
+            <i class="u-mlg u-mail"></i>
+            网易邮箱账号登录
+          </div>
+        </div>
+      </div>
+
+      <!-- 关闭按钮 -->
+      <span class="cls" title="关闭窗体" @click="closeLgDialog">×</span>
     </div>
-    <div class="form">
-      <label>账号</label>
-      <MyInput
-        class="input"
-        v-model="phone"
-        type="tel"
-        placeholder="请输入电话号码"
-      />
-      <label>密码</label>
-      <MyInput
-        class="input"
-        v-model="password"
-        type="password"
-        placeholder="请输入密码"
-      />
-      <MyButton
-        :width="120"
-        :height="30"
-        class="login-button"
-        :onclick="confirmLogin"
-      >
-        登录
-      </MyButton>
-      <MyButton
-        :width="120"
-        :height="30"
-        class="cancel-button"
-        :onclick="closeLoginDialog"
-      >
-        取消
-      </MyButton>
-    </div>
-    <PuzzleVerify
-      class="puzzle-verify"
-      v-if="isShowPuzzleVerify"
-      @verified="verified"
-    />
+    <!-- 拼图验证 -->
+    <PuzzleVerify class="pzl" v-if="isShowPuzzleVerify" @verified="verified" />
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-import { loginByPhone } from '@/apis/login';
-import PuzzleVerify from '../PuzzleVerify';
-import MyInput from '@/ui/MyInput';
-import MyButton from '@/ui/MyButton';
+import { mapMutations } from "vuex";
+import { loginByTel, loginByMail } from "@/apis/login";
+import PuzzleVerify from "../PuzzleVerify";
+import MyInput from "@/ui/MyInput";
+import MyButton from "@/ui/MyButton";
 
 export default {
   data() {
     return {
       /**
-       * 电话号码
+       * 账号
        */
-      phone: '',
+      account: "",
 
       /**
        * 密码
        */
-      password: '',
+      password: "",
+
+      /**
+       * 0代表手机号 1代表邮箱登录
+       */
+      mode: 0,
 
       /**
        * 是否显示图形验证码
@@ -78,12 +90,39 @@ export default {
     };
   },
 
+  computed: {
+    /**
+     * 登录模式的信息
+     */
+    curModeInfo() {
+      return this.config[this.mode];
+    },
+  },
+
   methods: {
+    /**
+     * 设置登录模式
+     */
+    setMode(mode) {
+      this.mode = mode;
+    },
+
     /**
      * 关闭登录框
      */
-    closeLoginDialog() {
+    closeLgDialog() {
       this.setLoginDialogStatus(false);
+    },
+
+    /**
+     * 点击登录按钮
+     */
+    confirmLogin() {
+      if (this.account && this.password) {
+        this.isShowPuzzleVerify = true;
+      } else {
+        this.$toast.failed("账号或密码为空，请输入");
+      }
     },
 
     /**
@@ -95,35 +134,61 @@ export default {
     },
 
     /**
-     * 登录按钮回调
-     * 验证账号 密码输入值 如果都不为空，则显示图形验证框
-     */
-    confirmLogin() {
-      if (this.phone && this.password) {
-        this.isShowPuzzleVerify = true;
-      } else {
-        this.$toast.failed('账号或密码为空，请输入');
-      }
-    },
-
-    /**
      * 登录
      */
     async login() {
       this.isShowPuzzleVerify = false;
 
-      await loginByPhone(this.phone, this.password)
+      await (!this.mode
+        ? loginByTel(this.account, this.password)
+        : loginByMail(this.account, this.password)
+      )
         .then((res) => {
-          this.$toast.success('登陆成功', 1000);
-          this.setLoginStatus(true);
-          this.setLoginDialogStatus(false);
+          /**
+           * 登录成功时，返回码以2开头
+           */
+          if (/^2/.test(res.data && res.data.code)) {
+            this.$toast.success("登陆成功", 1000);
+
+            /**
+             * 设置全局登录状态
+             */
+            this.setLoginStatus(true);
+
+            /**
+             * 关闭登录框
+             */
+            this.setLoginDialogStatus(false);
+          } else {
+            /**
+             * 当返回码不是2开头，并有错误信息时，toast出改报错
+             */
+            if (res.data && (res.data.msg || res.data.message)) {
+              this.$toast.failed(res.data.msg || res.data.message);
+            }
+          }
         })
         .catch((e) => {
-          this.$toast.failed('账号或密码错误，请重新输入');
+          this.$toast.failed("账号或密码错误，请重新输入");
         });
     },
 
-    ...mapMutations(['setLoginStatus', 'setLoginDialogStatus']),
+    ...mapMutations(["setLoginStatus", "setLoginDialogStatus"]),
+  },
+
+  created() {
+    this.config = [
+      {
+        name: "手机号",
+        x: -16,
+        y: -65,
+      },
+      {
+        name: "网易邮箱账号",
+        x: -271,
+        y: -670,
+      },
+    ];
   },
 
   components: {
@@ -135,94 +200,150 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
-.login-wrapper {
+.lg-wrp {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   margin: auto;
-  box-sizing: border-box;
-  border: 1px solid black;
-  border-radius: 2px;
-  width: 500px;
-  height: 400px;
-  background: url('~@/assets/images/Common/music.jpg');
-  background-size: cover;
-  background-position: center -20px;
+  background: transparent;
+  z-index: 99;
 
-  .header {
-    box-sizing: border-box;
-    width: 499px;
-    height: 50px;
-    padding: 0 20px;
-    line-height: 50px;
-    background: #5b5b5b;
-    border-radius: 2px;
+  .lg-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 530px;
+    height: 330px;
+    border-radius: 4px;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
+    border: none;
+    background: #fff;
 
-    font-size: 16px;
+    .lg-ttl {
+      position: relative;
+      z-index: 10;
+      border-bottom: 1px solid #191919;
+      border-radius: 4px 4px 0 0;
+      background: #2d2d2d;
 
-    label {
-      color: $white-color;
+      .zttl {
+        padding-right: 45px;
+        margin: 0;
+        height: 38px;
+        line-height: 38px;
+        padding-left: 18px;
+        border-radius: 3px 3px 0 0;
+        font-weight: bold;
+        font-size: 14px;
+        color: #fff;
+        background-position: 50% 0;
+      }
     }
 
-    .close-button {
-      float: right;
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #5b5b5b;
+    .lg-cnt {
+      padding: 40px 0 39px;
 
-      .icon-close {
-        color: $white-color;
+      .u-main {
+        float: left;
+        width: 224px;
+        padding: 0 35px 3px 40px;
+        border-right: 1px dotted #ccc;
 
-        &:hover,
-        &:active {
+        .u-mopt {
+          padding-left: 28px;
+          cursor: default;
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+
+        .u-ipt {
+          margin-top: 10px;
+          width: 220px;
+          font-size: 12px;
+        }
+
+        .u-lg {
+          height: 30px;
+          font-size: 12px;
+          background: rgba(40, 120, 198, 1);
           color: #fff;
+          border-radius: 3px;
+
+          &:hover {
+            background: #4a93db;
+          }
+        }
+      }
+
+      .u-alt {
+        float: left;
+        padding: 3px 0 3px 39px;
+      }
+
+      .u-opt {
+        display: flex;
+        margin-top: 15px;
+        align-items: center;
+        font-size: 12px;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+
+        .u-mlg {
+          display: block;
+          margin-right: 14px;
+          width: 38px;
+          height: 38px;
+          background: url("~@/assets/images/Common/logo.png");
+          border-radius: 9px;
+        }
+
+        .u-mail {
+          background-position: -271px -670px;
+          cursor: pointer;
+        }
+
+        .u-tel {
+          background-position: -16px -65px;
+          cursor: pointer;
+        }
+
+        .u-mmlg {
+          cursor: default;
         }
       }
     }
-  }
 
-  .form {
-    display: grid;
-    grid-template-rows: 50px 50px;
-    grid-template-columns: 100px 200px;
-    justify-content: center;
-    align-items: center;
-    width: 300px;
-    height: 200px;
-    margin: 50px 0 0 100px;
-
-    .input {
-      background: rgba(211, 212, 219, 0.2);
-      color: $white-color;
-    }
-
-    label {
-      justify-self: center;
-      padding: 5px;
-      color: $white-color;
-    }
-
-    .login-button {
-      position: relative;
-      left: 52px;
-      justify-self: self-end;
-    }
-
-    .cancel-button {
-      position: relative;
-      justify-self: self-end;
+    .cls {
+      position: absolute;
+      z-index: 20;
+      top: 16px;
+      right: 20px;
+      width: 10px;
+      height: 10px;
+      overflow: hidden;
+      text-indent: -9999px;
+      cursor: pointer;
+      background: url("~@/assets/images/Common/layer.png");
+      background-position: 0 -95px;
     }
   }
 
-  .puzzle-verify {
-    position: relative;
-    left: 40px;
-    top: -280px;
+  .pzl {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
   }
 }
 </style>

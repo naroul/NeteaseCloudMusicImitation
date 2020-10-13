@@ -196,7 +196,7 @@ export default {
 
   .recommend-content {
     box-sizing: border-box;
-    width: 730px;
+    width: 732px;
     margin: 0 auto;
     padding: 20px 20px 40px;
     border: 1px solid #ccc;

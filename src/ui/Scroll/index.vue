@@ -149,9 +149,12 @@ export default {
         return;
       }
 
-      if (newTopProps >= 0) {
-        this.scrollTop = newTopProps;
-      }
+      this.scrollTop =
+        newTopProps > this.scrollTopMax
+          ? this.scrollTopMax
+          : newTopProps < 0
+          ? 0
+          : newTopProps;
     },
   },
 
@@ -174,7 +177,7 @@ export default {
       /**
        * 即将赋给outer的scrollTop的值
        */
-      const scrollTop = this.$refs.scroll.parentNode.scrollTop + deltaY;
+      const scrollTop = this.scrollTop + deltaY;
 
       /**
        * 设置outer scrollTop 通过 watch位移 outer内容和滚动条
@@ -211,49 +214,56 @@ export default {
   },
 
   mounted() {
-    /**
-     * 父元素，即目标元素（outer）
-     */
-    const parentNode = this.$refs.scroll.parentNode;
+    this.$nextTick(function () {
+      /**
+       * 父元素，即目标元素（outer）
+       */
+      const parentNode = this.$refs.scroll.parentNode;
 
-    /**
-     * 设置目标元素（outer）的行高，deltaMode 为 1 时的计算单位
-     */
-    this.deltaUnit = getComputedStyle(parentNode).lineHeight;
+      /**
+       * 每次渲染时，重置父元素的scrollTop
+       */
+      parentNode.scrollTop = 0;
 
-    /**
-     * 设置目标元素（outer）的内容总高
-     */
-    this.cntHeight = parentNode.scrollHeight;
+      /**
+       * 设置目标元素（outer）的行高，deltaMode 为 1 时的计算单位
+       */
+      this.deltaUnit = getComputedStyle(parentNode).lineHeight;
 
-    /**
-     * 设置滚动条总宽高 滚动条总宽高
-     */
-    this.scrWrpWidth = this.size;
-    this.scrWrpHeight = parentNode.clientHeight;
+      /**
+       * 设置目标元素（outer）的内容总高
+       */
+      this.cntHeight = parentNode.scrollHeight;
 
-    /**
-     * outer的 scrollTop的最大值
-     */
-    this.scrollTopMax = parentNode.scrollHeight - parentNode.offsetHeight;
+      /**
+       * 设置滚动条总宽高 滚动条总宽高
+       */
+      this.scrWrpWidth = this.size;
+      this.scrWrpHeight = parentNode.clientHeight;
 
-    /**
-     * 纵向滚动条
-     */
-    this.scrWidth = this.size;
-    this.scrHeight =
-      parentNode.clientHeight *
-      fix(parentNode.clientHeight / parentNode.scrollHeight, 2);
+      /**
+       * outer的 scrollTop的最大值
+       */
+      this.scrollTopMax = parentNode.scrollHeight - parentNode.offsetHeight;
 
-    /**
-     * 渲染时跳转到对应位置
-     */
-    this.scrollTop = this.scrollTopProps;
+      /**
+       * 纵向滚动条
+       */
+      this.scrWidth = this.size;
+      this.scrHeight =
+        parentNode.clientHeight *
+        fix(parentNode.clientHeight / parentNode.scrollHeight, 2);
 
-    /**
-     * 给目标元素（outer）绑定鼠标滚轮回调事件
-     */
-    this.$refs.scroll.parentNode.addEventListener("wheel", this.wheel);
+      /**
+       * 渲染时跳转到对应位置
+       */
+      this.scrollTop = this.scrollTopProps;
+
+      /**
+       * 给目标元素（outer）绑定鼠标滚轮回调事件
+       */
+      this.$refs.scroll.parentNode.addEventListener("wheel", this.wheel);
+    });
   },
 };
 </script>

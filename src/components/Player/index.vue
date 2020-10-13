@@ -12,7 +12,10 @@
     <div class="lock-zone">
       <div class="left-trg"></div>
       <div class="lock">
-        <i :class="['iconfont', `${isLocked ? 'icon-suo' : 'icon-suo1'}`]" @click="controlLock" />
+        <i
+          :class="['iconfont', `${isLocked ? 'icon-suo' : 'icon-suo1'}`]"
+          @click="controlLock"
+        />
       </div>
       <div class="right-trg"></div>
     </div>
@@ -41,12 +44,19 @@
                 class="m-name"
                 v-if="songList.length"
                 :title="songList[curIndex].name"
-              >{{ songList[curIndex].name }}</span>
+                >{{ songList[curIndex].name }}</span
+              >
               <i v-if="songList.length" class="iconfont icon-MV" />
-              <span class="ar-name" v-if="songList.length">{{ songList[curIndex].author.name }}</span>
+              <span class="ar-name" v-if="songList.length">{{
+                songList[curIndex].author.name
+              }}</span>
               <i
-                v-if="songList.length && songList[curIndex].source && songList[curIndex].source.id"
-                :title="`来自于${ songList[curIndex].source.type }`"
+                v-if="
+                  songList.length &&
+                  songList[curIndex].source &&
+                  songList[curIndex].source.id
+                "
+                :title="`来自于${songList[curIndex].source.type}`"
                 class="iconfont icon-link"
               />
             </div>
@@ -88,7 +98,11 @@
           <div class="icon-vol-wrapper" @mouseleave="msLeaveVol">
             <div class="vol-prgs" v-if="isShowVolConfig">
               <div class="prgs-invisible" @click="msClickVolPrgs"></div>
-              <div class="prgs" @click="msClickVolPrgs" :style="{ height: `${volPrgsHeight}px`}">
+              <div
+                class="prgs"
+                @click="msClickVolPrgs"
+                :style="{ height: `${volPrgsHeight}px` }"
+              >
                 <span
                   class="slider-vol"
                   @click.stop
@@ -98,12 +112,17 @@
                 ></span>
               </div>
             </div>
-            <i :class="['icon-play-conf', 'iconfont', volIcon]" @click="controlVol" />
+            <i
+              :class="['icon-play-conf', 'iconfont', volIcon]"
+              @click="controlVol"
+            />
           </div>
 
           <!-- 播放模式 -->
           <div class="icon-mode-wrapper">
-            <div class="mode-tip" v-show="isShowModeTip">{{ playModeConf.tip }}</div>
+            <div class="mode-tip" v-show="isShowModeTip">
+              {{ playModeConf.tip }}
+            </div>
             <i
               :class="['icon-play-conf', 'iconfont', playModeConf.icon]"
               :title="playModeConf.tip"
@@ -112,7 +131,10 @@
           </div>
 
           <!-- 歌曲数 -->
-          <div class="song-count" @click="controlSongList">{{ songList.length }}</div>
+          <div class="song-count" @click="controlSongList">
+            {{ songList.length }}
+            <span class="tip" v-show="isShowStartPlayTip">已开始播放</span>
+          </div>
         </div>
       </div>
     </transition>
@@ -129,43 +151,53 @@
 
           <span class="listhdc-line"></span>
 
-          <div class="s-clear">
+          <div class="s-clear" @click="clearSongList">
             <i class="ico ico-del" />
             删除
           </div>
 
-          <p class="listhdc-lytit" v-if="songList.length">{{ songList[curIndex].name }}</p>
+          <p class="listhdc-lytit" v-if="songList.length">
+            {{ songList[curIndex].name }}
+          </p>
 
-          <span class="s-close"></span>
+          <span class="s-close" @click="closeSongList"></span>
         </div>
       </div>
 
       <div class="listbd">
         <img
           class="imgbg"
-          :src="`//music.163.com/api/img/blur/${songList.length && songList[curIndex].picStr}`"
+          :src="`//music.163.com/api/img/blur/${
+            songList.length && songList[curIndex].picStr
+          }`"
         />
         <!-- 歌曲列表区 -->
         <div class="msk"></div>
         <div class="listbdc">
           <!-- 不存在播放的歌曲时，显示提示 -->
           <div class="nocnt" v-if="!songList.length">
-            <i class="ico ico-face"></i> 你还没有添加任何歌曲
-            <br />去首页
+            <i class="ico ico-face"></i> 你还没有添加任何歌曲 <br />去首页
             <router-link to="/" class="f-tdu">发现音乐</router-link>，或在
-            <router-link to="/" class="f-tdu">我的音乐</router-link>收听自己收藏的歌单。
+            <router-link to="/" class="f-tdu">我的音乐</router-link
+            >收听自己收藏的歌单。
           </div>
 
           <!-- 存在歌曲时，显示播放列表 -->
           <ul v-else>
-            <li v-for="(song, index) of songList" :class="{ curBak: index === curIndex }">
+            <li
+              v-for="(song, index) of songList"
+              :class="{ curBak: index === curIndex }"
+              @click="playSelected(index)"
+            >
               <!-- 播放按钮 -->
               <div :class="['col', 'col-1', { visible: index === curIndex }]">
                 <div class="playicn"></div>
               </div>
 
               <!-- 歌名 -->
-              <div :class="['col', 'col-2', { 'col-cur': index === curIndex }]">{{ song.name }}</div>
+              <div :class="['col', 'col-2', { 'col-cur': index === curIndex }]">
+                {{ song.name }}
+              </div>
 
               <!-- 按钮区 -->
               <div class="col col-3">
@@ -182,21 +214,25 @@
               </div>
 
               <!-- 歌手 -->
-              <div
-                :class="['col', 'col-4', { 'col-cur': index === curIndex }]"
-              >{{ song.author.name }}</div>
+              <div :class="['col', 'col-4', { 'col-cur': index === curIndex }]">
+                {{ song.author.name }}
+              </div>
 
               <!-- 歌曲时长 -->
-              <div
-                :class="['col', 'col-5', { 'col-cur': index === curIndex }]"
-              >{{ _formatMsToDuration(song.dt) }}</div>
+              <div :class="['col', 'col-5', { 'col-cur': index === curIndex }]">
+                {{ _formatMsToDuration(song.dt) }}
+              </div>
 
               <!-- 来源 -->
               <div class="col col-6">
                 <router-link
                   to="/"
                   :class="['ico', 'ico-src', { 'ico-nosrc': !song.source }]"
-                  :title="`${song.source && song.source.type ? `来自于${ song.source.type }` : '暂无来源'}`"
+                  :title="`${
+                    song.source && song.source.type
+                      ? `来自于${song.source.type}`
+                      : '暂无来源'
+                  }`"
                 ></router-link>
               </div>
             </li>
@@ -214,25 +250,40 @@
         <div class="msk2"></div>
         <div class="listlyric">
           <div
-            v-if="songList.length && lyric && lyric.cnts &&  !lyric.cnts.length"
+            v-if="songList.length && lyric && lyric.cnts && !lyric.cnts.length"
             class="nocnt nolyric"
-          >纯音乐，无歌词</div>
+          >
+            纯音乐，无歌词
+          </div>
 
-          <div ref="lyricCntWrp" v-if="lyric && lyric.cnts && lyric.cnts.length">
+          <div
+            ref="lyricCntWrp"
+            v-if="lyric && lyric.cnts && lyric.cnts.length"
+          >
             <p
               v-for="(cnt, index) of lyric.cnts"
               :class="['lyric-cnt', { 'lyric-cur': index === curLyricIndex }]"
-            >{{ cnt }}</p>
+            >
+              {{ cnt }}
+            </p>
           </div>
 
-          <Scroll :position="{ right: '0px' }" :scrollTopProps="lyricScrTop" />
+          <Scroll
+            :key="reRenderLyricScr"
+            :position="{ right: '0px' }"
+            :scrollTopProps="lyricScrTop"
+          />
         </div>
       </div>
     </div>
 
     <audio
       ref="audio"
-      :src="songList && songList.length && songList[curIndex] ? songList[curIndex].url : ''"
+      :src="
+        songList && songList.length && songList[curIndex]
+          ? songList[curIndex].url
+          : ''
+      "
       @timeupdate="updateCurTime"
       @progress="updateBuffered"
       @ended="endPlay"
@@ -326,6 +377,11 @@ export default {
       isShowModeTip: false,
 
       /**
+       * 是否显示开始播放的浮窗
+       */
+      isShowStartPlayTip: false,
+
+      /**
        * 是否显示歌曲列表
        */
       isShowSongList: false,
@@ -354,6 +410,11 @@ export default {
        * 每条歌词对应的scrollTop值
        */
       lyricScrTops: [],
+
+      /**
+       * 重新渲染滚动条标识
+       */
+      reRenderLyricScr: 0,
     };
   },
 
@@ -411,7 +472,8 @@ export default {
      * 正在播放的歌词在歌词数组的index
      */
     curLyricIndex() {
-      return binarySearch(this.curTime, this.lyric.timeStamps);
+      const index = binarySearch(this.curTime, this.lyric.timeStamps);
+      return index === -1 ? this.lyric.timeStamps.length - 1 : index;
     },
 
     /**
@@ -429,6 +491,31 @@ export default {
      * 监听播放列表
      */
     async playlistInfo(newList, oldList) {
+      /**
+       * 清楚上次的定时器
+       */
+      clearTimeout(this.playTimeout);
+
+      this.playTimeout = null;
+
+      /**
+       * 播放列表变化时，展示播放器 1s
+       */
+      this.isShowPlayer = true;
+
+      /**
+       * 展开开始播放tip
+       */
+      this.isShowStartPlayTip = true;
+
+      this.playTimeout = setTimeout(() => {
+        if (!this.isLocked) {
+          this.isShowPlayer = false;
+        }
+
+        this.isShowStartPlayTip = false;
+      }, 1500);
+
       /**
        * 每次播放列表变化时，播放索引初始化为 0, 表现为播放第一首歌
        */
@@ -523,21 +610,7 @@ export default {
       this.isLocked = newStatus;
 
       this.$nextTick(function () {
-        if (newStatus) {
-          if (this.$refs.lyricCntWrp) {
-            let cntsH = [];
-
-            /**
-             * 计算每行歌词的 scrollTop
-             */
-            Array.from(this.$refs.lyricCntWrp.children).reduce((prev, cur) => {
-              cntsH.push(prev + cur.offsetHeight);
-              return prev + cur.offsetHeight;
-            }, 0);
-
-            this.lyricScrTops = cntsH;
-          }
-        } else {
+        if (!newStatus) {
           /**
            * 关闭歌曲列表时，同步隐藏播放组件
            */
@@ -696,7 +769,7 @@ export default {
          * 正常情况
          */
         this.widthPlayPrgs = width;
-      } else if (widthPlayPrgs <= 0) {
+      } else if (isMovingSlider && widthPlayPrgs <= 0) {
         /**
          * 越界或正在左边界时
          */
@@ -724,7 +797,7 @@ export default {
         if (e.clientX > this.startX) {
           this.widthPlayPrgs = this.startWidthPlayPrgs + e.clientX - startX;
         }
-      } else if (widthPlayPrgs >= maxPrgsWidth) {
+      } else if (isMovingSlider && widthPlayPrgs >= maxPrgsWidth) {
         /**
          * 越界或正在右边界时
          */
@@ -1080,6 +1153,43 @@ export default {
     },
 
     /**
+     * 点击关闭按钮  收起播放歌曲详情列表
+     */
+    closeSongList() {
+      this.isShowSongList = false;
+    },
+
+    /**
+     * 播放歌曲详情列表点击播放
+     */
+    playSelected(index) {
+      this.curIndex = index;
+    },
+
+    /**
+     * 清空播放歌曲数据
+     */
+    clearSongList() {
+      /**
+       * 清空列表和歌词
+       */
+      this.songList = [];
+
+      /**
+       * 清空歌词
+       */
+      this.lyric = {
+        timeStamps: [],
+        cnts: [],
+      };
+
+      /**
+       * 重新加载进度条
+       */
+      this.reRenderLyricScr = Math.floor(Math.random() * 1e8);
+    },
+
+    /**
      * 点击除播放器之外的节点时列表收起
      */
     _closeSongList(e) {
@@ -1160,6 +1270,25 @@ export default {
     },
 
     /**
+     * 获取每一行歌词列表 Dom 的高度，存入数组
+     */
+    _getLyricScrTops() {
+      if (this.$refs.lyricCntWrp) {
+        let cntsH = [];
+
+        /**
+         * 计算每行歌词的 scrollTop
+         */
+        Array.from(this.$refs.lyricCntWrp.children).reduce((prev, cur) => {
+          cntsH.push(prev + cur.offsetHeight);
+          return prev + cur.offsetHeight;
+        }, 0);
+
+        this.lyricScrTops = cntsH;
+      }
+    },
+
+    /**
      * 根据歌曲id获取url
      */
     async _getSongUrls(id) {
@@ -1198,6 +1327,18 @@ export default {
         }
 
         this.lyric = formatLyric(data.lrc.lyric);
+
+        this.$nextTick(function () {
+          /**
+           * 在渲染完歌词列表后，再设置重新渲染滚动条标识
+           */
+          this.reRenderLyricScr = Math.floor(Math.random() * 1e8);
+
+          /**
+           * 每次在渲染完歌词后，获取每一行歌词的高度
+           */
+          this._getLyricScrTops();
+        });
       });
     },
 
@@ -1208,6 +1349,16 @@ export default {
   },
 
   created() {
+    /**
+     * 存储列表变化时，改变播放器展示状态的定时器
+     */
+    this.playTimeout = null;
+
+    /**
+     * 存储展示播放模式tip定时器
+     */
+    this.modeTimer = null;
+
     /**
      * 进度条的总宽度，用于计算，对应 css 中 total-progress的width
      */
@@ -1609,6 +1760,7 @@ export default {
       }
 
       .song-count {
+        position: relative;
         width: 38px;
         padding-left: 21px;
         line-height: 27px;
@@ -1625,13 +1777,27 @@ export default {
         &:hover {
           background-position: -42px -98px;
         }
+
+        .tip {
+          position: absolute;
+          top: -68px;
+          left: -62px;
+          clear: both;
+          width: 152px;
+          height: 49px;
+          background: url("~@/assets/images/Common/playbar.png");
+          background-position: 0 -287px;
+          text-align: center;
+          color: #fff;
+          line-height: 37px;
+        }
       }
     }
   }
 
   .slide-enter-active,
   .slide-leave-active {
-    transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
   }
 
   .slide-enter,

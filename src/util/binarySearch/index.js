@@ -29,5 +29,8 @@ export const binarySearch = (sVal, arr) => {
     }
   }
 
-  return 0;
+  /**
+   * 如果是小于最小值 则返回 0 大于最大值 返回-1
+   */
+  return sVal < arr[0] ? 0 : -1;
 };
