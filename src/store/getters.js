@@ -22,3 +22,8 @@ export const isPlaying = (state) => state.isPlaying;
  * 播放器是否显示音量条
  */
 export const isShowVolConfig = (state) => state.isShowVolConfig;
+
+/**
+ * 登录用户的id
+ */
+export const uuId = (state) => state.uuId;

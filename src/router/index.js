@@ -14,8 +14,10 @@ VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch((err) => err);
 };
 
+// 这里实现组件懒加载是使用了异步组件的方式  与路由懒加载的实现方式并不相同
+
 /**
- * 推荐页
+ * 主页
  */
 const Home = (resolve) => {
   import('@/pages/Home').then((module) => {
@@ -51,6 +53,24 @@ const Playlist = (resolve) => {
 };
 
 /**
+ * 用户主页
+ */
+const UserHome = (resolve) => {
+  import('@/pages/User/Home').then((module) => {
+    resolve(module);
+  });
+};
+
+/**
+ * 用户信息页
+ */
+const UserInfo = (resolve) => {
+  import('@/pages/User/Info').then((module) => {
+    resolve(module);
+  });
+};
+
+/**
  * 404
  */
 const NotFound = (resolve) => {
@@ -79,6 +99,16 @@ const routes = [
       {
         path: 'playlist',
         component: Playlist,
+      },
+    ],
+  },
+  {
+    path: '/user',
+    component: UserHome,
+    children: [
+      {
+        path: 'info',
+        component: UserInfo,
       },
     ],
   },

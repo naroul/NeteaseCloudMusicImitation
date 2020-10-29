@@ -166,7 +166,7 @@ export default {
     font-size: 14px;
 
     a {
-      color: #000;
+      color: #505050;
     }
   }
 

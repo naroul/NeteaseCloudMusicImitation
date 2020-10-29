@@ -1477,6 +1477,7 @@ export default {
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 9999;
 
   .lock-zone {
     position: relative;
@@ -1646,6 +1647,7 @@ export default {
             top: -2px;
             right: 0;
             font-size: 12px;
+            color: #505050;
 
             span {
               color: #a1a1a1;

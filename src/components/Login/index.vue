@@ -59,13 +59,14 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 import { loginByTel, loginByMail } from "@/apis/login";
+import { loginMixin, userMixin } from "@/mixins";
 import PuzzleVerify from "../PuzzleVerify";
 import MyInput from "@/ui/MyInput";
 import MyButton from "@/ui/MyButton";
 
 export default {
+  mixins: [loginMixin, userMixin],
   data() {
     return {
       /**
@@ -156,6 +157,11 @@ export default {
             this.setLoginStatus(true);
 
             /**
+             * 存储登录用户Id
+             */
+            this.setUuId(res.data.profile.userId);
+
+            /**
              * 关闭登录框
              */
             this.setLoginDialogStatus(false);
@@ -172,8 +178,6 @@ export default {
           this.$toast.failed("账号或密码错误，请重新输入");
         });
     },
-
-    ...mapMutations(["setLoginStatus", "setLoginDialogStatus"]),
   },
 
   created() {

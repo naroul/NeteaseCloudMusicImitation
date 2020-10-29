@@ -66,7 +66,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .ranklist-summary-wrapper {
   box-sizing: border-box;
@@ -149,6 +149,7 @@ export default {
         height: 32px;
         line-height: 32px;
         font-size: 12px;
+        color: #505050;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;

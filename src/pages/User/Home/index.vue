@@ -1,6 +1,6 @@
 <template>
-  <div id="home">
-    <Header />
+  <div id="user-home">
+    <Header :isShowNavs="false" />
     <router-view></router-view>
     <Login v-if="isShowLoginDialog" />
     <Player />
@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import { getLoginStatus } from "@/apis/header";
-import { loginMixin, userMixin } from "@/mixins";
 import Header from "@/components/Header";
 import Login from "@/components/Login";
 import Player from "@/components/Player";
+import { getLoginStatus } from "@/apis/header";
+import { loginMixin, userMixin } from "@/mixins";
 
 export default {
   mixins: [loginMixin, userMixin],
@@ -46,4 +46,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

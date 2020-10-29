@@ -48,4 +48,12 @@ export const mutations = {
   setVolConfigStatus(state, status) {
     state.isShowVolConfig = status;
   },
+
+  /**
+   * 设置登录用户id
+   * @param id 用户id
+   */
+  setUuId(state, id) {
+    state.uuId = id;
+  },
 };

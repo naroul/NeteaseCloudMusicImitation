@@ -9,7 +9,10 @@
           @click="tabClicked(index, tab.url)"
         >
           {{ tab.title }}
-          <div class="selected-arrow-font" v-if="index === tabIndexActive"></div>
+          <div
+            class="selected-arrow-font"
+            v-if="index === tabIndexActive"
+          ></div>
         </li>
         <div class="filler"></div>
         <div class="search-wrapper">
@@ -20,8 +23,13 @@
           @mouseover.prevent="showOptions"
           @mouseleave.prevent="hiddenOptions"
         >
+          <!-- 消息数  -->
+          <i v-if="isLogged && !isShowOptions" class="msg-ct top-ct">{{
+            msgCount
+          }}</i>
+
           <!-- 已登陆 显示用户图标 -->
-          <i v-if="isLogged" class="iconfont icon-usercenter" />
+          <img v-if="isLogged" :src="userImgUrl" />
 
           <!-- 未登录 提示登录 -->
           <span class="login-text" @click="openLoginDialog" v-else>登录</span>
@@ -29,12 +37,38 @@
           <!-- 已登陆时，用户可操作的选项浮窗 -->
           <div v-if="isLogged && isShowOptions" class="logged-options">
             <div class="top-arrow"></div>
-            <div :class="['option', 'first-option']" @click="_logout">登出</div>
+            <router-link
+              :to="`/user/info?id=${uuId}`"
+              :class="['option', 'first-option']"
+            >
+              <i class="icn icn-hm"></i>
+              我的主页
+            </router-link>
+            <div class="option">
+              <i class="icn icn-msg"></i>
+              我的消息
+              <!-- 消息数  -->
+              <i v-if="isLogged && isShowOptions" class="msg-ct opt-ct">{{
+                msgCount
+              }}</i>
+            </div>
+            <div class="option">
+              <i class="icn icn-lv"></i>
+              我的等级
+            </div>
+            <div class="option">
+              <i class="icn icn-st"></i>
+              个人设置
+            </div>
+            <div class="option" @click="_logout">
+              <i class="icn icn-ex"></i>
+              退出
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="navs-wrapper" v-if="tabIndexActive === 0">
+    <div class="navs-wrapper" v-if="tabIndexActive === 0 && isShowNavs">
       <div class="navs">
         <li class="nav" v-for="(nav, index) of this.navs">
           <span
@@ -43,7 +77,8 @@
               { 'nav-text-active': index === navIndexActive },
             ]"
             @click="navClicked(index, nav.url)"
-          >{{ nav.title }}</span>
+            >{{ nav.title }}</span
+          >
         </li>
       </div>
     </div>
@@ -52,11 +87,26 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
 import SearchBox from "@/ui/SearchBox";
-import { getLoginStatus, logout } from "@/apis/header";
+import { userMixin, loginMixin } from "@/mixins";
+import { logout } from "@/apis/header";
+import { getPrivateMsg } from "@/apis/message";
+import user from "#/images/Header/user.jpg";
 
 export default {
+  mixins: [userMixin, loginMixin],
+
+  props: {
+    /**
+     * 控制是否显示navs栏
+     */
+    isShowNavs: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+  },
+
   data() {
     return {
       /**
@@ -73,11 +123,17 @@ export default {
        * 悬停在用户标时 显示操作项
        */
       isShowOptions: false,
-    };
-  },
 
-  computed: {
-    ...mapGetters(["isLogged"]),
+      /**
+       * 用户图标的 base64码
+       */
+      userImgUrl: user,
+
+      /**
+       * 新的私信数
+       */
+      msgCount: 0,
+    };
   },
 
   methods: {
@@ -131,28 +187,31 @@ export default {
     _logout() {
       logout()
         .then((res) => {
+          /**
+           * 重置登录状态
+           */
           this.setLoginStatus(false);
+
+          /**
+           * 清空用户id
+           */
+          this.setUuId("");
+
           this.$router.push("/home/recommend");
         })
         .catch((e) => {
-          this.$toast.failed("登出时遇到错误，请重试");
+          this.$toast.failed("退出时遇到错误，请重试");
         });
     },
 
     /**
-     * 获取登录状态并保存到state中
+     * 获取私信数
      */
-    _getLoginStatus() {
-      getLoginStatus()
-        .then((res) => {
-          this.setLoginStatus(true);
-        })
-        .catch((e) => {
-          this.setLoginStatus(false);
-        });
+    _getPrivateMsg() {
+      getPrivateMsg().then(({ data }) => {
+        this.msgCount = data.newMsgCount > 99 ? "99+" : data.newMsgCount;
+      });
     },
-
-    ...mapMutations(["setLoginStatus", "setLoginDialogStatus"]),
   },
 
   watch: {
@@ -169,6 +228,23 @@ export default {
         },
         { url: "/" }
       );
+    },
+
+    /**
+     * 监听登陆状态
+     */
+    isLogged(newStatus, oldStatus) {
+      if (newStatus) {
+        /**
+         * 登录成功同时获取私信数
+         */
+        this._getPrivateMsg();
+      } else {
+        /**
+         * 退出登录时私信数归零
+         */
+        this.msgCount = 0;
+      }
     },
   },
 
@@ -203,7 +279,15 @@ export default {
       { url: "/" }
     );
 
-    this._getLoginStatus();
+    /**
+     * 获取私信数
+     */
+    if (this.isLogged) {
+      /**
+       * 加载时已为已登录状态，加载私信数
+       */
+      this._getPrivateMsg();
+    }
   },
 
   components: {
@@ -216,8 +300,6 @@ export default {
 @import "#/scss/global.scss";
 
 .header-wrapper {
-  height: 105px;
-
   .tabs-wrapper {
     height: 70px;
     box-sizing: border-box;
@@ -287,10 +369,10 @@ export default {
         .logged-options {
           position: absolute;
           top: 40px;
-          left: -32px;
-          width: 100px;
-          height: 100px;
+          left: -64px;
+          width: 158px;
           border-radius: 4px;
+          z-index: 99;
 
           .top-arrow {
             position: absolute;
@@ -303,7 +385,11 @@ export default {
           }
 
           .option {
+            position: relative;
+            display: flex;
+            align-items: center;
             height: 34px;
+            padding-left: 24px;
             line-height: 34px;
             text-align: center;
             background: #000;
@@ -312,6 +398,40 @@ export default {
 
             &:hover {
               color: #fff;
+              background: #353535;
+            }
+
+            .icn {
+              float: left;
+              width: 18px;
+              height: 18px;
+              margin-right: 10px;
+              background: url("~@/assets/images/Common/toplist.png");
+            }
+
+            .icn-hm {
+              background-position: 0 -80px;
+            }
+
+            .icn-msg {
+              background-position: -20px -120px;
+            }
+
+            .opt-ct {
+              top: 9px;
+              left: 110px;
+            }
+
+            .icn-lv {
+              background-position: 0px -100px;
+            }
+
+            .icn-st {
+              background-position: 0px -140px;
+            }
+
+            .icn-ex {
+              background-position: 0px -200px;
             }
           }
 
@@ -328,9 +448,32 @@ export default {
           }
         }
 
-        .icon-usercenter {
-          font-size: 35px;
-          color: #a3a3a3;
+        img {
+          border-radius: 30px;
+        }
+
+        .msg-ct {
+          position: absolute;
+          display: inline-block;
+          min-width: 17px;
+          height: 17px;
+          padding: 0 4px;
+          box-sizing: border-box;
+          background: #c20c0c;
+          border-radius: 18px;
+          border: 1px solid #242424;
+          line-height: 16px;
+          font-size: 12px;
+          white-space: nowrap;
+          color: #fff;
+          text-align: center;
+          font-style: normal;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .top-ct {
+          top: -5px;
+          left: 20px;
         }
       }
     }

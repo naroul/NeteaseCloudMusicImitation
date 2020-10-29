@@ -14,10 +14,10 @@ export default {
      */
     type: {
       validator(type) {
-        return ['normal', 'success', 'failed'].includes(type);
+        return ["normal", "success", "failed"].includes(type);
       },
       required: true,
-      default: 'normal',
+      default: "normal",
     },
 
     /**
@@ -26,7 +26,7 @@ export default {
     msg: {
       type: String,
       required: true,
-      default: '',
+      default: "",
     },
 
     /**
@@ -63,7 +63,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .toast-wrapper {
   position: fixed;
@@ -71,6 +71,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   border-radius: 4px;
+  z-index: 9999;
 
   .toast-chunk {
     display: inline-block;
