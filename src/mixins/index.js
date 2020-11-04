@@ -1,4 +1,4 @@
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 /**
  * 登录相关 mixin
@@ -18,16 +18,19 @@ export const loginMixin = {
  */
 export const playerMixin = {
   computed: {
-    ...mapGetters(['playlistInfo', 'isPlaying', 'isShowVolConfig']),
+    ...mapGetters(['playlistInfo', 'addType', 'isPlaying', 'isShowVolConfig']),
   },
 
   methods: {
     ...mapMutations([
+      'setAddType',
       'replacePlaylistInfo',
       'addToPlaylistInfo',
       'setPlayStatus',
       'setVolConfigStatus',
     ]),
+
+    ...mapActions(['addPlayToPlaylistInfo', 'replacePlaylistInfoActs']),
   },
 };
 

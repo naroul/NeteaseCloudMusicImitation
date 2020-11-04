@@ -16,21 +16,35 @@ export const mutations = {
   },
 
   /**
-   * 设置播放列表信息
+   * 设置添加歌曲/歌曲列表到播放列表的方式
+   */
+  setAddType(state, type) {
+    state.addType = type;
+  },
+
+  /**
+   * 替换全部播放列表
    */
   replacePlaylistInfo(state, list) {
     state.playlistInfo = _.uniqBy(list, 'id');
   },
 
   /**
-   * 将 歌曲或歌曲列表 添加到当前播放列表的顶部
+   * 将 歌曲或歌曲列表 添加到当前播放列表的底部 不改变当前播放的歌曲
    * @param addition 要添加的 歌曲 或 歌曲列表
    */
   addToPlaylistInfo(state, addition) {
     state.playlistInfo = _.uniqBy(
-      [addition, ...state.playlistInfo].flat(),
+      [...state.playlistInfo, addition].flat(),
       'id'
     );
+  },
+
+  /**
+   * 设置正在播放的歌曲的 index
+   */
+  setCurSongIndex(state, index) {
+    state.curSongIndex = index;
   },
 
   /**

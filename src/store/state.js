@@ -59,6 +59,16 @@ export const state = {
   playlistInfo: [],
 
   /**
+   * 添加歌曲/歌曲列表到播放列表的方式 分为：
+   * {
+   *  'add': 0, // 只添加，但不改变正在播放的歌曲
+   *  'addPlay': 1, // 添加并播放最后一首歌曲
+   *  'replace': 2, // 将播放列表全部替换
+   * }
+   */
+  addType: 0,
+
+  /**
    * 是否正在播放音乐
    */
   isPlaying: false,

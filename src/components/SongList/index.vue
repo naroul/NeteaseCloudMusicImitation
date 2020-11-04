@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import { playerMixin } from "@/mixins";
-import { formatMsToDuration } from "^/formatMsToDuration";
+import { playerMixin } from '@/mixins';
+import { formatMsToDuration } from '^/formatMsToDuration';
 
 export default {
   mixins: [playerMixin],
@@ -55,10 +55,10 @@ export default {
      */
     type: {
       validator(value) {
-        return ["playlist", "singer"].includes(value);
+        return ['playlist', 'singer'].includes(value);
       },
       required: true,
-      default: "playlist",
+      default: 'playlist',
     },
 
     /**
@@ -92,7 +92,7 @@ export default {
      * 将歌曲添加到播放列表的顶部
      */
     playSong(song) {
-      this.addToPlaylistInfo({
+      this.addPlayToPlaylistInfo({
         id: song.id,
         name: song.name,
         coverUrl: song.al.picUrl,
@@ -141,7 +141,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "#/scss/global.scss";
+@import '#/scss/global.scss';
 
 .song-list {
   border: 1px solid #ccc;

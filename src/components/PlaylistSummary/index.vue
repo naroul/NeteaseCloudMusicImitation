@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import { playerMixin } from "@/mixins";
-import { getPlaylistDetail } from "@/apis/playlist";
-import { formatPlayCount } from "^/formatPlayCount";
+import { playerMixin } from '@/mixins';
+import { getPlaylistDetail } from '@/apis/playlist';
+import { formatPlayCount } from '^/formatPlayCount';
 
 export default {
   mixins: [playerMixin],
@@ -82,7 +82,7 @@ export default {
               picStr: track.al.pic_str,
               source: {
                 id: playlist.id,
-                type: "歌单",
+                type: '歌单',
               },
               author: {
                 id: track.ar[0].id,
@@ -93,7 +93,7 @@ export default {
             },
           ];
         }
-        this.replacePlaylistInfo(list);
+        this.replacePlaylistInfoActs(list);
       });
 
       /**

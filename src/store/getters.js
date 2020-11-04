@@ -27,3 +27,8 @@ export const isShowVolConfig = (state) => state.isShowVolConfig;
  * 登录用户的id
  */
 export const uuId = (state) => state.uuId;
+
+/**
+ * 将 歌曲/歌曲列表 添加到播放列表的方式
+ */
+export const addType = (state) => state.addType;
