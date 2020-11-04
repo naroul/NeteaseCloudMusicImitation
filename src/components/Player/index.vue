@@ -10,14 +10,12 @@
   >
     <!-- 锁定操作区 -->
     <div class="lock-zone">
-      <div class="left-trg"></div>
       <div class="lock">
         <i
-          :class="['iconfont', `${isLocked ? 'icon-suo' : 'icon-suo1'}`]"
+          :class="['icn-lock', `${isLocked ? 'locked' : 'unlock'}`]"
           @click="controlLock"
         />
       </div>
-      <div class="right-trg"></div>
     </div>
 
     <!-- 操作区 -->
@@ -635,18 +633,13 @@ export default {
      * 监听歌曲列表是否渲染
      */
     isShowSongList(newStatus, oldStatus) {
-      /**
-       * 歌曲列表状态和锁定状态同步
-       */
-      this.isLocked = newStatus;
-
       this.$nextTick(function() {
-        if (!newStatus) {
+        if (newStatus) {
           /**
-           * 关闭歌曲列表时，同步隐藏播放组件
+           * 打开歌曲列表和锁定播放器组件
            */
-          this.isShowPlayer = false;
-        } else {
+          this.isLocked = newStatus;
+
           /**
            * 每次打开歌曲列表时，计算生成歌词框的scrollTop的数组
            */
@@ -1521,51 +1514,46 @@ export default {
     border-bottom: 2px solid #696969;
     z-index: 9;
 
-    .left-trg {
-      position: absolute;
-      right: 60px;
-      width: 0;
-      height: 0;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid #2d2d2d;
-      border-left: 5px solid transparent;
-      border-right: 5px solid #2d2d2d;
-    }
-
-    .right-trg {
-      position: absolute;
-      right: 20px;
-      width: 0;
-      height: 0;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid #2d2d2d;
-      border-right: 5px solid transparent;
-      border-left: 5px solid #2d2d2d;
-    }
-
     .lock {
       position: absolute;
-      right: 30px;
-      height: 20px;
-      width: 30px;
-      background: #2d2d2d;
-      text-align: center;
-      border-radius: 2px 2px 0 0;
+      top: -5px;
+      right: 15px;
+      width: 52px;
+      height: 67px;
+      background: url('~@/assets/images/Common/playbar.png');
+      background-position: 0 -380px;
 
-      i {
-        font-size: 12px;
-        color: rgb(111, 111, 111);
+      .icn-lock {
+        display: block;
+        width: 18px;
+        height: 18px;
+        margin: 6px 0 0 17px;
+        background: url('~@/assets/images/Common/playbar.png');
+      }
+
+      .locked {
+        background-position: -100px -380px;
 
         &:hover {
-          color: #e4e4e4;
+          background-position: -100px -400px;
+        }
+      }
+
+      .unlock {
+        background-position: -80px -380px;
+
+        &:hover {
+          background-position: -80px -400px;
         }
       }
     }
   }
 
   .operator-zone {
+    position: relative;
     height: 50px;
-    background: #2d2d2d;
+    background: rgb(64, 63, 63);
+    z-index: 10;
 
     .op-content {
       width: 960px;
