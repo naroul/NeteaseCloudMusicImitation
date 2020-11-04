@@ -1,5 +1,15 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 
+export const headerMixin = {
+  computed: {
+    ...mapGetters(['isShowHeaderNavs']),
+  },
+
+  methods: {
+    ...mapMutations(['setIsShowHeaderNavs']),
+  },
+};
+
 /**
  * 登录相关 mixin
  */
@@ -30,7 +40,11 @@ export const playerMixin = {
       'setVolConfigStatus',
     ]),
 
-    ...mapActions(['addPlayToPlaylistInfo', 'replacePlaylistInfoActs']),
+    ...mapActions([
+      'addToPlaylistInfoActs',
+      'addPlayToPlaylistInfo',
+      'replacePlaylistInfoActs',
+    ]),
   },
 };
 

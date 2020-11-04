@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="navs-wrapper" v-if="tabIndexActive === 0 && isShowNavs">
+    <div class="navs-wrapper" v-if="tabIndexActive === 0 && isShowHeaderNavs">
       <div class="navs">
         <li class="nav" v-for="(nav, index) of this.navs">
           <span
@@ -87,25 +87,14 @@
 </template>
 
 <script>
-import SearchBox from "@/ui/SearchBox";
-import { userMixin, loginMixin } from "@/mixins";
-import { logout } from "@/apis/header";
-import { getPrivateMsg } from "@/apis/message";
-import user from "#/images/Header/user.jpg";
+import SearchBox from '@/ui/SearchBox';
+import { headerMixin, userMixin, loginMixin } from '@/mixins';
+import { logout } from '@/apis/header';
+import { getPrivateMsg } from '@/apis/message';
+import user from '#/images/Header/user.jpg';
 
 export default {
-  mixins: [userMixin, loginMixin],
-
-  props: {
-    /**
-     * 控制是否显示navs栏
-     */
-    isShowNavs: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-  },
+  mixins: [headerMixin, userMixin, loginMixin],
 
   data() {
     return {
@@ -145,7 +134,7 @@ export default {
        * 商城页暂不写，所以直接跳转到官方主页
        */
       if (index === 2) {
-        window.open("https://music.163.com/store/product");
+        window.open('https://music.163.com/store/product');
       } else {
         this.tabIndexActive = index;
         this.$router.push(url);
@@ -195,12 +184,12 @@ export default {
           /**
            * 清空用户id
            */
-          this.setUuId("");
+          this.setUuId('');
 
-          this.$router.push("/home/recommend");
+          this.$router.push('/music/recommend');
         })
         .catch((e) => {
-          this.$toast.failed("退出时遇到错误，请重试");
+          this.$toast.failed('退出时遇到错误，请重试');
         });
     },
 
@@ -209,7 +198,7 @@ export default {
      */
     _getPrivateMsg() {
       getPrivateMsg().then(({ data }) => {
-        this.msgCount = data.newMsgCount > 99 ? "99+" : data.newMsgCount;
+        this.msgCount = data.newMsgCount > 99 ? '99+' : data.newMsgCount;
       });
     },
   },
@@ -226,7 +215,7 @@ export default {
           }
           return cur;
         },
-        { url: "/" }
+        { url: '/' }
       );
     },
 
@@ -253,16 +242,16 @@ export default {
      * 存储tabs的文本和跳转地址
      */
     this.tabs = [
-      { title: "发现音乐", url: "/" },
-      { title: "我的音乐", url: "/my-music" },
-      { title: "商城", url: "/store" },
+      { title: '发现音乐', url: '/' },
+      { title: '我的音乐', url: '/my-music' },
+      { title: '商城', url: '/store' },
     ];
 
     this.navs = [
-      { title: "推荐", url: "/home/recommend" },
-      { title: "排行榜", url: "/home/toplist" },
-      { title: "歌单", url: "/home/playlist" },
-      { title: "歌手", url: "/home/singer" },
+      { title: '推荐', url: '/music/recommend' },
+      { title: '排行榜', url: '/music/toplist' },
+      { title: '歌单', url: '/music/playlist' },
+      { title: '歌手', url: '/music/singer' },
     ];
 
     /**
@@ -276,7 +265,7 @@ export default {
         }
         return cur;
       },
-      { url: "/" }
+      { url: '/' }
     );
 
     /**
@@ -297,7 +286,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "#/scss/global.scss";
+@import '#/scss/global.scss';
 
 .header-wrapper {
   .tabs-wrapper {
@@ -315,7 +304,7 @@ export default {
         display: block;
         width: 176px;
         height: 69px;
-        background: url("~@/assets/images/Common/topbar.png");
+        background: url('~@/assets/images/Common/topbar.png');
 
         background-position: 0 0;
       }
@@ -406,7 +395,7 @@ export default {
               width: 18px;
               height: 18px;
               margin-right: 10px;
-              background: url("~@/assets/images/Common/toplist.png");
+              background: url('~@/assets/images/Common/toplist.png');
             }
 
             .icn-hm {

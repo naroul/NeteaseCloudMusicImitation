@@ -118,7 +118,7 @@ module.exports = {
   ],
 
   devServer: {
-    port: 1009,
+    port: 0930,
 
     /**
      * 中间件，当404时重定向到默认的index.html（默认为主目录的index.html）

@@ -1,6 +1,5 @@
 <template>
-  <!-- 用户板块主页 -->
-  <div id="user-home">
+  <div id="music-home">
     <router-view></router-view>
   </div>
 </template>
@@ -12,10 +11,10 @@ export default {
   mixins: [headerMixin],
 
   /**
-   * 加载前设置header不显示navs
+   * 加载前设置header显示navs
    */
   beforeMount() {
-    this.setIsShowHeaderNavs(false);
+    this.setIsShowHeaderNavs(true);
   },
 };
 </script>

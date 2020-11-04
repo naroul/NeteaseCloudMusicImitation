@@ -26,7 +26,7 @@
 
       <!-- 操作项 -->
       <div class="opt">
-        <span class="icn-add" title="添加到播放列表" @click="playSong"></span>
+        <span class="icn-add" title="添加到播放列表" @click="addSong"></span>
         <span class="icn icn-fav" title="收藏"></span>
         <span class="icn icn-share" title="分享"></span>
         <span class="icn icn-dl" title="下载"></span>
@@ -75,12 +75,12 @@ export default {
 
   methods: {
     /**
-     * 将歌曲添加到播放列表的顶部
+     * 将歌曲添加到播放列表的底部
      */
-    playSong() {
+    addSong() {
       const { songData } = this;
 
-      this.addToPlaylistInfo({
+      this.addToPlaylistInfoActs({
         id: songData.song && songData.song.id,
         name: songData.song && songData.song.name,
         coverUrl: songData.song && songData.song.al.picUrl,
@@ -92,11 +92,6 @@ export default {
         mv: songData.song && songData.song.mv,
         dt: songData.song && songData.song.dt,
       });
-
-      /**
-       * 设置播放状态为true
-       */
-      this.setPlayStatus(true);
 
       /**
        * 收起音量条

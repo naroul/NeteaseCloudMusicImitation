@@ -2,6 +2,13 @@ import * as _ from 'lodash';
 
 export const mutations = {
   /**
+   * 设置 Header是否显示 navs栏
+   */
+  setIsShowHeaderNavs(state, status) {
+    state.isShowHeaderNavs = status;
+  },
+
+  /**
    * 设置登录状态
    */
   setLoginStatus(state, status) {

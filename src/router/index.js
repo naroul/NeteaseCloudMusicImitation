@@ -17,7 +17,7 @@ VueRouter.prototype.push = function push(location) {
 // 这里实现组件懒加载是使用了异步组件的方式  与路由懒加载的实现方式并不相同
 
 /**
- * 主页
+ * 总主页面
  */
 const Home = (resolve) => {
   import('@/pages/Home').then((module) => {
@@ -26,10 +26,19 @@ const Home = (resolve) => {
 };
 
 /**
+ * 音乐板块主页
+ */
+const MusicHome = (resolve) => {
+  import('@/pages/Music/Home').then((module) => {
+    resolve(module);
+  });
+};
+
+/**
  * 推荐页
  */
 const Recommend = (resolve) => {
-  import('@/pages/Recommend').then((module) => {
+  import('@/pages/Music/Recommend').then((module) => {
     resolve(module);
   });
 };
@@ -38,7 +47,7 @@ const Recommend = (resolve) => {
  * 排行榜页
  */
 const Toplist = (resolve) => {
-  import('@/pages/Toplist').then((module) => {
+  import('@/pages/Music/Toplist').then((module) => {
     resolve(module);
   });
 };
@@ -47,7 +56,7 @@ const Toplist = (resolve) => {
  * 歌单页
  */
 const Playlist = (resolve) => {
-  import('@/pages/Playlist').then((module) => {
+  import('@/pages/Music/Playlist').then((module) => {
     resolve(module);
   });
 };
@@ -82,33 +91,43 @@ const NotFound = (resolve) => {
 const routes = [
   {
     path: '/',
-    redirect: '/home/recommend',
-  },
-  {
-    path: '/home',
     component: Home,
+    redirect: '/music/recommend',
     children: [
+      /**
+       * 音乐板块路由
+       */
       {
-        path: 'recommend',
-        component: Recommend,
+        path: 'music',
+        component: MusicHome,
+        children: [
+          {
+            path: 'recommend',
+            component: Recommend,
+          },
+          {
+            path: 'toplist',
+            component: Toplist,
+          },
+          {
+            path: 'playlist',
+            component: Playlist,
+          },
+        ],
       },
+
+      /**
+       * 用户板块路由
+       */
       {
-        path: 'toplist',
-        component: Toplist,
-      },
-      {
-        path: 'playlist',
-        component: Playlist,
-      },
-    ],
-  },
-  {
-    path: '/user',
-    component: UserHome,
-    children: [
-      {
-        path: 'info',
-        component: UserInfo,
+        path: '/user',
+        component: UserHome,
+        children: [
+          {
+            path: 'info',
+            component: UserInfo,
+          },
+        ],
       },
     ],
   },

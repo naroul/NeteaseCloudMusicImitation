@@ -26,7 +26,12 @@
                 <span>{{ cat[0] }}</span>
               </div>
               <div class="cat-subs">
-                <span class="sub" v-for="sub of cat[1]" @click="subClicked(sub)">{{ sub }}</span>
+                <span
+                  class="sub"
+                  v-for="sub of cat[1]"
+                  @click="subClicked(sub)"
+                  >{{ sub }}</span
+                >
               </div>
             </div>
           </div>
@@ -35,12 +40,25 @@
 
       <!-- 最多36个歌单的展示 -->
       <div class="playlist-content">
-        <div class="playlist-item" v-if="playList.length" v-for="data of playList">
-          <PlaylistSummary :data="data" :isShowAuthor="true" :isElip="true" :key="data.id" />
+        <div
+          class="playlist-item"
+          v-if="playList.length"
+          v-for="data of playList"
+        >
+          <PlaylistSummary
+            :data="data"
+            :isShowAuthor="true"
+            :isElip="true"
+            :key="data.id"
+          />
         </div>
       </div>
 
-      <Pagination :pgSize="pgSize" :isPgReset="isPgReset" @pgChange="onPgChange" />
+      <Pagination
+        :pgSize="pgSize"
+        :isPgReset="isPgReset"
+        @pgChange="onPgChange"
+      />
     </div>
   </div>
 </template>
@@ -50,11 +68,11 @@ import {
   getPlaylistCat,
   getHotPlaylistCat,
   getTopPlaylist,
-} from "@/apis/playlist";
-import { includes } from "lodash";
-import MyButton from "@/ui/MyButton";
-import PlaylistSummary from "@/components/PlaylistSummary";
-import Pagination from "@/components/Pagination";
+} from '@/apis/playlist';
+import { includes } from 'lodash';
+import MyButton from '@/ui/MyButton';
+import PlaylistSummary from '@/components/PlaylistSummary';
+import Pagination from '@/components/Pagination';
 
 export default {
   data() {
@@ -72,7 +90,7 @@ export default {
       /**
        * 当前页所选的标签
        */
-      catCur: "全部",
+      catCur: '全部',
 
       /**
        * 是否显示下拉框
@@ -150,7 +168,7 @@ export default {
      */
     allClicked() {
       this.$router.push({
-        path: "/home/playlist",
+        path: '/music/playlist',
       });
 
       this.isShowSelector = false;
@@ -161,7 +179,7 @@ export default {
      */
     subClicked(sub) {
       this.$router.push({
-        path: "/home/playlist",
+        path: '/music/playlist',
         query: {
           cat: sub,
         },
@@ -228,7 +246,7 @@ export default {
       if (this.$route.query.cat && includes(allCats, this.$route.query.cat)) {
         this.catCur = this.$route.query.cat;
       } else {
-        this.catCur = "全部";
+        this.catCur = '全部';
       }
 
       this._getTopPlaylist({
@@ -246,11 +264,11 @@ export default {
     this._initData();
 
     this.icons = {
-      语种: "icon-Exportservices",
-      情感: "icon-smile",
-      场景: "icon-nightmode",
-      风格: "icon-component",
-      主题: "icon-customization",
+      语种: 'icon-Exportservices',
+      情感: 'icon-smile',
+      场景: 'icon-nightmode',
+      风格: 'icon-component',
+      主题: 'icon-customization',
     };
   },
 
@@ -263,7 +281,7 @@ export default {
     if (to.query.cat && includes(allCats, to.query.cat)) {
       this.catCur = to.query.cat;
     } else {
-      this.catCur = "全部";
+      this.catCur = '全部';
     }
 
     next();
@@ -278,7 +296,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "#/scss/global.scss";
+@import '#/scss/global.scss';
 
 .playlist {
   background: $background-grey-white;

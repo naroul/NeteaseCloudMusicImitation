@@ -1,5 +1,10 @@
 export const state = {
   /**
+   * Header是否显示navs栏
+   */
+  isShowHeaderNavs: true,
+
+  /**
    * 登陆状态
    */
   isLogged: false,

@@ -1,4 +1,9 @@
 /**
+ * Header是否显示navs栏
+ */
+export const isShowHeaderNavs = (state) => state.isShowHeaderNavs;
+
+/**
  * 登录状态
  */
 export const isLogged = (state) => state.isLogged;

@@ -16,7 +16,7 @@
           ]"
           v-for="(listItem, index) of specialList"
           @click="listItemClicked(listItem)"
-          :to="{ path: '/home/toplist', query: { id: listItem.id } }"
+          :to="{ path: '/music/toplist', query: { id: listItem.id } }"
           :key="listItem.id"
         >
           <img class="item-img" :src="listItem.coverImgUrl" />
@@ -37,7 +37,7 @@
           ]"
           v-for="(listItem, index) of globalList"
           @click="listItemClicked(listItem)"
-          :to="{ path: '/home/toplist', query: { id: listItem.id } }"
+          :to="{ path: '/music/toplist', query: { id: listItem.id } }"
           :key="listItem.id"
         >
           <img class="item-img" :src="listItem.coverImgUrl" />
@@ -71,7 +71,11 @@
               </MyButton>
 
               <!-- 添加到播放列表 -->
-              <MyButton :width="30" :height="30" class="btn-add btn-flex btn-space">
+              <MyButton
+                :width="30"
+                :height="30"
+                class="btn-add btn-flex btn-space"
+              >
                 <i class="iconfont icon-add-select" />
               </MyButton>
 
@@ -115,11 +119,11 @@
 </template>
 
 <script>
-import { getAllToplist, getToplistCur } from "@/apis/toplist";
-import { formatMsToDate } from "^/formatMsToDate";
-import MyButton from "@/ui/MyButton";
-import SongList from "@/components/SongList";
-import Comment from "@/components/Comment";
+import { getAllToplist, getToplistCur } from '@/apis/toplist';
+import { formatMsToDate } from '^/formatMsToDate';
+import MyButton from '@/ui/MyButton';
+import SongList from '@/components/SongList';
+import Comment from '@/components/Comment';
 
 export default {
   data() {
@@ -216,7 +220,7 @@ export default {
      */
     if (!this.$route.query.id) {
       this.$router.push({
-        path: "/home/toplist",
+        path: '/music/toplist',
         query: { id: this.toplistDataAll[0].id },
       });
     } else {
@@ -267,7 +271,7 @@ export default {
       next();
     } else {
       next({
-        path: "/home/toplist",
+        path: '/music/toplist',
         query: { id: this.toplistDataAll[0].id },
       });
     }
@@ -282,7 +286,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "#/scss/global.scss";
+@import '#/scss/global.scss';
 
 .toplist {
   background: $background-grey-white;
