@@ -51,8 +51,8 @@
               <i
                 v-if="
                   songList.length &&
-                    songList[curSongIndex].source &&
-                    songList[curSongIndex].source.id
+                  songList[curSongIndex].source &&
+                  songList[curSongIndex].source.id
                 "
                 :title="`来自于${songList[curSongIndex].source.type}`"
                 class="iconfont icon-link"
@@ -165,10 +165,9 @@
       <div class="listbd">
         <img
           class="imgbg"
-          :src="
-            `//music.163.com/api/img/blur/${songList.length &&
-              songList[curSongIndex].picStr}`
-          "
+          :src="`//music.163.com/api/img/blur/${
+            songList.length && songList[curSongIndex].picStr
+          }`"
         />
         <!-- 歌曲列表区 -->
         <div class="msk"></div>
@@ -235,13 +234,11 @@
                 <router-link
                   to="/"
                   :class="['ico', 'ico-src', { 'ico-nosrc': !song.source }]"
-                  :title="
-                    `${
-                      song.source && song.source.type
-                        ? `来自于${song.source.type}`
-                        : '暂无来源'
-                    }`
-                  "
+                  :title="`${
+                    song.source && song.source.type
+                      ? `来自于${song.source.type}`
+                      : '暂无来源'
+                  }`"
                 ></router-link>
               </div>
             </li>
@@ -288,11 +285,7 @@
 
     <audio
       ref="audio"
-      :src="
-        songList && songList.length && songList[curSongIndex]
-          ? songList[curSongIndex].url
-          : ''
-      "
+      :src="curSongUrl"
       @timeupdate="updateCurTime"
       @progress="updateBuffered"
       @ended="endPlay"
@@ -301,18 +294,18 @@
 </template>
 
 <script>
-import * as _ from 'lodash';
-import { formatMsToDuration } from '^/formatMsToDuration';
-import { fix } from '^/fix';
-import { debounce } from '^/debounce';
-import { binarySearch } from '^/binarySearch';
-import { formatLyric } from '^/formatLyric';
-import { getRandomInt } from '^/getRandomInt';
-import { isChildOfNodeById } from '^/isChildOfNodeById';
-import { playerMixin } from '@/mixins';
-import defaultCover from '#/images/Common/music.jpg';
-import { getSongUrl, getLyric } from '@/apis/song';
-import Scroll from '@/ui/Scroll';
+import * as _ from "lodash";
+import { formatMsToDuration } from "^/formatMsToDuration";
+import { fix } from "^/fix";
+import { debounce } from "^/debounce";
+import { binarySearch } from "^/binarySearch";
+import { formatLyric } from "^/formatLyric";
+import { getRandomInt } from "^/getRandomInt";
+import { isChildOfNodeById } from "^/isChildOfNodeById";
+import { playerMixin } from "@/mixins";
+import defaultCover from "#/images/Common/music.jpg";
+import { getSongUrl, getLyric } from "@/apis/song";
+import Scroll from "@/ui/Scroll";
 
 export default {
   mixins: [playerMixin],
@@ -349,6 +342,11 @@ export default {
        * 正在播放的歌曲在播放列表中所对应的index
        */
       curSongIndex: 0,
+
+      /**
+       * 正在播放的歌曲的url 用来绑定audio的src
+       */
+      curSongUrl: "",
 
       /**
        * 当前播放的进度 单位 ms
@@ -463,8 +461,8 @@ export default {
     volIcon() {
       return this.volPrgsHeight ===
         this.maxvolPrgsHeight - this.activevolPrgsHeight
-        ? 'icon-sound-Mute1'
-        : 'icon-sound-filling-fill';
+        ? "icon-sound-Mute1"
+        : "icon-sound-filling-fill";
     },
 
     /**
@@ -497,7 +495,7 @@ export default {
 
   watch: {
     /**
-     * 监听播放列表
+     * 监听播放列表数据源
      */
     async playlistInfo(newList, oldList) {
       /**
@@ -531,36 +529,6 @@ export default {
       const id = _.uniq(newList.map((item) => item.id));
       await this._getSongUrls(id);
 
-      switch (this.addType) {
-        /**
-         *  'add': 0, // 只添加，但不改变正在播放的歌曲
-         *  'addPlay': 1, // 添加并播放最后一首歌曲
-         *  'replace': 2, // 将播放列表全部替换
-         */
-        case 0:
-          /**
-           * 只添加时，不改变正在播放的歌曲
-           */
-          break;
-        case 1:
-          /**
-           * 播放添加后的播放列表的最后一首歌
-           */
-          this.curSongIndex = this.songList.length - 1;
-          break;
-        case 2:
-          /**
-           * 全部替换播放列表后，播放第一首歌
-           */
-          this.curSongIndex = 0;
-          break;
-      }
-
-      /**
-       * 获得最新的正在播放的歌词数据
-       */
-      this._debounceGetLyric(this.songList[this.curSongIndex].id);
-
       /**
        * 在播放状态下点击别的歌单，需要重新播放
        */
@@ -571,6 +539,69 @@ export default {
          */
         this.$refs.audio.play().catch((e) => e);
       }
+
+      /**
+       * 当因为清空列表导致触发该watch时，不执行以下操作
+       */
+      if (newList && newList.length) {
+        switch (this.addType) {
+          /**
+           *  'add': 0, // 只添加，但不改变正在播放的歌曲
+           *  'addPlay': 1, // 添加并播放最后一首歌曲
+           *  'replace': 2, // 将播放列表全部替换
+           */
+          case 0:
+            /**
+             * 只添加时，不改变正在播放的歌曲
+             */
+            break;
+          case 1:
+            /**
+             * 播放添加后的播放列表的最后一首歌
+             */
+            this.curSongIndex = this.songList.length - 1;
+            break;
+          case 2:
+            /**
+             * 全部替换播放列表后，播放第一首歌
+             */
+            this.curSongIndex = 0;
+            break;
+        }
+
+        /**
+         * 获得最新的正在播放的歌词数据
+         */
+        this._debounceGetLyric(this.songList[this.curSongIndex].id);
+      }
+    },
+
+    /**
+     * 监听播放列表
+     */
+    songList(newList, oldList) {
+      const { curSongIndex } = this;
+
+      if (
+        (newList.length &&
+          newList[curSongIndex] &&
+          newList[curSongIndex].id) ===
+        (oldList.length && oldList[curSongIndex] && oldList[curSongIndex].id)
+      ) {
+        /**
+         * 每当播放列表变化时，判断变化前正在播放的歌曲和变化后对应播放的歌曲是否是同一首，如果是同一首则不需要改变curSongUrl
+         * 因为后端即便是同一首歌，也会返回不同的url，导致curSongUrl变化后，audio重新渲染，以致于正在播放的歌曲重新播放
+         */
+        return;
+      }
+
+      /**
+       * 其它情况下，如果是清空列表时，则初始化curSongUrl为空，其它情况则赋值为最新的url
+       */
+      this.curSongUrl =
+        newList && newList.length && newList[curSongIndex]
+          ? newList[curSongIndex].url
+          : "";
     },
 
     /**
@@ -620,7 +651,19 @@ export default {
      * 监听播放歌曲的index，同步改变滚动条位置和列表内容位置
      */
     curSongIndex(newIndex, oldIndex) {
+      /**
+       * 赋值audio新的歌曲url
+       */
+      this.curSongUrl = this.songList[newIndex].url;
+
+      /**
+       * 获取歌词数据
+       */
       this._debounceGetLyric(this.songList[newIndex].id);
+
+      /**
+       * 调整歌曲列表滚动条位置
+       */
       if ((newIndex + 1) * this.listbdcItemHeight > this.listbdcHeight) {
         this.listbdcScrTop =
           (newIndex + 1) * this.listbdcItemHeight - this.listbdcHeight;
@@ -633,7 +676,7 @@ export default {
      * 监听歌曲列表是否渲染
      */
     isShowSongList(newStatus, oldStatus) {
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         if (newStatus) {
           /**
            * 打开歌曲列表和锁定播放器组件
@@ -1155,14 +1198,14 @@ export default {
         /**
          * 如果歌曲列表是收起状态, 绑定点击事件
          */
-        document.body.addEventListener('click', this._closeSongList);
+        document.body.addEventListener("click", this._closeSongList);
       }
 
       if (this.isShowSongList) {
         /**
          * 如果歌曲列表是展开状态, 解除绑定的点击事件
          */
-        document.body.removeEventListener('click', this._closeSongList);
+        document.body.removeEventListener("click", this._closeSongList);
       }
 
       /**
@@ -1205,6 +1248,16 @@ export default {
       this.songList = [];
 
       /**
+       * 同时清空vuex中的歌曲列表数据
+       */
+      this.replacePlaylistInfo([]);
+
+      /**
+       * 初始化curSongIndex
+       */
+      this.curSongIndex = 0;
+
+      /**
        * 清空歌词
        */
       this.lyric = {
@@ -1223,11 +1276,11 @@ export default {
      */
     _closeSongList(e) {
       if (
-        !isChildOfNodeById('p_player', e.target) &&
-        !(e.target.id === 'p_player')
+        !isChildOfNodeById("p_player", e.target) &&
+        !(e.target.id === "p_player")
       ) {
         this.isShowSongList = false;
-        document.body.removeEventListener('click', this._closeSongList);
+        document.body.removeEventListener("click", this._closeSongList);
       }
     },
 
@@ -1357,7 +1410,7 @@ export default {
 
         this.lyric = formatLyric(data.lrc.lyric);
 
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           /**
            * 在渲染完歌词列表后，再设置重新渲染滚动条标识
            */
@@ -1374,7 +1427,7 @@ export default {
     /**
      * 对获取歌词方法做防抖处理
      */
-    _debounceGetLyric: debounce('_getLyric', 300),
+    _debounceGetLyric: debounce("_getLyric", 300),
   },
 
   created() {
@@ -1452,15 +1505,15 @@ export default {
      * 播放模式 及 对应 icon名
      */
     this.playMode = {
-      0: 'icon-sequence',
-      1: 'icon-random',
-      2: 'icon-loop',
+      0: "icon-sequence",
+      1: "icon-random",
+      2: "icon-loop",
     };
 
     this.playModeTip = {
-      0: '循环',
-      1: '随机',
-      2: '单曲循环',
+      0: "循环",
+      1: "随机",
+      2: "单曲循环",
     };
   },
 
@@ -1500,7 +1553,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .player {
   position: fixed;
@@ -1520,7 +1573,7 @@ export default {
       right: 15px;
       width: 52px;
       height: 67px;
-      background: url('~@/assets/images/Common/playbar.png');
+      background: url("~@/assets/images/Common/playbar.png");
       background-position: 0 -380px;
 
       .icn-lock {
@@ -1528,7 +1581,7 @@ export default {
         width: 18px;
         height: 18px;
         margin: 6px 0 0 17px;
-        background: url('~@/assets/images/Common/playbar.png');
+        background: url("~@/assets/images/Common/playbar.png");
       }
 
       .locked {
@@ -1683,7 +1736,7 @@ export default {
             top: -8px;
             width: 22px;
             height: 24px;
-            background: url('~@/assets/images/Common/iconall.png');
+            background: url("~@/assets/images/Common/iconall.png");
             background-position: 0 -250px;
 
             &:hover {
@@ -1703,7 +1756,7 @@ export default {
           left: -4px;
           width: 32px;
           height: 113px;
-          background: url('~@/assets/images/Common/playbar.png');
+          background: url("~@/assets/images/Common/playbar.png");
           background-position: 0 -503px;
 
           .prgs-invisible {
@@ -1721,7 +1774,7 @@ export default {
             left: 14px;
             width: 5px;
             height: 93px;
-            background: url('~@/assets/images/Common/playbar.png');
+            background: url("~@/assets/images/Common/playbar.png");
             background-position: -40px bottom;
           }
 
@@ -1732,7 +1785,7 @@ export default {
             display: block;
             width: 18px;
             height: 20px;
-            background: url('~@/assets/images/Common/iconall.png');
+            background: url("~@/assets/images/Common/iconall.png");
             background-position: -40px -250px;
             cursor: pointer;
 
@@ -1757,7 +1810,7 @@ export default {
           text-align: center;
           color: #fff;
           font-size: 12px;
-          background: url('~@/assets/images/Common/playbar.png');
+          background: url("~@/assets/images/Common/playbar.png");
           background-position: 0 -457px;
         }
       }
@@ -1796,7 +1849,7 @@ export default {
         text-indent: 0;
         text-decoration: none;
         font-size: 12px;
-        background: url('~@/assets/images/Common/playbar.png');
+        background: url("~@/assets/images/Common/playbar.png");
         background-position: -42px -68px;
         cursor: pointer;
 
@@ -1811,7 +1864,7 @@ export default {
           clear: both;
           width: 152px;
           height: 49px;
-          background: url('~@/assets/images/Common/playbar.png');
+          background: url("~@/assets/images/Common/playbar.png");
           background-position: 0 -287px;
           text-align: center;
           color: #fff;
@@ -1842,7 +1895,7 @@ export default {
     .listhd {
       height: 41px;
       padding: 0 5px;
-      background: url('~@/assets/images/Common/playlist_bg.png') no-repeat;
+      background: url("~@/assets/images/Common/playlist_bg.png") no-repeat;
       background-position: 0 0;
 
       .listhdc {
@@ -1879,7 +1932,7 @@ export default {
           .ico-add {
             width: 16px;
             height: 16px;
-            background: url('~@/assets/images/Common/playlist.png');
+            background: url("~@/assets/images/Common/playlist.png");
             background-position: -24px 0;
 
             &:hover {
@@ -1919,7 +1972,7 @@ export default {
           .ico-del {
             width: 13px;
             height: 16px;
-            background: url('~@/assets/images/Common/playlist.png');
+            background: url("~@/assets/images/Common/playlist.png");
             background-position: -51px 0;
 
             &:hover {
@@ -1950,7 +2003,7 @@ export default {
           overflow: hidden;
           text-indent: -999px;
           cursor: pointer;
-          background: url('~@/assets/images/Common/playlist.png') no-repeat;
+          background: url("~@/assets/images/Common/playlist.png") no-repeat;
           background-position: -195px 9px;
 
           &:hover {
@@ -1968,7 +2021,7 @@ export default {
       height: 260px;
       padding: 0 5px;
       overflow: hidden;
-      background: url('~@/assets/images/Common/playlist_bg.png') no-repeat;
+      background: url("~@/assets/images/Common/playlist_bg.png") no-repeat;
       background-position: -1014px 0;
       background-repeat: repeat-y;
 
@@ -2010,7 +2063,7 @@ export default {
           width: 36px;
           height: 29px;
           margin-right: 3px;
-          background: url('~@/assets/images/Common/playlist.png');
+          background: url("~@/assets/images/Common/playlist.png");
           background-position: -138px 0;
           vertical-align: middle;
         }
@@ -2069,7 +2122,7 @@ export default {
                 margin-top: 8px;
                 width: 10px;
                 height: 13px;
-                background: url('~@/assets/images/Common/playlist.png');
+                background: url("~@/assets/images/Common/playlist.png");
                 background-position: -182px 0;
               }
             }
@@ -2097,7 +2150,7 @@ export default {
 
                 .ico-del {
                   width: 13px;
-                  background: url('~@/assets/images/Common/playlist.png');
+                  background: url("~@/assets/images/Common/playlist.png");
                   background-position: -51px 0;
 
                   &:hover {
@@ -2107,7 +2160,7 @@ export default {
 
                 .ico-dl {
                   width: 14px;
-                  background: url('~@/assets/images/Common/playlist.png');
+                  background: url("~@/assets/images/Common/playlist.png");
                   background-position: -57px -50px;
 
                   &:hover {
@@ -2117,7 +2170,7 @@ export default {
 
                 .ico-share {
                   width: 14px;
-                  background: url('~@/assets/images/Common/playlist.png');
+                  background: url("~@/assets/images/Common/playlist.png");
                   background-position: 0px 0px;
 
                   &:hover {
@@ -2127,7 +2180,7 @@ export default {
 
                 .ico-add {
                   width: 16px;
-                  background: url('~@/assets/images/Common/playlist.png');
+                  background: url("~@/assets/images/Common/playlist.png");
                   background-position: -24px 0px;
 
                   &:hover {
@@ -2158,7 +2211,7 @@ export default {
               .ico-src {
                 width: 14px;
                 margin-left: 0;
-                background: url('~@/assets/images/Common/playlist.png');
+                background: url("~@/assets/images/Common/playlist.png");
                 background-position: -80px 0px;
 
                 &:hover {

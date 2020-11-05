@@ -3,7 +3,7 @@
   <div :class="['s-record', { even: (index + 1) % 2 === 0 }]">
     <!-- 排序和播放按钮 -->
     <div class="hd">
-      <span class="ply">&nbsp;</span>
+      <span class="ply" @click="playSong">&nbsp;</span>
       <span class="num">{{ index + 1 }}.</span>
     </div>
 
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { playerMixin } from '@/mixins';
+import { playerMixin } from "@/mixins";
 
 export default {
   mixins: [playerMixin],
@@ -74,6 +74,28 @@ export default {
   },
 
   methods: {
+    playSong() {
+      const { songData } = this;
+
+      this.addPlayToPlaylistInfo({
+        id: songData.song && songData.song.id,
+        name: songData.song && songData.song.name,
+        coverUrl: songData.song && songData.song.al.picUrl,
+        picStr: songData.song && songData.song.al.pic,
+        author: {
+          id: songData.song && songData.song.ar[0].id,
+          name: songData.song && songData.song.ar[0].name,
+        },
+        mv: songData.song && songData.song.mv,
+        dt: songData.song && songData.song.dt,
+      });
+
+      /**
+       * 收起音量条
+       */
+      this.setVolConfigStatus(false);
+    },
+
     /**
      * 将歌曲添加到播放列表的底部
      */
@@ -135,7 +157,7 @@ export default {
       width: 17px;
       height: 17px;
       cursor: pointer;
-      background: url('~@/assets/images/Common/table.png');
+      background: url("~@/assets/images/Common/table.png");
       background-position: 0 -103px;
 
       &:hover {
@@ -211,7 +233,7 @@ export default {
         margin-top: 2px;
         width: 13px;
         height: 13px;
-        background: url('~@/assets/images/Common/icon.png');
+        background: url("~@/assets/images/Common/icon.png");
         background-position: 0 -700px;
         overflow: hidden;
         vertical-align: middle;
@@ -228,7 +250,7 @@ export default {
         margin: 2px 0 0 8px;
         overflow: hidden;
         text-indent: -999px;
-        background: url('~@/assets/images/Common/table.png');
+        background: url("~@/assets/images/Common/table.png");
         cursor: pointer;
       }
 

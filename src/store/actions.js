@@ -29,6 +29,11 @@ export const actions = {
      * 设置替换类型为 'addPlay'
      */
     commit('setAddType', 1);
+
+    /**
+     * 播放歌曲
+     */
+    commit('setPlayStatus', true);
   },
 
   /**
