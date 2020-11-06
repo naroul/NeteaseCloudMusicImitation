@@ -82,4 +82,16 @@ export const state = {
    * 播放器是否显示音量条
    */
   isShowVolConfig: false,
+
+  /**
+   * 用户页面对应用户的数据
+   * type  {
+   *
+   *  //用户等级
+   * 	level: 0,
+   *
+   *  //用户简介
+   * 	profile: {},
+   */
+  userInfo: null,
 };

@@ -80,6 +80,15 @@ const UserInfo = (resolve) => {
 };
 
 /**
+ * 用户动态页
+ */
+const Event = (resolve) => {
+  import('@/pages/User/Event').then((module) => {
+    resolve(module);
+  });
+};
+
+/**
  * 404
  */
 const NotFound = (resolve) => {
@@ -126,6 +135,10 @@ const routes = [
           {
             path: 'info',
             component: UserInfo,
+          },
+          {
+            path: 'event',
+            component: Event,
           },
         ],
       },

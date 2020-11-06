@@ -53,10 +53,10 @@ export const playerMixin = {
  */
 export const userMixin = {
   computed: {
-    ...mapGetters(['uuId']),
+    ...mapGetters(['uuId', 'userInfo']),
   },
 
   methods: {
-    ...mapMutations(['setUuId']),
+    ...mapMutations(['setUuId', 'setUserInfo']),
   },
 };

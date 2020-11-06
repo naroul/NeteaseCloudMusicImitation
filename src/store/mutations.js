@@ -77,4 +77,11 @@ export const mutations = {
   setUuId(state, id) {
     state.uuId = id;
   },
+
+  /**
+   * 设置用户页面对应用户的数据
+   */
+  setUserInfo(state, info) {
+    state.userInfo = info;
+  },
 };

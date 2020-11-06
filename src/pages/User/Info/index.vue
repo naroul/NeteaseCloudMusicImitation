@@ -1,101 +1,8 @@
 <template>
-  <div class="usr-hm">
+  <div class="usr-info">
     <div class="usr-main" v-if="userInfo">
       <!-- 用户基础信息 -->
-      <div class="usr-prf">
-        <!-- 用户头像 -->
-        <div class="usr-pic">
-          <img :src="userInfo.profile.avatarUrl" />
-        </div>
-
-        <!-- 用户简介 -->
-        <div class="usr-info">
-          <!-- 用户名 等级 私信 关注等-->
-          <div class="name">
-            <!-- 所有用户（包括登录用户）都会显示的信息 名字 等级 -->
-            <h2 class="name-wrp">
-              <span class="tit">
-                {{ userInfo.profile.nickname }}
-              </span>
-              <span class="lev">
-                {{ userInfo.level }}
-                <i class="icn-lev"></i>
-              </span>
-            </h2>
-
-            <!-- 登录用户显示编辑资料按钮 -->
-            <span class="u-btn-e" v-if="isUuId">
-              <i>编辑个人资料</i>
-            </span>
-
-            <!-- 访问其它用户显示的信息 -->
-            <div class="oth-u" v-else>
-              <!-- 用户性别 0代表保密 1男 2女-->
-              <i
-                v-if="!!userInfo.profile.gender"
-                :class="[
-                  'icn-gender',
-                  {
-                    'icn-male': userInfo.profile.gender === 1,
-                    'icn-female': userInfo.profile.gender === 2,
-                  },
-                ]"
-              ></i>
-
-              <!-- 私信按钮 -->
-              <span class="u-btn-s">
-                <i>发私信</i>
-              </span>
-
-              <!-- 关注按钮 -->
-              <span class="u-btn-f"> 关 注 </span>
-            </div>
-          </div>
-
-          <!-- 动态 关注 粉丝 -->
-          <ul class="tab-box">
-            <!-- 动态数 -->
-            <li class="fst">
-              <router-link to="#">
-                <strong>{{ userInfo.profile.eventCount }}</strong>
-                <span>动态</span>
-              </router-link>
-            </li>
-
-            <!-- 关注数 -->
-            <li>
-              <router-link to="#">
-                <strong>{{ userInfo.profile.follows }}</strong>
-                <span>关注</span>
-              </router-link>
-            </li>
-
-            <!-- 粉丝数 -->
-            <li>
-              <router-link to="#">
-                <strong>{{ userInfo.profile.followeds }}</strong>
-                <span>粉丝</span>
-              </router-link>
-            </li>
-          </ul>
-
-          <!-- 个人介绍 -->
-          <div
-            v-if="userInfo.profile && userInfo.profile.signature"
-            class="inf s-fc"
-          >
-            个人介绍：{{ userInfo.profile.signature }}
-          </div>
-
-          <!-- 年龄 -->
-          <div
-            v-if="userInfo.profile && userInfo.profile.birthday"
-            class="inf s-fc"
-          >
-            年龄：{{ _formatMsToYears(userInfo.profile.birthday) }}
-          </div>
-        </div>
-      </div>
+      <Profile :isUuId="isUuId" />
 
       <!-- 听歌排行标题 -->
       <div class="m-record-title" v-if="authorized">
@@ -124,17 +31,23 @@
 
       <!-- 听歌排行 -->
       <div class="m-record" v-if="authorized">
-        <SongRecord
-          v-for="(record, index) of records && records.slice(0, 10)"
-          :key="index"
-          :isShowTimes="isUuId"
-          :index="index"
-          :songData="record"
-        />
+        <div v-if="records && records.length">
+          <SongRecord
+            v-for="(record, index) of records && records.slice(0, 10)"
+            :key="index"
+            :isShowTimes="isUuId"
+            :index="index"
+            :songData="record"
+          />
 
-        <!-- 查看更多 -->
-        <div class="more">
-          <router-link to="#">查看更多&gt;</router-link>
+          <!-- 查看更多 -->
+          <div class="more">
+            <router-link to="#">查看更多&gt;</router-link>
+          </div>
+        </div>
+
+        <div v-else class="n-record">
+          <h3><i class="icn-norecord"></i>暂无听歌记录</h3>
         </div>
 
         <!-- 加载状态 -->
@@ -146,7 +59,7 @@
         <div class="cl-title" v-if="createdPlaylist.length">
           <h3>
             <span class="f-pr">
-              {{ isUuId ? '我' : userInfo.profile.nickname }}创建的歌单（{{
+              {{ isUuId ? "我" : userInfo.profile.nickname }}创建的歌单（{{
                 userInfo.profile.playlistCount
               }}）
             </span>
@@ -167,7 +80,7 @@
         <div class="cl-title" v-if="collectedPlaylist.length">
           <h3>
             <span class="f-pr">
-              {{ isUuId ? '我' : userInfo.profile.nickname }}收藏的歌单（{{
+              {{ isUuId ? "我" : userInfo.profile.nickname }}收藏的歌单（{{
                 userInfo.profile.playlistCount
               }}）
             </span>
@@ -189,34 +102,17 @@
 </template>
 
 <script>
-import SongRecord from '@/components/SongRecord';
-import Loading from '@/components/Loading';
-import PlaylistSummary from '@/components/PlaylistSummary';
-import { userMixin } from '@/mixins';
-import { getUserDetail, getUserRecord, getUserPlaylist } from '@/apis/user';
-import { formatMsToYears } from '^/formatMsToYears';
+import SongRecord from "@/components/SongRecord";
+import Loading from "@/components/Loading";
+import Profile from "@/components/Profile";
+import PlaylistSummary from "@/components/PlaylistSummary";
+import { userMixin } from "@/mixins";
+import { getUserDetail, getUserRecord, getUserPlaylist } from "@/apis/user";
 
 export default {
   mixins: [userMixin],
   data() {
     return {
-      /**
-       * 用户数据
-       * type  {
-       *
-       *  //用户等级
-       * 	level: 0,
-       *
-       *  //用户简介
-       * 	profile: {},
-       */
-      userInfo: null,
-
-      /**
-       * 当前页面的对应的用户Id
-       */
-      curUserId: '',
-
       /**
        * 是否有权限访问播放记录
        */
@@ -291,34 +187,9 @@ export default {
     },
 
     /**
-     * 根据出生的 ms 计算年代
-     */
-    _formatMsToYears(ms) {
-      return formatMsToYears(ms);
-    },
-
-    /**
-     * 获取用户信息
-     */
-    _getUserDetail() {
-      /**
-       * 根据id获取用户信息，报错时跳转到 404
-       */
-      getUserDetail({ id: this.curUserId })
-        .then(({ data }) => {
-          this.userInfo = data;
-        })
-        .catch((e) => {
-          this.$router.push({
-            path: '/404',
-          });
-        });
-    },
-
-    /**
      * 获取用户听歌记录
      */
-    _getUserRecord() {
+    async _getUserRecord() {
       /**
        * 开始加载记录
        */
@@ -327,7 +198,7 @@ export default {
       /**
        * 加载
        */
-      getUserRecord({ id: this.curUserId, type: this.recordType })
+      await getUserRecord({ id: this.curUserId, type: this.recordType })
         .then((res) => {
           if (res.data && res.data.code === 200) {
             this.authorized = true;
@@ -414,42 +285,26 @@ export default {
           this.playlistOffset += 1;
         })
         .catch((e) => {
-          this.$toast.failed('加载发生了错误！');
+          this.$toast.failed("加载发生了错误！");
         });
     },
   },
 
   created() {
     /**
-     * 是否还有未加载的歌单数据
+     * 实例属性，是否还有未加载的歌单数据
      */
     this.more = true;
 
     /**
-     * 用户创建歌单的偏移量 用于下拉加载
+     * 实例属性，用户创建歌单的偏移量 用于下拉加载
      */
     this.playlistOffset = 0;
 
     /**
-     * 加载时判断路由中是否有 id，无id跳转 404页面
-     */
-    if (!this.$route.query.id) {
-      this.$router.push({
-        path: '/404',
-      });
-
-      return;
-    }
-
-    /**
-     * 存取页面对应用户Id
+     * 实例属性，存取页面对应用户Id
      */
     this.curUserId = this.$route.query.id;
-
-    /**
-     * 根据id获取用户信息，报错时跳转到 404
-     */
-    this._getUserDetail();
 
     /**
      * 获取用户听歌记录
@@ -462,7 +317,46 @@ export default {
     this._getUserPlaylist();
   },
 
+  /**
+   * 路由参数变化时触发，初始化页面
+   */
+  async beforeRouteUpdate(to, from, next) {
+    /**
+     * 初始化所有数据
+     */
+    this.more = true;
+
+    this.playlistOffset = 0;
+
+    this.authorized = false;
+
+    this.recordType = 1;
+
+    this.records = null;
+
+    this.isLoadingRecord = false;
+
+    this.createdPlaylist = [];
+
+    this.collectedPlaylist = [];
+
+    this.curUserId = to && to.query && to.query.id;
+
+    /**
+     * 获取用户听歌记录
+     */
+    await this._getUserRecord();
+
+    /**
+     * 获取用户歌单数据
+     */
+    await this._getUserPlaylist();
+
+    next();
+  },
+
   components: {
+    Profile,
     SongRecord,
     PlaylistSummary,
     Loading,
@@ -471,252 +365,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
-.usr-hm {
+.usr-info {
   .usr-main {
     width: 900px;
     margin: 0 auto;
     padding: 40px;
     border: 1px solid #d3d3d3;
     border-width: 0 1px;
-
-    .usr-prf {
-      margin-bottom: 43px;
-      display: flex;
-
-      .usr-pic {
-        width: 188px;
-        margin-right: 40px;
-
-        img {
-          display: block;
-          width: 180px;
-          height: 180px;
-          padding: 3px;
-          background: #fff;
-          border: 1px solid #d5d5d5;
-        }
-      }
-
-      .usr-info {
-        flex: 1;
-
-        .name {
-          display: flex;
-          align-items: center;
-          padding-bottom: 12px;
-          margin-bottom: 10px;
-          border-bottom: 1px solid #ddd;
-
-          .name-wrp {
-            .tit {
-              margin-top: 3px;
-              font-size: 22px;
-              font-weight: normal;
-              line-height: 30px;
-            }
-
-            .lev {
-              margin: 8px 0 0 10px;
-              display: inline-flex;
-              align-items: center;
-              height: 19px;
-              overflow: hidden;
-              padding-left: 29px;
-              line-height: 21px;
-              color: #e03a24;
-              font-size: 14px;
-              font-weight: bold;
-              font-style: italic;
-              background: url('~@/assets/images/Common/icon2.png') no-repeat 0
-                9999px;
-              background-position: -135px -190px;
-              word-break: break-word;
-
-              .icn-lev {
-                position: relative;
-                left: 3px;
-                width: 12px;
-                height: 19px;
-                background: url('~@/assets/images/Common/icon2.png');
-                background-position: -191px -190px;
-                display: inline-block;
-                overflow: hidden;
-                font-style: normal;
-                text-align: left;
-                font-size: inherit;
-              }
-            }
-          }
-
-          .oth-u {
-            display: flex;
-            margin-left: 8px;
-
-            .icn-gender {
-              display: block;
-              width: 20px;
-              height: 20px;
-              margin-top: 9px;
-              background: url('~@/assets/images/Common/icon.png');
-            }
-
-            .icn-male {
-              background-position: -41px -57px;
-            }
-
-            .icn-female {
-              background-position: -41px -27px;
-            }
-
-            .u-btn-s {
-              display: inline-block;
-              margin: 4px 0 0 15px;
-              width: 75px;
-              height: 31px;
-              background: url('~@/assets/images/Common/button.png');
-              background-position: 0 -810px;
-              text-decoration: none;
-              cursor: pointer;
-
-              i {
-                display: inline-block;
-                height: 29px;
-                line-height: 29px;
-                padding-left: 30px;
-                font-style: normal;
-                text-align: left;
-                font-size: 12px;
-                cursor: pointer;
-              }
-
-              &:hover,
-              &:active {
-                outline: none;
-                background-position: 0 -845px;
-              }
-            }
-
-            .u-btn-f {
-              display: inline-block;
-              margin: 4px 0 0 15px;
-              width: 40px;
-              height: 31px;
-              padding-left: 30px;
-              color: #fff;
-              line-height: 30px;
-              font-size: 12px;
-              background: url('~@/assets/images/Common/button.png');
-              background-position: 0 -720px;
-              cursor: pointer;
-
-              &:hover,
-              &:active {
-                background-position: -80px -720px;
-              }
-            }
-          }
-
-          .u-btn-e {
-            margin: 4px 0 0 15px;
-            padding: 0 5px 0 0;
-            display: inline-block;
-            height: 31px;
-            line-height: 31px;
-            overflow: hidden;
-            vertical-align: top;
-            text-align: center;
-            outline: none;
-            font-size: 12px;
-            color: #333;
-            background: url('~@/assets/images/Common/button2.png') no-repeat 0
-              9999px;
-            background-position: right -100px;
-            text-decoration: none;
-            cursor: pointer;
-
-            &:hover,
-            &:active {
-              background-position: right -182px;
-            }
-
-            i {
-              display: inline-block;
-              padding: 0 15px 0 20px;
-              height: 31px;
-              line-height: 31px;
-              overflow: hidden;
-              vertical-align: top;
-              text-align: center;
-              font-style: normal;
-              background: url('~@/assets/images/Common/button2.png') no-repeat 0
-                9999px;
-              background-position: 0 -59px;
-              cursor: pointer;
-
-              &:hover,
-              &:active {
-                background-position: 0 -141px;
-              }
-            }
-          }
-        }
-
-        .tab-box {
-          height: 41px;
-          margin-bottom: 15px;
-          color: #666;
-
-          li {
-            float: left;
-            padding: 0 40px 0 20px;
-            border-left: 1px solid #ddd;
-          }
-
-          a {
-            display: inline-block;
-            position: relative;
-            zoom: 1;
-            color: #666;
-            text-decoration: none;
-            list-style: none;
-
-            &:hover {
-              color: #0c73c2;
-            }
-          }
-
-          strong {
-            display: block;
-            margin-top: -4px;
-            margin-bottom: 6px;
-            font-size: 24px;
-            font-weight: normal;
-            cursor: pointer;
-          }
-
-          span {
-            display: block;
-            font-size: 12px;
-            text-indent: 2px;
-            cursor: pointer;
-          }
-
-          .fst {
-            padding-left: 0;
-            border-left: none;
-          }
-        }
-
-        .inf {
-          margin-bottom: 5px;
-          line-height: 21px;
-          font-size: 12px;
-          color: #666;
-        }
-      }
-    }
 
     .m-record-title {
       position: relative;
@@ -759,7 +416,7 @@ export default {
           display: inline-block;
           width: 18px;
           height: 18px;
-          background: url('~@/assets/images/Common/icon2.png');
+          background: url("~@/assets/images/Common/icon2.png");
           background-position: 0 -50px;
           overflow: hidden;
           vertical-align: middle;
@@ -779,7 +436,7 @@ export default {
           font-size: 12px;
           line-height: 20px;
           padding: 8px 19px 7px 19px;
-          background: url('~@/assets/images/Common/top_m.png');
+          background: url("~@/assets/images/Common/top_m.png");
           z-index: 2;
           color: #666;
 
@@ -789,7 +446,7 @@ export default {
             height: 16px;
             left: 0;
             top: -16px;
-            background: url('~@/assets/images/Common/top_t.png');
+            background: url("~@/assets/images/Common/top_t.png");
           }
 
           .b {
@@ -798,7 +455,7 @@ export default {
             height: 12px;
             left: 0;
             bottom: -12px;
-            background: url('~@/assets/images/Common/top_b.png');
+            background: url("~@/assets/images/Common/top_b.png");
           }
         }
       }
@@ -848,6 +505,28 @@ export default {
           font-size: 12px;
           cursor: pointer;
           text-decoration: none;
+        }
+      }
+    }
+
+    .n-record {
+      padding: 105px 0 105px 0;
+      text-align: center;
+
+      h3 {
+        padding-bottom: 38px;
+        font-size: 18px;
+        font-weight: bold;
+
+        .icn-norecord {
+          display: inline-block;
+          margin-right: 17px;
+          width: 64px;
+          height: 50px;
+          overflow: hidden;
+          vertical-align: middle;
+          background: url("~@/assets/images/Common/icon.png");
+          background-position: 0 -347px;
         }
       }
     }

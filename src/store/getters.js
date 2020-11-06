@@ -1,3 +1,5 @@
+import { state } from './state';
+
 /**
  * Header是否显示navs栏
  */
@@ -37,3 +39,15 @@ export const uuId = (state) => state.uuId;
  * 将 歌曲/歌曲列表 添加到播放列表的方式
  */
 export const addType = (state) => state.addType;
+
+/**
+ * 用户页面对应用户的数据
+ * type  {
+ *
+ *  //用户等级
+ * 	level: 0,
+ *
+ *  //用户简介
+ * 	profile: {},
+ */
+export const userInfo = (state) => state.userInfo;
