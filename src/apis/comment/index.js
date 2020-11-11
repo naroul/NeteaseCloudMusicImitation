@@ -6,7 +6,7 @@ import { Host } from '../config';
  * @param id 必传项 歌单id
  * @param limit 取出的评论数量，默认20
  * @param offset 偏移数量 用于分页
- * @param limit 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过5000条评论的时候需要用到)
+ * @param before 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过5000条评论的时候需要用到)
  */
 export const getCommentPlaylist = ({ id, limit, offset, before }) => {
   const url = Host + '/comment/playlist';
