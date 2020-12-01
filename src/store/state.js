@@ -64,6 +64,11 @@ export const state = {
   playlistInfo: [],
 
   /**
+   * 正在播放的歌曲在播放列表中所对应的index
+   */
+  curSongIndex: 0,
+
+  /**
    * 添加歌曲/歌曲列表到播放列表的方式 分为：
    * {
    *  'add': 0, // 只添加，但不改变正在播放的歌曲

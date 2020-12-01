@@ -6,9 +6,9 @@
       disabled,
     }"
     v-on="{
-      click: onclick,
-      focus: onfocus,
-      blur: onblur,
+      click: handleClick,
+      focus: handleFocus,
+      blur: handleBlur,
     }"
   >
     <slot></slot>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { noop } from 'lodash';
+import { noop } from "lodash";
 
 export default {
   props: {
@@ -44,39 +44,35 @@ export default {
       required: false,
       default: false,
     },
+  },
 
+  methods: {
     /**
-     * click事件回调
+     * 点击时抛出 clk 事件
      */
-    onclick: {
-      type: Function,
-      required: false,
-      default: noop,
+    handleClick() {
+      this.$emit("clk");
     },
 
     /**
-     * focus事件回调
+     * 聚焦时抛出 fcs 事件
      */
-    onfocus: {
-      type: Function,
-      required: false,
-      default: noop,
+    handleFocus() {
+      this.$emit("fcs");
     },
 
     /**
-     * blur事件回调
+     * 失焦时抛出 blr 事件
      */
-    onblur: {
-      type: Function,
-      required: false,
-      default: noop,
+    handleBlur() {
+      this.$emit("blr");
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 button {
   padding: 0 8px;

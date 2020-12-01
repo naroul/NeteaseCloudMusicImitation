@@ -35,7 +35,7 @@
             type="password"
             placeholder="请输入密码"
           />
-          <MyButton class="u-ipt u-lg" :onclick="confirmLogin"> 登录 </MyButton>
+          <MyButton class="u-ipt u-lg" @clk="confirmLogin"> 登录 </MyButton>
         </div>
         <div class="u-alt">
           <div class="u-opt" @click="setMode(0)">

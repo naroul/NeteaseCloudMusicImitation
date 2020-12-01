@@ -41,6 +41,11 @@ export const actions = {
    */
   replacePlaylistInfoActs({ commit }, list) {
     /**
+     * 重置播放歌曲index
+     */
+    commit('setCurSongIndex', 0)
+
+    /**
      * 替换播放列表
      */
     commit('replacePlaylistInfo', list);

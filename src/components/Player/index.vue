@@ -339,11 +339,6 @@ export default {
       songList: [],
 
       /**
-       * 正在播放的歌曲在播放列表中所对应的index
-       */
-      curSongIndex: 0,
-
-      /**
        * 正在播放的歌曲的url 用来绑定audio的src
        */
       curSongUrl: "",
@@ -433,7 +428,7 @@ export default {
       /**
        * 播放列表变化时，改变当前播放歌曲的封面
        */
-      return this.songList && this.songList.length
+      return this.songList && this.songList.length && this.songList[this.curSongIndex]
         ? this.songList[this.curSongIndex].coverUrl
         : defaultCover;
     },
@@ -559,13 +554,13 @@ export default {
             /**
              * 播放添加后的播放列表的最后一首歌
              */
-            this.curSongIndex = this.songList.length - 1;
+            this.setCurSongIndex(this.songList.length - 1);
             break;
           case 2:
             /**
              * 全部替换播放列表后，播放第一首歌
              */
-            this.curSongIndex = 0;
+            this.setCurSongIndex(0);
             break;
         }
 
@@ -962,9 +957,9 @@ export default {
            * 如果当前在播发列表第一首，则跳到最后一首
            */
           if (this.curSongIndex === 0) {
-            this.curSongIndex = maxIndex;
+            this.setCurSongIndex(maxIndex);
           } else {
-            this.curSongIndex -= 1;
+            this.setCurSongIndex(this.curSongIndex - 1);
           }
 
           return;
@@ -1005,9 +1000,9 @@ export default {
            * 如果当前在播发列表最后一首，则跳到第一首
            */
           if (this.curSongIndex === maxIndex) {
-            this.curSongIndex = 0;
+            this.setCurSongIndex(0);
           } else {
-            this.curSongIndex += 1;
+            this.setCurSongIndex(this.curSongIndex + 1);
           }
 
           return;
@@ -1235,7 +1230,7 @@ export default {
      * 播放歌曲详情列表点击播放
      */
     playSelected(index) {
-      this.curSongIndex = index;
+      this.setCurSongIndex(index);
     },
 
     /**
@@ -1255,7 +1250,7 @@ export default {
       /**
        * 初始化curSongIndex
        */
-      this.curSongIndex = 0;
+      this.setCurSongIndex(0);
 
       /**
        * 清空歌词
@@ -1341,7 +1336,7 @@ export default {
         }
       }
 
-      this.curSongIndex = nextIndex;
+      this.setCurSongIndex(nextIndex);
     },
 
     /**

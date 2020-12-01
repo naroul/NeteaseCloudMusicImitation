@@ -70,31 +70,10 @@ export default {
      * 将当前播放列表清空，并用歌单歌曲替代 并设置播放状态为 true
      */
     play(id) {
-      getPlaylistDetail({ id }).then(({ data: { playlist } }) => {
-        let list = [];
-        for (let track of playlist.tracks.values()) {
-          list = [
-            ...list,
-            {
-              id: track.id,
-              name: track.name,
-              coverUrl: track.al.picUrl,
-              picStr: track.al.pic_str,
-              source: {
-                id: playlist.id,
-                type: '歌单',
-              },
-              author: {
-                id: track.ar[0].id,
-                name: track.ar[0].name,
-              },
-              mv: track.mv,
-              dt: track.dt,
-            },
-          ];
-        }
-        this.replacePlaylistInfoActs(list);
-      });
+      /**
+       * 播放歌单
+       */
+      this.plyPlaylist(id);
 
       /**
        * 设置播放状态为true

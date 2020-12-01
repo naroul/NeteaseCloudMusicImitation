@@ -1,7 +1,6 @@
 <template>
   <input
     :class="{ disabled }"
-    @input="handleInput"
     v-bind="{
       value,
       type,
@@ -10,17 +9,18 @@
       readonly,
     }"
     v-on="{
-      change: onchange,
-      keydown: onkeydown,
-      focus: onfocus,
-      blur: onblur,
-      paste: onpaste,
+      input: handleInput,
+      change: handleChange,
+      keydown: handleKeydown,
+      focus: handleFocus,
+      blur: handleBlur,
+      paste: handlePaste,
     }"
   />
 </template>
 
 <script>
-import { noop } from 'lodash';
+import { noop } from "lodash";
 
 export default {
   props: {
@@ -30,7 +30,7 @@ export default {
     value: {
       type: [String, Number],
       required: false,
-      default: '',
+      default: "",
     },
 
     /**
@@ -39,19 +39,19 @@ export default {
     type: {
       validator(value) {
         return [
-          'text',
-          'password',
-          'email',
-          'number',
-          'search',
-          'tel',
-          'url',
-          'time',
-          'month',
+          "text",
+          "password",
+          "email",
+          "number",
+          "search",
+          "tel",
+          "url",
+          "time",
+          "month",
         ].includes(value);
       },
       required: true,
-      default: 'text',
+      default: "text",
     },
 
     /**
@@ -78,51 +78,6 @@ export default {
       type: [Boolean, String],
       required: false,
     },
-
-    /**
-     * change事件回调
-     */
-    onchange: {
-      type: Function,
-      required: false,
-      default: noop,
-    },
-
-    /**
-     * keydown事件回调
-     */
-    onkeydown: {
-      type: Function,
-      required: false,
-      default: noop,
-    },
-
-    /**
-     * focus事件回调
-     */
-    onfocus: {
-      type: Function,
-      required: false,
-      default: noop,
-    },
-
-    /**
-     * blur事件回调
-     */
-    onblur: {
-      type: Function,
-      required: false,
-      default: noop,
-    },
-
-    /**
-     * paste事件回调
-     */
-    onpaste: {
-      type: Function,
-      required: false,
-      default: noop,
-    },
   },
 
   methods: {
@@ -133,14 +88,49 @@ export default {
       /**
        * 抛出 input事件，实现自定义控件的 v-model
        */
-      this.$emit('input', e.target.value);
+      this.$emit("input", e.target.value);
+    },
+
+    /**
+     * change事件回调 抛出 chg 事件
+     */
+    handleChange(e) {
+      this.$emit("chg", e.target.value);
+    },
+
+    /**
+     * keydown事件回调 抛出 kyd 事件
+     */
+    handleKeydown(e) {
+      this.$emit("kyd", e.target.value);
+    },
+
+    /**
+     * 聚焦时抛出 fcs 事件
+     */
+    handleFocus(e) {
+      this.$emit("fcs", e.target.value);
+    },
+
+    /**
+     * 失焦时抛出 blr 事件
+     */
+    handleBlur(e) {
+      this.$emit("blr", e.target.value);
+    },
+
+    /**
+     * 失焦时抛出 pst 事件
+     */
+    handlePaste(e) {
+      this.$emit("pst", e.target.value);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 input {
   box-sizing: border-box;

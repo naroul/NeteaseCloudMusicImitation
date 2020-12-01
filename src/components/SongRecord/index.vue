@@ -26,7 +26,7 @@
 
       <!-- 操作项 -->
       <div class="opt">
-        <span class="icn-add" title="添加到播放列表" @click="addSong"></span>
+        <span class="icn-add" title="添加到播放列表" @click="handleAddSong"></span>
         <span class="icn icn-fav" title="收藏"></span>
         <span class="icn icn-share" title="分享"></span>
         <span class="icn icn-dl" title="下载"></span>
@@ -77,18 +77,7 @@ export default {
     playSong() {
       const { songData } = this;
 
-      this.addPlayToPlaylistInfo({
-        id: songData.song && songData.song.id,
-        name: songData.song && songData.song.name,
-        coverUrl: songData.song && songData.song.al.picUrl,
-        picStr: songData.song && songData.song.al.pic,
-        author: {
-          id: songData.song && songData.song.ar[0].id,
-          name: songData.song && songData.song.ar[0].name,
-        },
-        mv: songData.song && songData.song.mv,
-        dt: songData.song && songData.song.dt,
-      });
+      this.addPlySong(songData.song);
 
       /**
        * 收起音量条
@@ -99,21 +88,10 @@ export default {
     /**
      * 将歌曲添加到播放列表的底部
      */
-    addSong() {
+    handleAddSong() {
       const { songData } = this;
 
-      this.addToPlaylistInfoActs({
-        id: songData.song && songData.song.id,
-        name: songData.song && songData.song.name,
-        coverUrl: songData.song && songData.song.al.picUrl,
-        picStr: songData.song && songData.song.al.pic,
-        author: {
-          id: songData.song && songData.song.ar[0].id,
-          name: songData.song && songData.song.ar[0].name,
-        },
-        mv: songData.song && songData.song.mv,
-        dt: songData.song && songData.song.dt,
-      });
+      this.addSong(songData.song);
 
       /**
        * 收起音量条

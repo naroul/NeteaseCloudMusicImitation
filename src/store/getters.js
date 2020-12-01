@@ -21,6 +21,11 @@ export const isShowLoginDialog = (state) => state.isShowLoginDialog;
 export const playlistInfo = (state) => state.playlistInfo;
 
 /**
+ * 正在播放的歌曲在播放列表中所对应的index
+ */
+export const curSongIndex = (state) => state.curSongIndex;
+
+/**
  * 播放状态 是否正在播放音乐
  */
 export const isPlaying = (state) => state.isPlaying;

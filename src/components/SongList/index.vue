@@ -28,7 +28,7 @@
 
         <!-- 播放按钮 -->
         <i class="iconfont icon-play" @click="playSong(item)" />
-        <div>{{ item.name }}</div>
+        <div class="item-name" :title="item.name">{{ item.name }}</div>
       </div>
       <div class="item-duration item-normal">
         <div v-if="indexHover === index">
@@ -89,21 +89,10 @@ export default {
 
   methods: {
     /**
-     * 将歌曲添加到播放列表的顶部
+     * 将歌曲添加到播放列表的底部并播放
      */
     playSong(song) {
-      this.addPlayToPlaylistInfo({
-        id: song.id,
-        name: song.name,
-        coverUrl: song.al.picUrl,
-        picStr: song.al.pic_str,
-        author: {
-          id: song.ar[0].id,
-          name: song.ar[0].name,
-        },
-        mv: song.mv,
-        dt: song.dt,
-      });
+      this.addPlySong(song);
 
       /**
        * 设置播放状态为true
@@ -205,6 +194,11 @@ export default {
       flex: 1;
       display: flex;
       align-items: center;
+
+      .item-name {
+        max-width: 200px;
+        @include word-hide;
+      }
 
       img {
         width: 50px;

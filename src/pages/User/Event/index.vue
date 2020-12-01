@@ -25,7 +25,14 @@
           </div>
 
           <!-- 动态区 -->
-          <div else></div>
+          <div else>
+            <Event
+              v-for="event of events"
+              :key="event.id"
+              :originEvent="event"
+              :isUuId="isUuId"
+            />
+          </div>
         </div>
 
         <!-- 关注 粉丝 -->
@@ -85,6 +92,7 @@
 
 <script>
 import Profile from "@/components/Profile";
+import Event from "@/components/Event";
 import { userMixin } from "@/mixins";
 import {
   getUserDetail,
@@ -153,7 +161,7 @@ export default {
           ]) => {
             this.follows = follow;
             this.followeds = followeds;
-            console.log(data);
+            this.events = data.events;
           }
         )
         .catch((e) => this.$toast.failed(e.toString()));
@@ -185,6 +193,7 @@ export default {
 
   components: {
     Profile,
+    Event,
   },
 };
 </script>

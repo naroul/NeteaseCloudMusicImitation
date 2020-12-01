@@ -2,7 +2,7 @@
   <!-- 分页 -->
   <div class="pg-wrapper">
     <div class="pagination">
-      <MyButton class="btn-pg" :disabled="pgCur === 1" :onclick="pgChangePrev">
+      <MyButton class="btn-pg" :disabled="pgCur === 1" @clk="pgChangePrev">
         <i
           :class="['iconfont', 'icon-arrow-lift', { disabled: pgCur === 1 }]"
         />
@@ -13,13 +13,9 @@
         v-for="pg of pgList"
         @click="pgChange(pg)"
       >
-        {{ pg === 0 ? '...' : pg }}
+        {{ pg === 0 ? "..." : pg }}
       </div>
-      <MyButton
-        class="btn-pg"
-        :disabled="pgCur === pgSize"
-        :onclick="pgChangeNext"
-      >
+      <MyButton class="btn-pg" :disabled="pgCur === pgSize" @clk="pgChangeNext">
         <span :class="{ disabled: pgCur === pgSize }">下一页</span>
         <i
           :class="[
@@ -34,7 +30,7 @@
 </template>
 
 <script>
-import MyButton from '@/ui/MyButton';
+import MyButton from "@/ui/MyButton";
 
 export default {
   props: {
@@ -110,7 +106,7 @@ export default {
      * 页码改变，重新请求数据
      */
     pgCur(newPg, oldPg) {
-      this.$emit('pgChange', newPg);
+      this.$emit("pgChange", newPg);
     },
 
     isPgReset(newIs, oldIs) {

@@ -26,7 +26,7 @@
         <span :class="['remainder', { 'red-font': editRemainder < 0 }]">
           {{ editRemainder }}
         </span>
-        <MyButton class="comment-btn" :onclick="editConfirm">评论</MyButton>
+        <MyButton class="comment-btn" @clk="editConfirm">评论</MyButton>
       </div>
     </div>
 
@@ -119,7 +119,7 @@
               </span>
               <MyButton
                 class="btn-reply"
-                :onclick="() => reply(hotCmt.user.nickname)"
+                @clk="() => reply(hotCmt.user.nickname)"
               >
                 回复
               </MyButton>
@@ -186,7 +186,7 @@
               <span
                 v-show="
                   comment.likedCount ||
-                    likedCids.liked.includes(comment.commentId)
+                  likedCids.liked.includes(comment.commentId)
                 "
                 class="count-like"
                 @click="
@@ -221,7 +221,7 @@
               </span>
               <MyButton
                 class="btn-reply"
-                :onclick="() => reply(comment.user.nickname)"
+                @clk="() => reply(comment.user.nickname)"
               >
                 回复
               </MyButton>
@@ -249,12 +249,12 @@ import {
   commentLikeMusic,
   commentUnlikeMusic,
   replyCommentMusic,
-} from '@/apis/comment';
-import { includes, uniqBy } from 'lodash';
-import { mapGetters, mapMutations } from 'vuex';
-import MyButton from '@/ui/MyButton';
-import { formatMsToDate } from '^/formatMsToDate';
-import Pagination from '../Pagination';
+} from "@/apis/comment";
+import { includes, uniqBy } from "lodash";
+import { mapGetters, mapMutations } from "vuex";
+import MyButton from "@/ui/MyButton";
+import { formatMsToDate } from "^/formatMsToDate";
+import Pagination from "../Pagination";
 
 export default {
   props: {
@@ -265,7 +265,7 @@ export default {
       type: String,
       required: true,
       validator(value) {
-        return ['playlist', 'music'].includes(value);
+        return ["playlist", "music"].includes(value);
       },
     },
 
@@ -293,12 +293,12 @@ export default {
       /**
        * 评论
        */
-      editValue: '',
+      editValue: "",
 
       /**
        * 回复评论
        */
-      replyValue: '',
+      replyValue: "",
 
       /**
        * 正在回复的评论id
@@ -351,7 +351,7 @@ export default {
       }
     },
 
-    ...mapGetters(['isLogged', 'isShowLoginDialog']),
+    ...mapGetters(["isLogged", "isShowLoginDialog"]),
   },
 
   watch: {
@@ -399,17 +399,17 @@ export default {
       }
 
       if (this.editRemainder < 0) {
-        this.$toast.failed('评论不可超过140字');
-      } else if (this.editValue === '') {
-        this.$toast.failed('请输入内容在提交评论');
+        this.$toast.failed("评论不可超过140字");
+      } else if (this.editValue === "") {
+        this.$toast.failed("请输入内容在提交评论");
       } else {
         this._sendComment({ id: this.id, content: this.editValue })
           .then((res) => {
-            this.$toast.success('评论成功');
-            this.editValue = '';
+            this.$toast.success("评论成功");
+            this.editValue = "";
           })
           .catch((e) => {
-            this.$toast.failed('评论失败');
+            this.$toast.failed("评论失败");
           });
       }
     },
@@ -419,7 +419,7 @@ export default {
      */
     controlReply(commentId, nickname) {
       if (!this.isLogged) {
-        this.$toast.failed('请登录后再评论');
+        this.$toast.failed("请登录后再评论");
         return;
       }
 
@@ -445,17 +445,17 @@ export default {
      */
     reply(nickname) {
       if (!this.isLogged) {
-        this.$toast.failed('请登录后再回复');
+        this.$toast.failed("请登录后再回复");
         return;
       }
 
       if (this.replyRemainder < 0) {
-        this.$toast.failed('回复不可超过140字');
+        this.$toast.failed("回复不可超过140字");
       } else if (
-        this.replyValue === '' ||
+        this.replyValue === "" ||
         this.replyValue === `回复${nickname}:`
       ) {
-        this.$toast.failed('请输入内容在提交评论');
+        this.$toast.failed("请输入内容在提交评论");
       } else {
         this._replyComment({
           id: this.id,
@@ -463,13 +463,13 @@ export default {
           commentId: this.repliedId,
         })
           .then((res) => {
-            this.$toast.success('回复成功');
-            this.replyValue = '';
+            this.$toast.success("回复成功");
+            this.replyValue = "";
             this.repliedId = NaN;
           })
           .catch((e) => {
-            this.$toast.failed('回复失败');
-            this.replyValue = '';
+            this.$toast.failed("回复失败");
+            this.replyValue = "";
             this.repliedId = NaN;
           });
       }
@@ -480,7 +480,7 @@ export default {
      */
     likeClicked({ type, index, cid, isLiked }) {
       if (!this.isLogged) {
-        this.$toast.failed('请登录后再进行操作');
+        this.$toast.failed("请登录后再进行操作");
         return;
       }
 
@@ -504,7 +504,7 @@ export default {
             this.likedCids = { liked, unliked };
           }
 
-          if (type === 'hotCmt') {
+          if (type === "hotCmt") {
             hotCmt[index] -= 1;
             this.likedCounts = { ...this.likedCounts, hotCmt };
           } else {
@@ -530,7 +530,7 @@ export default {
             this.likedCids = { liked, unliked };
           }
 
-          if (type === 'hotCmt') {
+          if (type === "hotCmt") {
             hotCmt[index] += 1;
             this.likedCounts = { ...this.likedCounts, hotCmt };
           } else {
@@ -560,9 +560,9 @@ export default {
      */
     _getHotComments({ id, before }) {
       switch (this.type) {
-        case 'playlist':
+        case "playlist":
           return getHotCommentPlaylist({ id, before });
-        case 'music':
+        case "music":
           return getHotCommentMusic({ id, before });
       }
     },
@@ -572,9 +572,9 @@ export default {
      */
     _getComments({ id, limit, offset, before }) {
       switch (this.type) {
-        case 'playlist':
+        case "playlist":
           return getCommentPlaylist({ id, limit, offset, before });
-        case 'music':
+        case "music":
           return getCommentMusic({ id, limit, offset, before });
       }
     },
@@ -584,9 +584,9 @@ export default {
      */
     _sendComment({ id, content }) {
       switch (this.type) {
-        case 'playlist':
+        case "playlist":
           return sendCommentPlaylist({ id, content });
-        case 'music':
+        case "music":
           return sendCommentMusic({ id, content });
       }
     },
@@ -596,9 +596,9 @@ export default {
      */
     _replyComment({ id, content, commentId }) {
       switch (this.type) {
-        case 'playlist':
+        case "playlist":
           return replyCommentPlaylist({ id, content, commentId });
-        case 'music':
+        case "music":
           return replyCommentMusic({ id, content, commentId });
       }
     },
@@ -608,9 +608,9 @@ export default {
      */
     _commentLike({ id, cid }) {
       switch (this.type) {
-        case 'playlist':
+        case "playlist":
           return commentLikePlaylist({ id, cid });
-        case 'music':
+        case "music":
           return commentLikeMusic({ id, cid });
       }
     },
@@ -620,9 +620,9 @@ export default {
      */
     _commentUnlike({ id, cid }) {
       switch (this.type) {
-        case 'playlist':
+        case "playlist":
           return commentUnlikePlaylist({ id, cid });
-        case 'music':
+        case "music":
           return commentUnlikeMusic({ id, cid });
       }
     },
@@ -654,7 +654,7 @@ export default {
       });
     },
 
-    ...mapMutations(['setLoginDialogStatus']),
+    ...mapMutations(["setLoginDialogStatus"]),
   },
 
   created() {
@@ -669,7 +669,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .comment {
   margin-top: 40px;

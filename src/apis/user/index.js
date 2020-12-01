@@ -103,3 +103,75 @@ export const getUserEvents = ({ id, limit, lasttime }) => {
     withCredentials: true,
   });
 };
+
+/**
+ * 点赞动态
+ */
+export const likeEvent = ({ threadId }) => {
+  const url = Host + '/resource/like';
+
+  return axios.get(url, {
+    params: {
+      type: 6,
+      t: 1,
+      threadId
+    },
+    withCredentials: true,
+  })
+}
+
+/**
+ * 取消点赞动态
+ */
+export const unlikeEvent = ({ threadId }) => {
+  const url = Host + '/resource/like';
+
+  return axios.get(url, {
+    params: {
+      type: 6,
+      t: 0,
+      threadId
+    },
+    withCredentials: true,
+  })
+}
+
+/**
+ * 转发用户动态
+ * @param uid 用户id
+ * @param evId 动态id
+ * @param forwards 评论
+ */
+export const forwardEvent = ({ uid, evId, forwards }) => {
+  const url = Host + '/event/forward';
+
+  return axios.get(url, {
+    params: {
+      uid,
+      evId,
+      forwards
+    },
+    withCredentials: true,
+  })
+}
+
+/**
+ * 发送动态评论
+ * @param threadId 动态id
+ * @param content 评论内容
+ * @param commentId 回复的评论id（评论时必填）
+ */
+export const sendEventCmt = ({ t = 1, type = 6, threadId, content, commentId } = {}) => {
+  const url = Host + '/comment';
+
+  return axios.get(url, {
+    params: {
+      t,
+      type,
+      threadId,
+      content,
+      commentId
+    },
+    withCredentials: true,
+  })
+}

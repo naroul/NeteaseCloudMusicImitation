@@ -7,7 +7,7 @@
 
         <!-- 选择下拉框 -->
         <div class="selector">
-          <MyButton class="cat-select" :onclick="controlSelector">
+          <MyButton class="cat-select" @clk="controlSelector">
             <span>选择分类</span>
             <i class="iconfont icon-arrow-down" />
           </MyButton>
@@ -16,7 +16,7 @@
           <div class="select-content" v-if="catSubs && isShowSelector">
             <div class="arrorw-top"></div>
             <div class="all-style">
-              <MyButton :onclick="allClicked" class="btn-all">
+              <MyButton @clk="allClicked" class="btn-all">
                 <span>全部风格</span>
               </MyButton>
             </div>
@@ -68,11 +68,11 @@ import {
   getPlaylistCat,
   getHotPlaylistCat,
   getTopPlaylist,
-} from '@/apis/playlist';
-import { includes } from 'lodash';
-import MyButton from '@/ui/MyButton';
-import PlaylistSummary from '@/components/PlaylistSummary';
-import Pagination from '@/components/Pagination';
+} from "@/apis/playlist";
+import { includes } from "lodash";
+import MyButton from "@/ui/MyButton";
+import PlaylistSummary from "@/components/PlaylistSummary";
+import Pagination from "@/components/Pagination";
 
 export default {
   data() {
@@ -90,7 +90,7 @@ export default {
       /**
        * 当前页所选的标签
        */
-      catCur: '全部',
+      catCur: "全部",
 
       /**
        * 是否显示下拉框
@@ -168,7 +168,7 @@ export default {
      */
     allClicked() {
       this.$router.push({
-        path: '/music/playlist',
+        path: "/music/playlist",
       });
 
       this.isShowSelector = false;
@@ -179,7 +179,7 @@ export default {
      */
     subClicked(sub) {
       this.$router.push({
-        path: '/music/playlist',
+        path: "/music/playlist",
         query: {
           cat: sub,
         },
@@ -246,7 +246,7 @@ export default {
       if (this.$route.query.cat && includes(allCats, this.$route.query.cat)) {
         this.catCur = this.$route.query.cat;
       } else {
-        this.catCur = '全部';
+        this.catCur = "全部";
       }
 
       this._getTopPlaylist({
@@ -264,11 +264,11 @@ export default {
     this._initData();
 
     this.icons = {
-      语种: 'icon-Exportservices',
-      情感: 'icon-smile',
-      场景: 'icon-nightmode',
-      风格: 'icon-component',
-      主题: 'icon-customization',
+      语种: "icon-Exportservices",
+      情感: "icon-smile",
+      场景: "icon-nightmode",
+      风格: "icon-component",
+      主题: "icon-customization",
     };
   },
 
@@ -281,7 +281,7 @@ export default {
     if (to.query.cat && includes(allCats, to.query.cat)) {
       this.catCur = to.query.cat;
     } else {
-      this.catCur = '全部';
+      this.catCur = "全部";
     }
 
     next();
@@ -296,7 +296,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .playlist {
   background: $background-grey-white;
