@@ -175,3 +175,18 @@ export const sendEventCmt = ({ t = 1, type = 6, threadId, content, commentId } =
     withCredentials: true,
   })
 }
+
+/**
+ * 删除动态
+ * @param evId 动态id
+ */
+export const deleteEvent = ({ evId }) => {
+  const url = Host + '/event/del';
+
+  return axios.get(url, {
+    params: {
+      evId
+    },
+    withCredentials: true,
+  })
+}

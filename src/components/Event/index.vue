@@ -199,7 +199,10 @@
       <template v-slot:reference>
         <div class="arw-del" title="动态管理"></div>
       </template>
-      <span>aaaa</span>
+      <div class="del" @click="evtDel">
+        <i class="bin"></i>
+        删除
+      </div>
     </PopOver>
 
     <Dialog
@@ -230,6 +233,7 @@ import {
   unlikeEvent,
   forwardEvent,
   sendEventCmt,
+  deleteEvent,
 } from "@/apis/user";
 
 const Type = {
@@ -403,6 +407,18 @@ export default {
     },
 
     /**
+     * 删除动态
+     */
+    evtDel() {
+      deleteEvent({ evId: this.event.id }).then(() => {
+        /**
+         * 删除成功后通知父组件
+         */
+        this.$emit("delSuccess");
+      });
+    },
+
+    /**
      * 点击点赞按钮
      */
     handleLkBtnClick() {
@@ -521,11 +537,12 @@ export default {
      * 格式化用户动态数据
      */
     _formatOriginData(originData) {
-      const { user, type, pics, info } = originData,
+      const { user, type, pics, info, id } = originData,
         detail = JSON.parse(originData.json),
         time = formatMsToDate(originData.eventTime);
 
       return {
+        id,
         user,
         type,
         time,
@@ -787,6 +804,34 @@ export default {
       background: url("~@/assets/images/Common/sprite.png");
       background-position: -15px 0;
       cursor: pointer;
+    }
+
+    .del {
+      float: left;
+      width: 105px;
+      height: 30px;
+      overflow: hidden;
+      line-height: 31px;
+      background: #FFF;
+      border: 1px solid #cccfd9;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+      font-size: 12px;
+      cursor: pointer;
+
+      &:hover {
+        background: #f3f3f3;
+      }
+
+      .bin {
+        width: 16px;
+        height: 16px;
+        margin: 7px 8px 0 9px;
+        display: inline-block;
+        vertical-align: top;
+        background: url("~@/assets/images/Common/sprite.png");
+        background-position: -40px -360px;
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div id="pop-over">
+  <div :id="id">
     <!-- popover触发元素容器 -->
     <div class="reference" ref="refer">
       <!-- 具名插槽 触发元素 -->
@@ -35,6 +35,11 @@ export default {
 
   data() {
     return {
+      /**
+       * 随机生成唯一的id
+       */
+      id: "pop-over" + Math.random() * 1e10,
+
       /**
        * 内容元素对于触发元素的 定位top值
        */
@@ -78,10 +83,7 @@ export default {
      * 关闭pop
      */
     close(e) {
-      if (
-        !isChildOfNodeById("pop-over", e.target) &&
-        !(e.target.id === "pop-over")
-      ) {
+      if (!isChildOfNodeById(this.id, e.target) && !(e.target.id === this.id)) {
         /**
          * 隐藏 pop 并解绑 body 的 click事件
          */

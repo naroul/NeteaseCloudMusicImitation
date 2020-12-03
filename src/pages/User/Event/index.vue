@@ -31,6 +31,7 @@
               :key="event.id"
               :originEvent="event"
               :isUuId="isUuId"
+              @delSuccess="_initPage"
             />
           </div>
         </div>

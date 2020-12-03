@@ -5,7 +5,9 @@
 1. 一定要传入具名插槽 reference 对应的 template 作为触发元素。
 2. 可以传入 content props 作为纯文字内容。当传入了默认插槽对应的元素时，content 会被无视。
 
-实例：
+---
+
+代码示例：
 
 ```js
 <PopOver class="pop-del" v-if="isUuId && !isChild">
