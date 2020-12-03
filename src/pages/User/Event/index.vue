@@ -25,7 +25,7 @@
           </div>
 
           <!-- 动态区 -->
-          <div else>
+          <div else v-dropload="loadMoreEvt">
             <Event
               v-for="event of events"
               :key="event.id"
@@ -142,13 +142,53 @@ export default {
 
   methods: {
     /**
+     * 下拉加载动态
+     */
+    async loadMoreEvt() {
+      /**
+       * 判断是否还有未加载的动态数据
+       */
+      if (!this.hasMoreEvts) {
+        return;
+      }
+
+      await this._getUserEvents(this.lasttime).then(({ data }) => {
+        console.log(data);
+        this.events = [...this.events, ...data.events];
+      });
+    },
+
+    /**
+     * 加载用户动态数据
+     */
+    async _getUserEvents(lasttime) {
+      return await getUserEvents({
+        id: this.curUserId,
+        limit: 20,
+        lasttime,
+      }).then((res) => {
+        /**
+         * 存储数据进度
+         */
+        this.lasttime = res.data.lasttime;
+
+        /**
+         * 存储是否还有更多数据
+         */
+        this.hasMoreEvts = res.data.more;
+
+        return res;
+      });
+    },
+
+    /**
      * 初始化数据
      */
     _initPage() {
       Promise.all([
         getUserFollows({ id: this.curUserId, limit: 6 }),
         getUserFolloweds({ id: this.curUserId, limit: 6 }),
-        getUserEvents({ id: this.curUserId, limit: 20 }),
+        this._getUserEvents(-1),
       ])
         .then(
           ([
@@ -174,6 +214,16 @@ export default {
      * 实例属性，存取页面对应用户Id
      */
     this.curUserId = this.$route.query.id;
+
+    /**
+     * 用于获取用户动态接口 初始值为-1
+     */
+    this.lasttime = -1;
+
+    /**
+     * 是否还有未加载的动态
+     */
+    this.hasMoreEvts = false;
 
     this._initPage();
   },
