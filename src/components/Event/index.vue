@@ -195,7 +195,12 @@
       </div>
     </div>
 
-    <div v-if="isUuId" class="arw-del" title="动态管理"></div>
+    <PopOver class="pop-del" v-if="isUuId && !isChild">
+      <template v-slot:reference>
+        <div class="arw-del" title="动态管理"></div>
+      </template>
+      <span>aaaa</span>
+    </PopOver>
 
     <Dialog
       v-if="isShowForward"
@@ -217,6 +222,7 @@
 import Gallery from "../Gallery";
 import Dialog from "@/ui/Dialog";
 import EditBox from "@/ui/EditBox";
+import PopOver from "@/ui/PopOver";
 import { playerMixin } from "@/mixins";
 import { formatMsToDate } from "^/formatMsToDate";
 import {
@@ -534,6 +540,7 @@ export default {
     Gallery,
     Dialog,
     EditBox,
+    PopOver,
   },
 };
 </script>
@@ -769,15 +776,18 @@ export default {
     }
   }
 
-  .arw-del {
+  .pop-del {
     position: absolute;
     top: 20px;
     right: 0;
-    width: 19px;
-    height: 19px;
-    background: url("~@/assets/images/Common/sprite.png");
-    background-position: -15px 0;
-    cursor: pointer;
+
+    .arw-del {
+      width: 19px;
+      height: 19px;
+      background: url("~@/assets/images/Common/sprite.png");
+      background-position: -15px 0;
+      cursor: pointer;
+    }
   }
 }
 
