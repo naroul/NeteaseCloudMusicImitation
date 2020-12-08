@@ -149,7 +149,7 @@ export default {
            * 登录成功时，返回码以2开头
            */
           if (/^2/.test(res.data && res.data.code)) {
-            this.$toast.success("登陆成功", 1000);
+            this.$toast.success("登录成功", 1000);
 
             /**
              * 设置全局登录状态

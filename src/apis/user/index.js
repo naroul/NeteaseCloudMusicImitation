@@ -54,7 +54,7 @@ export const getUserPlaylist = ({ id, limit, offset } = { limit: 30 }) => {
  * @param limit 取出的评论数量，默认30
  * @param offset 偏移数量 用于分页
  */
-export const getUserFollows = ({ id, limit, offset } = { limit: 20 }) => {
+export const getUserFollows = ({ id, limit = 20, offset } = {}) => {
   const url = Host + '/user/follows';
 
   return axios.get(url, {

@@ -1,12 +1,12 @@
 <template>
-  <div class="usr-fl">
+  <div class="usr-fld">
     <!-- 用户基础信息 -->
     <Profile :isUuId="isUuId" />
 
     <!-- 动态 标题 -->
     <div class="title" v-if="userInfo">
       <h3>
-        <span class="f-pr"> 关注（{{ userInfo.profile.follows }}） </span>
+        <span class="f-pr"> 粉丝（{{ userInfo.profile.followeds }}） </span>
       </h3>
     </div>
 
@@ -18,26 +18,19 @@
           { odd: index % 2 === 1 },
           { last: index > followeds.length - 3 },
         ]"
-        v-for="(follow, index) of follows"
+        v-for="(followed, index) of followeds"
       >
-        <Resume :profile="follow" :width="index % 2 === 1 ? 408 : 409" />
+        <Resume :profile="followed" :width="index % 2 === 1 ? 408 : 409" />
       </li>
-
-      <!-- 加载状态 -->
-      <Loading v-if="isLoading" />
     </ul>
-
-    <Pagination v-if="pgSize !== 0" :pgSize="pgSize" @pgChange="onPgChange" />
   </div>
 </template>
 
 <script>
 import Profile from "@/components/Profile";
-import Loading from "@/components/Loading";
 import Resume from "@/components/Resume";
-import Pagination from "@/components/Pagination";
 import { userMixin } from "@/mixins";
-import { getUserFollows } from "@/apis/user";
+import { getUserFolloweds } from "@/apis/user";
 
 export default {
   mixins: [userMixin],
@@ -47,12 +40,7 @@ export default {
       /**
        * 关注列表
        */
-      follows: [],
-
-      /**
-       * 加载状态
-       */
-      isLoading: false,
+      followeds: [],
     };
   },
 
@@ -70,63 +58,15 @@ export default {
        */
       return false;
     },
-
-    /**
-     * 分页的总页数
-     */
-    pgSize() {
-      /**
-       * 当未读取到数据或者动态少于20条时，不显示分页
-       */
-      if (!this.userInfo || this.userInfo.profile.follows <= 20) {
-        return 0;
-      }
-
-      const pgSize = parseInt(this.userInfo.profile.follows / 20);
-      if (this.userInfo.profile.follows % 20 === 0) {
-        return pgSize;
-      } else {
-        return pgSize + 1;
-      }
-    },
   },
 
   methods: {
     /**
-     * 分页，页数改变
-     */
-    onPgChange(page) {
-      /**
-       * 设置加载中
-       */
-      this.isLoading = true;
-
-      /**
-       * 请求分页数据
-       */
-      getUserFollows({
-        id: this.curUserId,
-        limit: 20,
-        offset: (page - 1) * 20,
-      }).then(({ data }) => {
-        /**
-         * 加载完毕
-         */
-        this.isLoading = false;
-
-        /**
-         * 更新数据
-         */
-        this.follows = data.follow;
-      });
-    },
-
-    /**
      * 加载数据初始化页面
      */
     _initPage() {
-      getUserFollows({ id: this.curUserId, limit: 20 }).then(({ data }) => {
-        this.follows = data.follow;
+      getUserFolloweds({ id: this.curUserId, limit: 100 }).then(({ data }) => {
+        this.followeds = data.followeds;
       });
     },
   },
@@ -157,19 +97,17 @@ export default {
   components: {
     Profile,
     Resume,
-    Loading,
-    Pagination,
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.usr-fl {
+.usr-fld {
   width: 900px;
   margin: 0 auto;
   padding: 40px;
   border: 1px solid #d3d3d3;
-  border-width: 0 1px;
+  border-width: 0 1px 1px 1px;
 
   .title {
     height: 33px;

@@ -71,7 +71,7 @@
 
         <!-- 粉丝数 -->
         <li>
-          <router-link to="#">
+          <router-link :to="`/user/followed?id=${userInfo.profile.userId}`">
             <strong>{{ userInfo.profile.followeds }}</strong>
             <span>粉丝</span>
           </router-link>

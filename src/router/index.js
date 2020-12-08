@@ -88,9 +88,21 @@ const Event = (resolve) => {
   });
 };
 
+/**
+ * 用户关注页
+ */
 const Follow = (resolve) => {
   import('@/pages/User/Follow').then((module) => {
     resolve(module);
+  })
+}
+
+/**
+ * 用户粉丝页
+ */
+const Followed = (resolve) => {
+  import('@/pages/User/Followed').then((module) => {
+    resolve(module)
   })
 }
 
@@ -148,7 +160,11 @@ const routes = [
           },
           {
             path: 'follow',
-            component: Follow
+            component: Follow,
+          },
+          {
+            path: 'followed',
+            component: Followed,
           }
         ],
       },
