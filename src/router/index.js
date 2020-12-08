@@ -88,6 +88,12 @@ const Event = (resolve) => {
   });
 };
 
+const Follow = (resolve) => {
+  import('@/pages/User/Follow').then((module) => {
+    resolve(module);
+  })
+}
+
 /**
  * 404
  */
@@ -140,6 +146,10 @@ const routes = [
             path: 'event',
             component: Event,
           },
+          {
+            path: 'follow',
+            component: Follow
+          }
         ],
       },
     ],

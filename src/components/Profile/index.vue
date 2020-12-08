@@ -41,12 +41,13 @@
           ></i>
 
           <!-- 私信按钮 -->
-          <span class="u-btn-s">
-            <i>发私信</i>
-          </span>
+          <BtnSendMsg class="smsg" :id="userInfo.profile.userId" />
 
           <!-- 关注按钮 -->
-          <span class="u-btn-f"> 关 注 </span>
+          <BtnFollow
+            :id="userInfo.profile.userId"
+            :followed="userInfo.profile.followed"
+          ></BtnFollow>
         </div>
       </div>
 
@@ -62,7 +63,7 @@
 
         <!-- 关注数 -->
         <li>
-          <router-link to="#">
+          <router-link :to="`/user/follow?id=${userInfo.profile.userId}`">
             <strong>{{ userInfo.profile.follows }}</strong>
             <span>关注</span>
           </router-link>
@@ -97,6 +98,8 @@
 </template>
 
 <script>
+import BtnFollow from "@/components/BtnFollow";
+import BtnSendMsg from "@/components/BtnSendMsg";
 import { formatMsToYears } from "^/formatMsToYears";
 import { userMixin } from "@/mixins";
 
@@ -119,6 +122,11 @@ export default {
     _formatMsToYears(ms) {
       return formatMsToYears(ms);
     },
+  },
+
+  components: {
+    BtnFollow,
+    BtnSendMsg,
   },
 };
 </script>
@@ -213,51 +221,8 @@ export default {
           background-position: -41px -27px;
         }
 
-        .u-btn-s {
-          display: inline-block;
+        .smsg {
           margin: 4px 0 0 15px;
-          width: 75px;
-          height: 31px;
-          background: url("~@/assets/images/Common/button.png");
-          background-position: 0 -810px;
-          text-decoration: none;
-          cursor: pointer;
-
-          i {
-            display: inline-block;
-            height: 29px;
-            line-height: 29px;
-            padding-left: 30px;
-            font-style: normal;
-            text-align: left;
-            font-size: 12px;
-            cursor: pointer;
-          }
-
-          &:hover,
-          &:active {
-            outline: none;
-            background-position: 0 -845px;
-          }
-        }
-
-        .u-btn-f {
-          display: inline-block;
-          margin: 4px 0 0 15px;
-          width: 40px;
-          height: 31px;
-          padding-left: 30px;
-          color: #fff;
-          line-height: 30px;
-          font-size: 12px;
-          background: url("~@/assets/images/Common/button.png");
-          background-position: 0 -720px;
-          cursor: pointer;
-
-          &:hover,
-          &:active {
-            background-position: -80px -720px;
-          }
         }
       }
 

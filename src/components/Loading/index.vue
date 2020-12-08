@@ -1,6 +1,9 @@
 <template>
   <div class="msk">
-    <img :src="LoadingImg" />
+    <img
+      :src="LoadingImg"
+      :style="{ width: `${width}px`, height: `${height}px` }"
+    />
   </div>
 </template>
 
@@ -8,6 +11,20 @@
 import Loading from "@/assets/images/Common/loading.gif";
 
 export default {
+  props: {
+    width: {
+      type: Number,
+      required: false,
+      default: 30,
+    },
+
+    height: {
+      type: Number,
+      required: false,
+      default: 30,
+    },
+  },
+
   data() {
     return {
       /**

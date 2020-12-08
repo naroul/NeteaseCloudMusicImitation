@@ -1,8 +1,17 @@
 import Vue from 'vue';
+import { noop } from 'lodash';
 import Loading from './loading';
 
 export default class Drop {
-  constructor() {}
+  /**
+   * 滚动回调函数
+   */
+  onWheel = noop;
+
+  /**
+   * 监听的滚动元素
+   */
+  scrollNode = null;
 
   /**
    * 给滚动元素绑定回调
@@ -11,7 +20,7 @@ export default class Drop {
     /**
      * 离el最近的滚动节点（包括el）
      */
-    const scrollNode = this._findScrollNode(el);
+    this.scrollNode = this._findScrollNode(el);
 
     /**
      * 创建 加载节点 “子类”
@@ -28,7 +37,7 @@ export default class Drop {
      */
     let isLoading = false;
 
-    scrollNode.addEventListener('wheel', async function() {
+    this.onWheel = async () => {
       /**
        * 如果处于加载状态，则不做处理
        */
@@ -41,7 +50,7 @@ export default class Drop {
        */
 
       const { scrollTop, clientHeight, scrollHeight } =
-        scrollNode === document.body ? document.documentElement : scrollNode;
+        this.scrollNode === document.body ? document.documentElement : this.scrollNode;
 
       /**
        * 判断滚动到距离底部10px时，调用下拉加载的回调函数
@@ -55,7 +64,7 @@ export default class Drop {
         /**
          * 挂在 加载节点 表示加载中
          */
-        scrollNode.appendChild(loadingVm.$el);
+        this.scrollNode.appendChild(loadingVm.$el);
 
         /**
          * 调用回调
@@ -70,10 +79,23 @@ export default class Drop {
         /**
          * 加载结束后移除 加载节点 表示加载结束
          */
-        scrollNode.removeChild(loadingVm.$el);
+        this.scrollNode.removeChild(loadingVm.$el);
       }
-    });
+    }
+
+    this.scrollNode.addEventListener('wheel', this.onWheel);
   };
+
+  /**
+   * 指令元素解绑时，解除滚动元素的滚动回调监听
+   */
+  removeScrollListener = (el) => {
+
+    /**
+     * 接触监听
+     */
+    this.scrollNode.removeEventListener('wheel', this.onWheel);
+  }
 
   /**
    * 向上遍历找到 overflow为 auto或 scroll的元素（包括自己）

@@ -13,6 +13,7 @@ const DropLoad = {
      */
     Vue.directive('dropload', {
       inserted: drop.addScrollListener,
+      unbind: drop.removeScrollListener,
     });
   },
 };

@@ -73,6 +73,15 @@ export default {
       required: false,
       default: "确认",
     },
+
+    /**
+     * 输入的最大字数
+     */
+    maxCount: {
+      type: Number,
+      required: false,
+      default: 140,
+    },
   },
 
   computed: {
@@ -80,7 +89,7 @@ export default {
      * 字数
      */
     count() {
-      return 140 - this.value.length;
+      return this.maxCount - this.value.length;
     },
 
     /**

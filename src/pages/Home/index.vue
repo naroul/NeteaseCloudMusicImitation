@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import { getLoginStatus } from '@/apis/header';
-import Header from '@/components/Header';
-import Login from '@/components/Login';
-import Player from '@/components/Player';
-import { loginMixin, userMixin } from '@/mixins';
+import { getLoginStatus } from "@/apis/header";
+import Header from "@/components/Header";
+import Login from "@/components/Login";
+import Player from "@/components/Player";
+import { loginMixin, userMixin } from "@/mixins";
 
 export default {
   mixins: [loginMixin, userMixin],

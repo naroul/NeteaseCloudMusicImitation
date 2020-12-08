@@ -236,6 +236,8 @@
 </template>
 
 <script>
+import MyButton from "@/ui/MyButton";
+import Pagination from "@/components/Pagination";
 import {
   getCommentPlaylist,
   getCommentMusic,
@@ -252,9 +254,7 @@ import {
 } from "@/apis/comment";
 import { includes, uniqBy } from "lodash";
 import { mapGetters, mapMutations } from "vuex";
-import MyButton from "@/ui/MyButton";
 import { formatMsToDate } from "^/formatMsToDate";
-import Pagination from "../Pagination";
 
 export default {
   props: {

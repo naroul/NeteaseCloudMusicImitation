@@ -11,6 +11,7 @@ export const getUserDetail = ({ id }) => {
     params: {
       uid: id,
     },
+    withCredentials: true,
   });
 };
 
@@ -53,7 +54,7 @@ export const getUserPlaylist = ({ id, limit, offset } = { limit: 30 }) => {
  * @param limit 取出的评论数量，默认30
  * @param offset 偏移数量 用于分页
  */
-export const getUserFollows = ({ id, limit, offset } = { limit: 30 }) => {
+export const getUserFollows = ({ id, limit, offset } = { limit: 20 }) => {
   const url = Host + '/user/follows';
 
   return axios.get(url, {
@@ -186,6 +187,57 @@ export const deleteEvent = ({ evId }) => {
   return axios.get(url, {
     params: {
       evId
+    },
+    withCredentials: true,
+  })
+}
+
+/**
+ * 关注 / 取消关注用户
+ * @param id 需要关注/取消关注用户的id
+ * @param t 1为关注 其它为取消关注
+ */
+export const follow = ({ t = 1, id } = {}) => {
+  const url = Host + '/follow';
+
+  return axios.get(url, {
+    params: {
+      id,
+      t
+    },
+    withCredentials: true,
+  })
+}
+
+/**
+ * 取消关注用户
+ * @param id 需要取消关注用户的id
+ * @param t 1为关注 其它为取消关注
+ */
+export const unfollow = ({ t = 0, id } = {}) => {
+  const url = Host + '/follow';
+
+  return axios.get(url, {
+    params: {
+      id,
+      t
+    },
+    withCredentials: true,
+  })
+}
+
+/**
+ * 发送私信
+ * @param id 发送私信的目标用户id
+ * @param msg 私信内容
+ */
+export const sendMsg = ({ id, msg }) => {
+  const url = Host + '/send/text';
+
+  return axios.get(url, {
+    params: {
+      user_ids: id,
+      msg,
     },
     withCredentials: true,
   })

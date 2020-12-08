@@ -145,6 +145,7 @@ export default {
      * 下拉加载动态
      */
     async loadMoreEvt() {
+      console.log(1111);
       /**
        * 判断是否还有未加载的动态数据
        */
@@ -153,7 +154,6 @@ export default {
       }
 
       await this._getUserEvents(this.lasttime).then(({ data }) => {
-        console.log(data);
         this.events = [...this.events, ...data.events];
       });
     },

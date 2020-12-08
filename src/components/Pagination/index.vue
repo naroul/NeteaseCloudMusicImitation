@@ -71,7 +71,7 @@ export default {
          * 总页数不满9页的情况
          */
         let pgLs = [];
-        for (i = 1; i <= this.pgSize; i++) {
+        for (let i = 1; i <= this.pgSize; i++) {
           pgLs = [...pgLs, i];
         }
         return pgLs;
