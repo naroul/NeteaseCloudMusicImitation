@@ -71,17 +71,17 @@ export const mutations = {
   },
 
   /**
-   * 设置登录用户id
-   * @param id 用户id
-   */
-  setUuId(state, id) {
-    state.uuId = id;
-  },
-
-  /**
    * 设置用户页面对应用户的数据
    */
   setUserInfo(state, info) {
     state.userInfo = info;
+  },
+
+  /**
+   * 设置登录用户id
+   * @param id 用户id
+   */
+  setUuId(state, id) {
+    localStorage.uuId = id;
   },
 };

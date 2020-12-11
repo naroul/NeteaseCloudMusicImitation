@@ -16,7 +16,7 @@
         :class="[
           'follow',
           { odd: index % 2 === 1 },
-          { last: index > followeds.length - 3 },
+          { last: index > follows.length - 3 },
         ]"
         v-for="(follow, index) of follows"
       >

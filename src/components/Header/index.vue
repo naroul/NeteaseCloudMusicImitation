@@ -23,11 +23,6 @@
           @mouseover.prevent="showOptions"
           @mouseleave.prevent="hiddenOptions"
         >
-          <!-- 消息数  -->
-          <i v-if="isLogged && !isShowOptions" class="msg-ct top-ct">{{
-            msgCount
-          }}</i>
-
           <!-- 已登陆 显示用户图标 -->
           <img v-if="isLogged" :src="userImgUrl" />
 
@@ -44,18 +39,10 @@
               <i class="icn icn-hm"></i>
               我的主页
             </router-link>
-            <div class="option">
-              <i class="icn icn-msg"></i>
-              我的消息
-              <!-- 消息数  -->
-              <i v-if="isLogged && isShowOptions" class="msg-ct opt-ct">{{
-                msgCount
-              }}</i>
-            </div>
-            <div class="option">
+            <router-link to="/user/level" class="option">
               <i class="icn icn-lv"></i>
               我的等级
-            </div>
+            </router-link>
             <div class="option">
               <i class="icn icn-st"></i>
               个人设置
@@ -90,7 +77,6 @@
 import SearchBox from "@/ui/SearchBox";
 import { headerMixin, userMixin, loginMixin } from "@/mixins";
 import { logout } from "@/apis/header";
-import { getPrivateMsg } from "@/apis/message";
 import user from "#/images/Header/user.jpg";
 
 export default {
@@ -117,11 +103,6 @@ export default {
        * 用户图标的 base64码
        */
       userImgUrl: user,
-
-      /**
-       * 新的私信数
-       */
-      msgCount: 0,
     };
   },
 
@@ -193,14 +174,6 @@ export default {
         });
     },
 
-    /**
-     * 获取私信数
-     */
-    _getPrivateMsg() {
-      getPrivateMsg().then(({ data }) => {
-        this.msgCount = data.newMsgCount > 99 ? "99+" : data.newMsgCount;
-      });
-    },
   },
 
   watch: {
@@ -219,22 +192,6 @@ export default {
       );
     },
 
-    /**
-     * 监听登陆状态
-     */
-    isLogged(newStatus, oldStatus) {
-      if (newStatus) {
-        /**
-         * 登录成功同时获取私信数
-         */
-        this._getPrivateMsg();
-      } else {
-        /**
-         * 退出登录时私信数归零
-         */
-        this.msgCount = 0;
-      }
-    },
   },
 
   created() {
@@ -267,16 +224,6 @@ export default {
       },
       { url: "/" }
     );
-
-    /**
-     * 获取私信数
-     */
-    if (this.isLogged) {
-      /**
-       * 加载时已为已登录状态，加载私信数
-       */
-      this._getPrivateMsg();
-    }
   },
 
   components: {
@@ -440,30 +387,6 @@ export default {
 
         img {
           border-radius: 30px;
-        }
-
-        .msg-ct {
-          position: absolute;
-          display: inline-block;
-          min-width: 17px;
-          height: 17px;
-          padding: 0 4px;
-          box-sizing: border-box;
-          background: #c20c0c;
-          border-radius: 18px;
-          border: 1px solid #242424;
-          line-height: 16px;
-          font-size: 12px;
-          white-space: nowrap;
-          color: #fff;
-          text-align: center;
-          font-style: normal;
-          font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .top-ct {
-          top: -5px;
-          left: 20px;
         }
       }
     }

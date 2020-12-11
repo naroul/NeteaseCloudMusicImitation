@@ -10,11 +10,6 @@ export const state = {
   isLogged: false,
 
   /**
-   * 登录用户的id
-   */
-  uuId: '',
-
-  /**
    * 是否显示登录框
    */
   isShowLoginDialog: false,
@@ -99,4 +94,9 @@ export const state = {
    * 	profile: {},
    */
   userInfo: null,
+
+  /**
+   * 登录用户的id
+   */
+  uuId: localStorage.uuId,
 };

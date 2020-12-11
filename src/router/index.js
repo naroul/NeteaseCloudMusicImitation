@@ -102,7 +102,13 @@ const Follow = (resolve) => {
  */
 const Followed = (resolve) => {
   import('@/pages/User/Followed').then((module) => {
-    resolve(module)
+    resolve(module);
+  })
+}
+
+const Level = (resolve) => {
+  import("@/pages/User/Level").then((module) => {
+    resolve(module);
   })
 }
 
@@ -165,6 +171,10 @@ const routes = [
           {
             path: 'followed',
             component: Followed,
+          },
+          {
+            path: 'level',
+            component: Level,
           }
         ],
       },

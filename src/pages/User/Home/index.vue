@@ -33,8 +33,26 @@ export default {
   },
 
   created() {
+    const reg = /(msg|level|update)$/;
+
     /**
-     * 加载时判断路由中是否有 id，无id跳转 404页面
+     * 登录用户专页不需要验证 query id 直接读取并存储数据
+     */
+    if (reg.test(this.$route.path)) {
+      /**
+       * 实例属性，存取页面对应用户Id
+       */
+      this.curUserId = this.uuId;
+
+      /**
+       * 获取用户数据
+       */
+      this._getUserDetail();
+      return;
+    }
+
+    /**
+     * 加载通用用户页时判断路由中是否有 id，无id跳转 404页面  登录用户页不需要传id
      */
     if (!this.$route.query.id) {
       this.$router.push({
@@ -66,6 +84,30 @@ export default {
    * 路由参数变化时触发，初始化页面
    */
   async beforeRouteUpdate(to, from, next) {
+    /**
+     * 对应 用户信息、等级、个人设置页
+     */
+    const reg = /(level|update)$/;
+
+    /**
+     * 登录用户专页不需要验证 query id 直接读取并存储数据
+     */
+    if (reg.test(to.path)) {
+      /**
+       * 实例属性，存取页面对应用户Id
+       */
+      this.curUserId = this.uuId;
+
+      /**
+       * 获取用户数据
+       */
+      await this._getUserDetail();
+
+      next();
+
+      return;
+    }
+
     /**
      * 加载时判断路由中是否有 id，无id跳转 404页面
      */

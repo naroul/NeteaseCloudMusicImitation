@@ -242,3 +242,14 @@ export const sendMsg = ({ id, msg }) => {
     withCredentials: true,
   })
 }
+
+/**
+ * 获取登录用户等级信息
+ */
+export const getLevel = () => {
+  const url = Host + '/user/level';
+
+  return axios.get(url, {
+    withCredentials: true,
+  })
+}
