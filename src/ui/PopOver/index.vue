@@ -3,12 +3,17 @@
     <!-- popover触发元素容器 -->
     <div class="reference" ref="refer">
       <!-- 具名插槽 触发元素 -->
-      <div @click="ctrlPop">
+      <div class="sltwrp" @click="ctrlPop">
         <slot name="reference"></slot>
       </div>
 
       <!-- 内容容器 -->
-      <div v-if="isPop" class="content" :style="{ top: posTop }">
+      <div
+        v-if="isPop"
+        @click="ctrlPop"
+        class="content"
+        :style="{ top: posTop }"
+      >
         <slot name="default">
           <!-- 备用内容，未传默认插槽时显示 -->
           <div class="txt-bak">{{ content }}</div>
@@ -106,6 +111,11 @@ export default {
 <style lang="scss" scoped>
 .reference {
   position: relative;
+  display: inline-block;
+
+  .sltwrp {
+    display: inline-block;
+  }
 
   .content {
     position: absolute;

@@ -1,6 +1,7 @@
 <template>
   <input
     :class="{ disabled }"
+    :style="{ width: widthStyle, height: heightStyle }"
     v-bind="{
       value,
       type,
@@ -55,6 +56,24 @@ export default {
     },
 
     /**
+     * 文本框的宽度
+     */
+    width: {
+      type: [Number, String],
+      required: false,
+      default: 200,
+    },
+
+    /**
+     * 文本框的高度
+     */
+    height: {
+      type: [Number, String],
+      required: false,
+      default: 30,
+    },
+
+    /**
      * 禁用状态
      */
     disabled: {
@@ -77,6 +96,22 @@ export default {
     readonly: {
       type: [Boolean, String],
       required: false,
+    },
+  },
+
+  computed: {
+    /**
+     * 宽度样式
+     */
+    widthStyle() {
+      return typeof this.width === "string" ? this.width : this.width + "px";
+    },
+
+    /**
+     * 高度样式
+     */
+    heightStyle() {
+      return typeof this.height === "string" ? this.height : this.height + "px";
     },
   },
 
@@ -134,8 +169,6 @@ export default {
 
 input {
   box-sizing: border-box;
-  width: 200px;
-  height: 30px;
   padding: 0;
   padding-left: 10px;
   border-radius: 3px;

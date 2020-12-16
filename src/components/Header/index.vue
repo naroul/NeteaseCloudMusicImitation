@@ -43,10 +43,10 @@
               <i class="icn icn-lv"></i>
               我的等级
             </router-link>
-            <div class="option">
+            <router-link to="/user/update" class="option">
               <i class="icn icn-st"></i>
               个人设置
-            </div>
+            </router-link>
             <div class="option" @click="_logout">
               <i class="icn icn-ex"></i>
               退出

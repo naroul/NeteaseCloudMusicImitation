@@ -253,3 +253,33 @@ export const getLevel = () => {
     withCredentials: true,
   })
 }
+
+/**
+ * 获取登录用户账号信息
+ */
+export const getAccountInfo = () => {
+  const url = Host + '/user/account';
+
+  return axios.get(url, {
+    withCredentials: true,
+  })
+}
+
+/**
+ * 获取登录用户账号信息
+ */
+export const setAccountInfo = ({ gender, birthday, nickname, province, city, signature }) => {
+  const url = Host + '/user/update';
+
+  return axios.get(url, {
+    params: {
+      gender,
+      birthday,
+      nickname,
+      province,
+      city,
+      signature
+    },
+    withCredentials: true,
+  })
+}

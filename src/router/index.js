@@ -106,8 +106,20 @@ const Followed = (resolve) => {
   })
 }
 
+/**
+ * 用户等级页
+ */
 const Level = (resolve) => {
   import("@/pages/User/Level").then((module) => {
+    resolve(module);
+  })
+}
+
+/**
+ * 个人设置页
+ */
+const Update = (resolve) => {
+  import("@/pages/User/Update").then((module) => {
     resolve(module);
   })
 }
@@ -175,6 +187,10 @@ const routes = [
           {
             path: 'level',
             component: Level,
+          },
+          {
+            path: 'update',
+            component: Update,
           }
         ],
       },

@@ -22,9 +22,9 @@
         </h2>
 
         <!-- 登录用户显示编辑资料按钮 -->
-        <span class="u-btn-e" v-if="isUuId">
+        <router-link to="/user/update" class="u-btn-e" v-if="isUuId">
           <i>编辑个人资料</i>
-        </span>
+        </router-link>
 
         <!-- 访问其它用户显示的信息 -->
         <div class="oth-u" v-else>
