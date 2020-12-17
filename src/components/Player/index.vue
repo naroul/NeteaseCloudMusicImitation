@@ -428,7 +428,9 @@ export default {
       /**
        * 播放列表变化时，改变当前播放歌曲的封面
        */
-      return this.songList && this.songList.length && this.songList[this.curSongIndex]
+      return this.songList &&
+        this.songList.length &&
+        this.songList[this.curSongIndex]
         ? this.songList[this.curSongIndex].coverUrl
         : defaultCover;
     },
@@ -1882,7 +1884,7 @@ export default {
   .song-list {
     position: absolute;
     left: 50%;
-    bottom: 52px;
+    bottom: 51px;
     width: 986px;
     height: 301px;
     transform: translateX(-50%);

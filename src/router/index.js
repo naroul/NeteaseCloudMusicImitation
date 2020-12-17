@@ -62,6 +62,15 @@ const Playlist = (resolve) => {
 };
 
 /**
+ * 歌手页
+ */
+const Singer = (resolve) => {
+  import('@/pages/Music/Singer').then((module) => {
+    resolve(module)
+  })
+};
+
+/**
  * 用户主页
  */
 const UserHome = (resolve) => {
@@ -158,6 +167,10 @@ const routes = [
             path: 'playlist',
             component: Playlist,
           },
+          {
+            path: 'singer',
+            component: Singer,
+          }
         ],
       },
 
