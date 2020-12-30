@@ -392,6 +392,7 @@ export default {
 
     .occlusion {
       position: absolute;
+      left: 0;
       top: 0;
     }
 

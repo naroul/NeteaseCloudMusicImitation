@@ -269,7 +269,7 @@ export default {
 
         .u-ipt {
           margin-top: 10px;
-          width: 220px;
+          width: 200px;
           font-size: 12px;
         }
 

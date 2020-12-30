@@ -32,7 +32,10 @@
       </div>
       <div class="item-duration item-normal">
         <div v-if="indexHover === index">
-          <i class="iconfont icon-add-select"></i>
+          <!-- 添加到播放列表 -->
+          <i class="iconfont icon-add-select" @click="addSong(item)"></i>
+
+          <!-- 收藏歌曲 -->
           <i class="iconfont icon-addfile"></i>
         </div>
         <span v-else>{{ _formatMsToDuration(item.dt) }}</span>
@@ -43,8 +46,8 @@
 </template>
 
 <script>
-import { playerMixin } from '@/mixins';
-import { formatMsToDuration } from '^/formatMsToDuration';
+import { playerMixin } from "@/mixins";
+import { formatMsToDuration } from "^/formatMsToDuration";
 
 export default {
   mixins: [playerMixin],
@@ -55,10 +58,10 @@ export default {
      */
     type: {
       validator(value) {
-        return ['playlist', 'singer'].includes(value);
+        return ["playlist", "singer"].includes(value);
       },
       required: true,
-      default: 'playlist',
+      default: "playlist",
     },
 
     /**
@@ -130,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .song-list {
   border: 1px solid #ccc;
@@ -196,7 +199,7 @@ export default {
       align-items: center;
 
       .item-name {
-        max-width: 200px;
+        max-width: 150px;
         @include word-hide;
       }
 

@@ -1,7 +1,10 @@
 <template>
   <div class="playlist-summary-wrapper">
     <div class="cover">
-      <img :src="data.picUrl || data.coverImgUrl" />
+      <router-link :to="`/music/musiclist?id=${data.id}`">
+        <img :src="data.picUrl || data.coverImgUrl" />
+      </router-link>
+
       <div class="cover-bottom-bar">
         <i class="iconfont icon-service"></i>
         <span class="play-count">{{ playCount }}</span>
@@ -10,19 +13,23 @@
       </div>
     </div>
     <p :class="['name', { elip: isElip }]">
-      <router-link to="/">{{ data.name }}</router-link>
+      <router-link :to="`/music/musiclist?id=${data.id}`">
+        {{ data.name }}
+      </router-link>
     </p>
     <p class="author" v-if="isShowAuthor">
       <span>by</span>
-      <span class="author-name">{{ data.creator.nickname }}</span>
+      <router-link :to="`/user/info?id=${data.userId}`" class="author-name">
+        {{ data.creator.nickname }}
+      </router-link>
     </p>
   </div>
 </template>
 
 <script>
-import { playerMixin } from '@/mixins';
-import { getPlaylistDetail } from '@/apis/playlist';
-import { formatPlayCount } from '^/formatPlayCount';
+import { playerMixin } from "@/mixins";
+import { getPlaylistDetail } from "@/apis/playlist";
+import { formatPlayCount } from "^/formatPlayCount";
 
 export default {
   mixins: [playerMixin],
@@ -146,6 +153,10 @@ export default {
 
     a {
       color: #505050;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -159,7 +170,8 @@ export default {
     margin-top: 0;
     margin-bottom: 20px;
 
-    span {
+    span,
+    a {
       font-size: 12px;
       color: #999;
     }

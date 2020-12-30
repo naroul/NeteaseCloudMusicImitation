@@ -69,6 +69,26 @@ export const playerMixin = {
     },
 
     /**
+     * 替换所有播放列表
+     */
+    plySonglist(list) {
+      let lst = list.map( (song) => ({
+        id: song.id,
+        name: song.name,
+        coverUrl: song.al.picUrl,
+        picStr: song.al.pic || song.al.pic_str,
+        author: {
+          id: song.ar[0].id,
+          name: song.ar[0].name,
+        },
+        mv: song.mv,
+        dt: song.dt,
+      }) )
+
+      this.replacePlaylistInfoActs(lst);
+    },
+
+    /**
      * 将歌曲添加到播放列表的底部
      */
     addSong(song) {
@@ -84,6 +104,26 @@ export const playerMixin = {
         mv: song.mv,
         dt: song.dt,
       });
+    },
+
+    /**
+     * 将歌曲列表添加到播放列表底部
+     */
+    addSongList(list) {
+      let lst = list.map( (song) => ({
+        id: song.id,
+        name: song.name,
+        coverUrl: song.al.picUrl,
+        picStr: song.al.pic || song.al.pic_str,
+        author: {
+          id: song.ar[0].id,
+          name: song.ar[0].name,
+        },
+        mv: song.mv,
+        dt: song.dt,
+      }) )
+
+      this.addToPlaylistInfoActs(lst);
     },
 
     /**

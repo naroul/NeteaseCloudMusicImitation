@@ -39,11 +39,13 @@
           <!-- 前10个显示封面 -->
           <div class="avr" v-if="index < 10">
             <img :src="artist.img1v1Url" />
-            <router-link class="msk" to="/user/singer" />
+            <router-link class="msk" :to="`/music/artist?id=${artist.id}`" />
           </div>
 
           <p :title="artist.name">
-            <router-link to="/user/singer">{{ artist.name }}</router-link>
+            <router-link :to="`/music/artist?id=${artist.id}`">{{
+              artist.name
+            }}</router-link>
           </p>
         </li>
       </ul>
@@ -98,7 +100,6 @@ export default {
      * 监听地区变化,更新数据
      */
     curArea(newArea, oldArea) {
-      console.log("area");
       this._getArtist({ area: newArea, type: this.curType });
     },
 
@@ -106,7 +107,6 @@ export default {
      * 监听歌手类型变化，,更新数据
      */
     curType(newType, oldType) {
-      console.log("type");
       this._getArtist({ type: newType, area: this.curArea });
     },
   },

@@ -124,10 +124,12 @@ export default {
     /**
      * 加载数据初始化页面
      */
-    _initPage() {
-      getUserFollows({ id: this.curUserId, limit: 20 }).then(({ data }) => {
-        this.follows = data.follow;
-      });
+    async _initPage() {
+      await getUserFollows({ id: this.curUserId, limit: 20 }).then(
+        ({ data }) => {
+          this.follows = data.follow;
+        }
+      );
     },
   },
 
@@ -143,13 +145,13 @@ export default {
   /**
    * 路由参数变化时触发，初始化页面
    */
-  beforeRouteUpdate(to, from, next) {
+  async beforeRouteUpdate(to, from, next) {
     /**
      * 初始化所有数据
      */
     this.curUserId = to && to.query && to.query.id;
 
-    this._initPage();
+    await this._initPage();
 
     next();
   },

@@ -173,7 +173,6 @@ export default {
           this.$toast.failed("退出时遇到错误，请重试");
         });
     },
-
   },
 
   watch: {
@@ -191,7 +190,6 @@ export default {
         { url: "/" }
       );
     },
-
   },
 
   created() {
@@ -274,7 +272,7 @@ export default {
           position: absolute;
           left: 50%;
           transform: translateX(-50%);
-          bottom: 0;
+          bottom: -1px;
           width: 0px;
           height: 0px;
           border-bottom: 7px solid $background-red;
