@@ -390,6 +390,7 @@ export default {
         }
 
         .opr {
+          margin-top: 5px;
           color: #0c73c2;
           font-size: 12px;
           cursor: pointer;

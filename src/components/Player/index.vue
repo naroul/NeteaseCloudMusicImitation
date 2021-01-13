@@ -53,7 +53,9 @@
 
               <!-- 歌手名 -->
               <span class="ar-name" v-if="songList.length">
-                {{ songList[curSongIndex].author.name }}
+                <LinkLabel type="artist" :id="songList[curSongIndex].author.id">
+                  {{ songList[curSongIndex].author.name }}
+                </LinkLabel>
               </span>
 
               <i
@@ -314,6 +316,7 @@ import { playerMixin } from "@/mixins";
 import defaultCover from "#/images/Common/music.jpg";
 import { getSongUrl, getLyric } from "@/apis/song";
 import Scroll from "@/ui/Scroll";
+import LinkLabel from "@/ui/LinkLabel";
 
 export default {
   mixins: [playerMixin],
@@ -1581,6 +1584,7 @@ export default {
 
   components: {
     Scroll,
+    LinkLabel,
   },
 };
 </script>
