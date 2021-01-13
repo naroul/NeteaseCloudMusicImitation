@@ -30,7 +30,8 @@ export const getSongUrl = ({ id }) => {
  */
 export const getSongDetail = ({ ids }) => {
   const url = Host + '/song/detail';
-  if (ids && ids.length) {
+
+  if (ids && ids instanceof Array && ids.length) {
     return axios.get(url, {
       params: {
         ids: ids.join(','),
@@ -60,3 +61,17 @@ export const getLyric = ({ id }) => {
     },
   });
 };
+
+
+/**
+ * 获取相似歌曲
+ */
+export const getSimSong = ({ id }) => {
+  const url = Host + '/simi/song';
+
+  return axios.get(url, {
+    params: {
+      id,
+    }
+  })
+}

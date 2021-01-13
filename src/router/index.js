@@ -89,6 +89,24 @@ const MusicList = (resolve) => {
 };
 
 /**
+ * 我的音乐 （暂不支持）
+ */
+const MyMusic = (resolve) => {
+  import("@/pages/Music/MyMusic").then((module) => {
+    resolve(module);
+  })
+};
+
+/**
+ * 歌曲详情页
+ */
+const Song = (resolve) => {
+  import("@/pages/Music/Song").then((module) => {
+    resolve(module);
+  })
+};
+
+/**
  * 用户主页
  */
 const UserHome = (resolve) => {
@@ -122,7 +140,7 @@ const Follow = (resolve) => {
   import('@/pages/User/Follow').then((module) => {
     resolve(module);
   })
-}
+};
 
 /**
  * 用户粉丝页
@@ -131,7 +149,7 @@ const Followed = (resolve) => {
   import('@/pages/User/Followed').then((module) => {
     resolve(module);
   })
-}
+};
 
 /**
  * 用户等级页
@@ -140,7 +158,7 @@ const Level = (resolve) => {
   import("@/pages/User/Level").then((module) => {
     resolve(module);
   })
-}
+};
 
 /**
  * 个人设置页
@@ -149,7 +167,7 @@ const Update = (resolve) => {
   import("@/pages/User/Update").then((module) => {
     resolve(module);
   })
-}
+};
 
 /**
  * 404
@@ -196,6 +214,14 @@ const routes = [
           {
             path: 'musiclist',
             component: MusicList,
+          },
+          {
+            path: 'mymusic',
+            component: MyMusic,
+          },
+          {
+            path: 'song',
+            component: Song,
           },
         ],
       },

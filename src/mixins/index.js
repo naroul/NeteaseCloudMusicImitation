@@ -92,17 +92,22 @@ export const playerMixin = {
      * 将歌曲添加到播放列表的底部
      */
     addSong(song) {
+      const al = song.al || song.album;
+      const ar = song.ar || song.artists;
+      const mv = song.mv || song.mvid;
+      const dt = song.dt || song.duration;
+
       this.addToPlaylistInfoActs({
         id: song.id,
         name: song.name,
-        coverUrl: song.al.picUrl,
-        picStr: song.al.pic || song.al.pic_str,
+        coverUrl: al.picUrl,
+        picStr: al.pic || al.pic_str,
         author: {
-          id: song.ar[0].id,
-          name: song.ar[0].name,
+          id: ar[0].id,
+          name: ar[0].name,
         },
-        mv: song.mv,
-        dt: song.dt,
+        mv,
+        dt,
       });
     },
 

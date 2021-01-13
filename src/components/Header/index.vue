@@ -189,6 +189,16 @@ export default {
         },
         { url: "/" }
       );
+
+      this.tabs.reduce(
+        (prev, cur, index) => {
+          if (cur.url === to.path) {
+            this.tabIndexActive = index;
+          }
+          return cur;
+        },
+        { url: "/" }
+      );
     },
   },
 
@@ -198,7 +208,7 @@ export default {
      */
     this.tabs = [
       { title: "发现音乐", url: "/" },
-      { title: "我的音乐", url: "/my-music" },
+      { title: "我的音乐", url: "/music/mymusic" },
       { title: "商城", url: "/store" },
     ];
 
@@ -217,6 +227,16 @@ export default {
       (prev, cur, index) => {
         if (cur.url === this.$route.path) {
           this.navIndexActive = index;
+        }
+        return cur;
+      },
+      { url: "/" }
+    );
+
+    this.tabs.reduce(
+      (prev, cur, index) => {
+        if (cur.url === this.$route.path) {
+          this.tabIndexActive = index;
         }
         return cur;
       },

@@ -31,23 +31,31 @@
           <i class="iconfont icon-next" @click="playNext" />
 
           <!-- 歌曲封面 -->
-          <div class="music-cover">
+          <div @click="linkToSongPage" class="music-cover">
             <img :src="curCoverUrl" />
           </div>
 
           <!-- 进度条区域 -->
           <div class="progress-zone">
             <div class="m-label">
+              <!-- 歌名 -->
               <span
                 class="m-name"
                 v-if="songList.length"
+                @click="linkToSongPage"
                 :title="songList[curSongIndex].name"
-                >{{ songList[curSongIndex].name }}</span
               >
+                {{ songList[curSongIndex].name }}
+              </span>
+
+              <!-- mv -->
               <i v-if="songList.length" class="iconfont icon-MV" />
-              <span class="ar-name" v-if="songList.length">{{
-                songList[curSongIndex].author.name
-              }}</span>
+
+              <!-- 歌手名 -->
+              <span class="ar-name" v-if="songList.length">
+                {{ songList[curSongIndex].author.name }}
+              </span>
+
               <i
                 v-if="
                   songList.length &&
@@ -176,7 +184,7 @@
           <div class="nocnt" v-if="!songList.length">
             <i class="ico ico-face"></i> 你还没有添加任何歌曲 <br />去首页
             <router-link to="/" class="f-tdu">发现音乐</router-link>，或在
-            <router-link to="/" class="f-tdu">我的音乐</router-link
+            <router-link to="/music/mymusic" class="f-tdu">我的音乐</router-link
             >收听自己收藏的歌单。
           </div>
 
@@ -436,6 +444,18 @@ export default {
     },
 
     /**
+     * 正在播放的歌曲id
+     */
+    curSongId() {
+      return (
+        this.songList &&
+        this.songList.length &&
+        this.songList[this.curSongIndex] &&
+        this.songList[this.curSongIndex].id
+      );
+    },
+
+    /**
      * 缓冲进度条的宽度
      */
     widthBufferedPrgs() {
@@ -690,6 +710,22 @@ export default {
   },
 
   methods: {
+    /**
+     * 跳转到歌曲详情页
+     */
+    linkToSongPage() {
+      if (
+        this.songList &&
+        this.songList.length &&
+        this.songList[this.curSongIndex] &&
+        this.songList[this.curSongIndex].id
+      ) {
+        this.$router.push(
+          `/music/song?id=${this.songList[this.curSongIndex].id}`
+        );
+      }
+    },
+
     /**
      * 切换锁定状态
      */
@@ -1638,6 +1674,10 @@ export default {
         border-radius: 2px;
         font-size: 0;
 
+        &:hover {
+          cursor: pointer;
+        }
+
         img {
           width: 34px;
           height: 34px;
@@ -1678,6 +1718,11 @@ export default {
             max-width: 300px;
             color: #e8e8e8;
             @include word-hide;
+
+            &:hover {
+              text-decoration: underline;
+              cursor: pointer;
+            }
           }
 
           .ar-name {
