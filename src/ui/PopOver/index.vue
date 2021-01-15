@@ -3,14 +3,14 @@
     <!-- popover触发元素容器 -->
     <div class="reference" ref="refer">
       <!-- 具名插槽 触发元素 -->
-      <div class="sltwrp" @click="ctrlPop">
+      <div class="sltwrp" @click="refClk">
         <slot name="reference"></slot>
       </div>
 
       <!-- 内容容器 -->
       <div
         v-if="isPop"
-        @click="ctrlPop"
+        @click="cntClk"
         class="content"
         :style="{ top: posTop }"
       >
@@ -35,6 +35,24 @@ export default {
       type: String,
       required: false,
       default: "popover",
+    },
+
+    /**
+     * 是否支持点击触发元素展开pop
+     */
+    canClkPop: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+
+    /**
+     * 点击内容时是否可以关闭 pop
+     */
+    canCntClsPop: {
+      type: Boolean,
+      rrquired: false,
+      default: false,
     },
   },
 
@@ -75,13 +93,44 @@ export default {
 
   methods: {
     /**
-     * 触发元素点击回调
+     * 显示 pop
      */
-    ctrlPop() {
+    popOpen() {
+      this.isPop = true;
+    },
+
+    /**
+     * 关闭 pop
+     */
+    popClose() {
+      this.isPop = false;
+    },
+
+    /**
+     * 点击内容元素
+     */
+    cntClk() {
       /**
-       * 显示 pop
+       * 关闭 pop
        */
+      if (!this.canCntClsPop) {
+        return;
+      }
+
+      this.popClose();
+    },
+
+    ctrlPop() {
       this.isPop = !this.isPop;
+    },
+
+    /**
+     * 点击触发元素回调
+     */
+    refClk() {
+      if (this.canClkPop) {
+        this.ctrlPop();
+      }
     },
 
     /**
@@ -119,6 +168,7 @@ export default {
 
   .content {
     position: absolute;
+    z-index: 99;
     right: 0;
 
     .txt-bak {

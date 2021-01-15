@@ -1,6 +1,6 @@
 <template>
   <!-- 下拉选择组件	 -->
-  <PopOver class="pop-del">
+  <PopOver :canCntClsPop="true" class="pop-del">
     <template v-slot:reference>
       <div class="dls" :style="{ width: `${width}px` }">
         <div class="val">{{ value }}</div>

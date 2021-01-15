@@ -14,8 +14,9 @@
           disabled,
         }"
         v-on="{
-          blur: onblur,
-          change: onchange,
+          click: handleClick,
+          focus: handleFocus,
+          blur: handleBlur,
         }"
       />
     </div>
@@ -23,7 +24,7 @@
 </template>
 
 <script>
-import { noop } from 'lodash';
+import { noop } from "lodash";
 
 export default {
   props: {
@@ -51,7 +52,7 @@ export default {
     value: {
       type: [String, Number],
       required: false,
-      default: '',
+      default: "",
     },
 
     /**
@@ -98,14 +99,35 @@ export default {
       /**
        * 抛出 input事件，实现自定义控件的 v-model
        */
-      this.$emit('input', e.target.value);
+      this.$emit("input", e.target.value);
+    },
+
+    /**
+     * 点击时抛出 clk 事件
+     */
+    handleClick(e) {
+      this.$emit("click", e);
+    },
+
+    /**
+     * 聚焦时抛出 fcs 事件
+     */
+    handleFocus(e) {
+      this.$emit("focus", e);
+    },
+
+    /**
+     * 失焦时抛出 blr 事件
+     */
+    handleBlur(e) {
+      this.$emit("blur", e);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .search-box {
   display: flex;

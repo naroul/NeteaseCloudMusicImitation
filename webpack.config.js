@@ -114,6 +114,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './index.html',
+      favicon: path.resolve('favicon.ico'),
     }),
   ],
 

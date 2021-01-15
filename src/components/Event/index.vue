@@ -195,7 +195,7 @@
       </div>
     </div>
 
-    <PopOver class="pop-del" v-if="isUuId && !isChild">
+    <PopOver class="pop-del" :canCntClsPop="true" v-if="isUuId && !isChild">
       <template v-slot:reference>
         <div class="arw-del" title="动态管理"></div>
       </template>
@@ -812,7 +812,7 @@ export default {
       height: 30px;
       overflow: hidden;
       line-height: 31px;
-      background: #FFF;
+      background: #fff;
       border: 1px solid #cccfd9;
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
       text-decoration: none;

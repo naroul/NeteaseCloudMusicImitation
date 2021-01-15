@@ -23,7 +23,7 @@ export default {
      * 获取登录状态并保存到vuex中
      */
     getLoginStatus()
-      .then(({ data }) => {
+      .then(({ data: { data } }) => {
         /**
          * 设置登录状态
          */

@@ -16,7 +16,7 @@
         </li>
         <div class="filler"></div>
         <div class="search-wrapper">
-          <SearchBox placeholder="音乐/视频/用户"></SearchBox>
+          <Search />
         </div>
         <div
           class="login-wrapper"
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import SearchBox from "@/ui/SearchBox";
+import Search from "@/components/Search";
 import { headerMixin, userMixin, loginMixin } from "@/mixins";
 import { logout } from "@/apis/header";
 import user from "#/images/Header/user.jpg";
@@ -245,7 +245,7 @@ export default {
   },
 
   components: {
-    SearchBox,
+    Search,
   },
 };
 </script>
@@ -270,7 +270,6 @@ export default {
         width: 176px;
         height: 69px;
         background: url("~@/assets/images/Common/topbar.png");
-
         background-position: 0 0;
       }
 
