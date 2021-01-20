@@ -178,6 +178,10 @@ export default {
 
     .author-name {
       color: #666;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }

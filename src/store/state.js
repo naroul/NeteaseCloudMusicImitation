@@ -99,4 +99,14 @@ export const state = {
    * 登录用户的id
    */
   uuId: localStorage.uuId,
+
+  /**
+   * 音量条的高度
+   */
+  vol: localStorage.vol,
+
+  /**
+   * 歌曲播放列表数据源 对应 Player组件中的 playlistInfo
+   */
+  tracks: localStorage.tracks && JSON.parse(localStorage.tracks),
 };

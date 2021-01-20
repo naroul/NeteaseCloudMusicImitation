@@ -65,7 +65,12 @@
             <!-- 按钮区 -->
             <div class="btns">
               <!-- 播放按钮 -->
-              <MyButton :width="70" :height="30" class="btn-play btn-flex">
+              <MyButton
+                :width="70"
+                :height="30"
+                @clk="plyAll"
+                class="btn-play btn-flex"
+              >
                 <i class="iconfont icon-play" />
                 <span>播放</span>
               </MyButton>
@@ -74,25 +79,35 @@
               <MyButton
                 :width="30"
                 :height="30"
+                @clk="addSongs"
                 class="btn-add btn-flex btn-space"
               >
                 <i class="iconfont icon-add-select" />
               </MyButton>
 
               <!-- 添加收藏 -->
-              <MyButton :height="30" class="btn-collection btn-flex btn-space">
+              <MyButton
+                :height="30"
+                title="收藏（暂不支持）"
+                class="btn-collection btn-flex btn-space"
+              >
                 <i class="iconfont icon-addfile" />
                 <span>{{ toplistDataCur.subscribedCount }}</span>
               </MyButton>
 
-              <!-- 评论按钮 -->
-              <MyButton :height="30" class="btn-comments btn-flex">
+              <MyButton
+                :height="30"
+                title="评论（见下方）"
+                class="btn-comments btn-flex"
+              >
                 <i class="iconfont icon-comments" />
                 <span>{{ toplistDataCur.commentCount }}</span>
               </MyButton>
+              <!-- 评论按钮 -->
             </div>
           </div>
         </div>
+
         <div class="content-playcount">
           <span class="count-label">歌曲列表</span>
           <span class="count-track">{{ toplistDataCur.trackCount }}首歌</span>
@@ -119,13 +134,15 @@
 </template>
 
 <script>
-import { getAllToplist, getToplistCur } from '@/apis/toplist';
-import { formatMsToDate } from '^/formatMsToDate';
-import MyButton from '@/ui/MyButton';
-import SongList from '@/components/SongList';
-import Comment from '@/components/Comment';
+import { getAllToplist, getToplistCur } from "@/apis/toplist";
+import { formatMsToDate } from "^/formatMsToDate";
+import { playerMixin } from "@/mixins";
+import MyButton from "@/ui/MyButton";
+import SongList from "@/components/SongList";
+import Comment from "@/components/Comment";
 
 export default {
+  mixins: [playerMixin],
   data() {
     return {
       /**
@@ -190,6 +207,29 @@ export default {
     },
 
     /**
+     * 将歌单所有歌曲替换到播放列表
+     */
+    plyAll() {
+      /**
+       * 播放歌单
+       */
+      this.plyPlaylist(this.id);
+
+      /**
+       * 设置播放状态为true
+       */
+      this.setPlayStatus(true);
+      this.setVolConfigStatus(false);
+    },
+
+    /**
+     * 将歌单所有歌曲添加到播放列表底部
+     */
+    addSongs() {
+      this.addSongList(this.toplistDataCur.tracks);
+    },
+
+    /**
      * 获取所有榜单信息
      */
     async _getAllToplist() {
@@ -220,7 +260,7 @@ export default {
      */
     if (!this.$route.query.id) {
       this.$router.push({
-        path: '/music/toplist',
+        path: "/music/toplist",
         query: { id: this.toplistDataAll[0].id },
       });
     } else {
@@ -271,7 +311,7 @@ export default {
       next();
     } else {
       next({
-        path: '/music/toplist',
+        path: "/music/toplist",
         query: { id: this.toplistDataAll[0].id },
       });
     }
@@ -286,7 +326,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '#/scss/global.scss';
+@import "#/scss/global.scss";
 
 .toplist {
   background: $background-grey-white;

@@ -24,23 +24,36 @@
     >
       <div class="item-rank item-normal">{{ index + 1 }}</div>
       <div class="item-cover item-normal">
-        <img :src="item.al.picUrl" v-if="index < 3 && type === 'playlist'" />
+        <router-link class="lkcvr" :to="`/music/song?id=${item.id}`">
+          <img :src="item.al.picUrl" v-if="index < 3 && type === 'playlist'" />
+        </router-link>
 
         <!-- 播放按钮 -->
         <i class="iconfont icon-play" @click="playSong(item)" />
-        <div class="item-name" :title="item.name">{{ item.name }}</div>
+        <router-link class="item-name" :to="`/music/song?id=${item.id}`">
+          {{ item.name }}
+        </router-link>
       </div>
       <div class="item-duration item-normal">
         <div v-if="indexHover === index">
           <!-- 添加到播放列表 -->
-          <i class="iconfont icon-add-select" @click="addSong(item)"></i>
+          <i
+            class="iconfont icon-add-select"
+            title="添加到播放列表"
+            @click="addSong(item)"
+          ></i>
 
           <!-- 收藏歌曲 -->
-          <i class="iconfont icon-addfile"></i>
+          <i class="iconfont icon-addfile" title="收藏（暂不支持）"></i>
         </div>
         <span v-else>{{ _formatMsToDuration(item.dt) }}</span>
       </div>
-      <div class="item-singer item-normal">{{ item.ar[0].name }}</div>
+      <router-link
+        class="item-singer item-normal"
+        :to="`/music/artist?id=${item.ar[0].id}`"
+      >
+        {{ item.ar[0].name }}
+      </router-link>
     </div>
   </div>
 </template>
@@ -181,6 +194,14 @@ export default {
     background: #f5f5f5;
     font-size: 12px;
 
+    a {
+      color: #000;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     .item-normal {
       padding: 6px 10px;
       height: 18px;
@@ -203,6 +224,11 @@ export default {
         @include word-hide;
       }
 
+      .lkcvr {
+        display: flex;
+        align-items: center;
+      }
+
       img {
         width: 50px;
         height: 50px;
@@ -210,8 +236,9 @@ export default {
       }
 
       .iconfont {
-        font-size: 18px;
+        margin-top: 3px;
         margin-right: 10px;
+        font-size: 18px;
 
         &:hover {
           color: #8b8b8b;

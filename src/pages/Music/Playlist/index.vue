@@ -375,6 +375,10 @@ export default {
               font-weight: normal;
               margin-left: 26px;
               border: 1px solid #ccc;
+
+              &:hover {
+                color: #000;
+              }
             }
           }
 

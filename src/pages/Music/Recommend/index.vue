@@ -19,10 +19,12 @@
                   'split-right': index !== tags.length - 1,
                 },
               ]"
-              to="/"
+              :to="`/music/playlist?cat=${tag.name}`"
               v-for="(tag, index) of tags"
               :key="tag.id"
-            >{{ tag.name }}</router-link>
+            >
+              {{ tag.name }}
+            </router-link>
           </div>
         </div>
         <div class="grid-content">
@@ -232,6 +234,10 @@ export default {
             padding: 0 10px;
             font-size: 12px;
             color: #666;
+
+            &:hover {
+              text-decoration: underline;
+            }
           }
 
           .split-right {

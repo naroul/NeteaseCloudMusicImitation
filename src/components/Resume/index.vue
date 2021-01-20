@@ -46,7 +46,7 @@
 
         <span class="line">|</span>
 
-        <router-link class="acts" :to="`/user/fans?id=${profile.userId}`">
+        <router-link class="acts" :to="`/user/followed?id=${profile.userId}`">
           粉丝
           <em>{{ profile.followeds }}</em>
         </router-link>

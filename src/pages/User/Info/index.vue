@@ -39,11 +39,6 @@
             :index="index"
             :songData="record"
           />
-
-          <!-- 查看更多 -->
-          <div class="more">
-            <router-link to="#">查看更多&gt;</router-link>
-          </div>
         </div>
 
         <div v-else class="n-record">

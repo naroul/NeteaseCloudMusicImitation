@@ -1,16 +1,16 @@
 <template>
   <div class="ranklist-summary-wrapper">
     <div class="title">
-      <router-link to="">
+      <router-link :to="`/music/toplist?id=${data.id}`">
         <img :src="data.coverImgUrl" />
       </router-link>
       <div class="title-text-wrapper">
-        <router-link to="">
+        <router-link :to="`/music/toplist?id=${data.id}`">
           <div class="text">{{ data.name }}</div>
         </router-link>
         <div class="fonts">
-          <i class="iconfont icon-play" title="播放" />
-          <i class="iconfont icon-add" title="收藏" />
+          <i class="iconfont icon-play" @click="play" title="播放" />
+          <i class="iconfont icon-add" @click="addSongs" title="添加到列表" />
         </div>
       </div>
     </div>
@@ -35,19 +35,25 @@
         >
           {{ index + 1 }}
         </div>
-        <router-link class="text-wrap" to="">
+        <router-link class="text-wrap" :to="`/music/song?id=${item.id}`">
           <div class="item-name">{{ item.name }}</div>
         </router-link>
       </div>
       <div class="look-all">
-        <router-link to="">查看全部></router-link>
+        <router-link :to="`/music/toplist?id=${data.id}`">
+          查看全部>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { playerMixin } from "@/mixins";
+
 export default {
+  mixins: [playerMixin],
+
   props: {
     /**
      * 推荐的榜单的数据
@@ -59,9 +65,30 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    /**
+     * 将当前播放列表清空，并用歌单歌曲替代 并设置播放状态为 true
+     */
+    play() {
+      /**
+       * 播放歌单
+       */
+      this.plyPlaylist(this.data.id);
 
-  computed: {},
+      /**
+       * 设置播放状态为true
+       */
+      this.setPlayStatus(true);
+      this.setVolConfigStatus(false);
+    },
+
+    /**
+     * 将歌单所有歌曲添加到播放列表底部
+     */
+    addSongs() {
+      this.addSongList(this.data.toplist);
+    },
+  },
 };
 </script>
 
@@ -153,6 +180,11 @@ export default {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
 
@@ -167,6 +199,12 @@ export default {
       background: $white-color-opacity;
       text-align: right;
       line-height: 32px;
+
+      a {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
   }
 }

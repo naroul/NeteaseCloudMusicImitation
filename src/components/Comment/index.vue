@@ -1,5 +1,5 @@
 <template>
-  <div class="comment">
+  <div class="comment" :id="id">
     <!-- 评论 标题 -->
     <div class="comment-label">
       <span class="label-text">评论</span>

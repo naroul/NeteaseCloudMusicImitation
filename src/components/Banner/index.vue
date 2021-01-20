@@ -7,7 +7,10 @@
       <img :src="imgUrl" />
       <div class="dots">
         <div v-for="(banner, index) of banners" class="dot-wrapper">
-          <li :class="['dot', { 'dot-active': index === bannerIndex }]"></li>
+          <li
+            @click="dotClk(index)"
+            :class="['dot', { 'dot-active': index === bannerIndex }]"
+          ></li>
         </div>
       </div>
       <div class="right-switch-arrow" @click="switchNext">
@@ -151,6 +154,10 @@ export default {
         this.stop = this.autoSwitch();
       }, 3000);
     },
+
+    dotClk(index) {
+      this.bannerIndex = index;
+    },
   },
 
   created() {
@@ -241,6 +248,7 @@ export default {
           height: 5px;
           border-radius: 5px;
           background: #fff;
+          cursor: pointer;
         }
 
         .dot-active {

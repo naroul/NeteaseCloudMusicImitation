@@ -47,7 +47,9 @@
       <div v-else>
         <!-- 转发的动态的作者 -->
         <div class="f-lb">
-          <router-link to="#"> @{{ event.user.nickname }} </router-link>
+          <router-link :to="`/user/info?id=${event.user.userId}`">
+            @{{ event.user.nickname }}
+          </router-link>
           {{
             type === "song"
               ? "分享单曲："
@@ -78,14 +80,17 @@
           <div class="tl-ar">
             <!-- 曲名 -->
             <h3>
-              <router-link to="#">
+              <router-link :to="`/music/song?id=${event.detail.song.id}`">
                 {{ event.detail.song.name }}
               </router-link>
             </h3>
 
             <!-- 歌手 -->
             <h4>
-              <router-link to="#" :title="event.detail.song.artists[0].name">
+              <router-link
+                :to="`/music/artist?id=${event.detail.song.artists[0].id}`"
+                :title="event.detail.song.artists[0].name"
+              >
                 {{ event.detail.song.artists[0].name }}
               </router-link>
             </h4>

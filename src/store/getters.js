@@ -56,4 +56,14 @@ export const userInfo = (state) => state.userInfo;
 /**
  * 登录用户的id
  */
-export const uuId = (state) => localStorage.uuId;
+export const uuId = () => localStorage.uuId;
+
+/**
+ * 音量条的高度
+ */
+export const vol = () => Number(localStorage.vol);
+
+/**
+ * 歌曲播放列表数据源 对应 Player组件中的 playlistInfo
+ */
+export const tracks = () => localStorage.tracks && JSON.parse(localStorage.tracks);

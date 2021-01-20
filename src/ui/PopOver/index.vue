@@ -16,7 +16,7 @@
       >
         <slot name="default">
           <!-- 备用内容，未传默认插槽时显示 -->
-          <div class="txt-bak">{{ content }}</div>
+          <div class="txt-bak" v-if="content">{{ content }}</div>
         </slot>
       </div>
     </div>
@@ -34,7 +34,6 @@ export default {
     content: {
       type: String,
       required: false,
-      default: "popover",
     },
 
     /**

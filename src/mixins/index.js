@@ -30,7 +30,7 @@ export const loginMixin = {
  */
 export const playerMixin = {
   computed: {
-    ...mapGetters(['playlistInfo', 'curSongIndex', 'addType', 'isPlaying', 'isShowVolConfig']),
+    ...mapGetters(['playlistInfo', 'curSongIndex', 'addType', 'isPlaying', 'isShowVolConfig', 'vol', 'tracks']),
   },
 
   methods: {
@@ -161,6 +161,8 @@ export const playerMixin = {
       'setCurSongIndex',
       'setPlayStatus',
       'setVolConfigStatus',
+      'setLocalVol',
+      'setLocalTracks',
     ]),
 
     ...mapActions([

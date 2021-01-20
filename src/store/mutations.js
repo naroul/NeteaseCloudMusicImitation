@@ -84,4 +84,18 @@ export const mutations = {
   setUuId(state, id) {
     localStorage.uuId = id;
   },
+
+  /**
+   * 存储音量条高度到本地
+   */
+  setLocalVol(state, vol) {
+    localStorage.vol = vol;
+  },
+
+  /**
+   * 存储播放列表数据源到本地
+   */
+  setLocalTracks(state, tracks) {
+    localStorage.tracks = JSON.stringify(tracks);
+  }
 };

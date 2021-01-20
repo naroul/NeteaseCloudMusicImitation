@@ -49,7 +49,7 @@
               </span>
 
               <!-- mv -->
-              <i v-if="songList.length" class="iconfont icon-MV" />
+              <!-- <i v-if="songList.length" class="iconfont icon-MV" /> -->
 
               <!-- 歌手名 -->
               <span class="ar-name" v-if="songList.length">
@@ -64,6 +64,7 @@
                   songList[curSongIndex].source &&
                   songList[curSongIndex].source.id
                 "
+                @click="linkToSrc(songList[curSongIndex].source)"
                 :title="`来自于${songList[curSongIndex].source.type}`"
                 class="iconfont icon-link"
               />
@@ -100,7 +101,7 @@
           </div>
 
           <!-- 添加到歌单 -->
-          <i class="iconfont icon-addfile" />
+          <i class="iconfont icon-addfile" title="收藏（暂不支持）" />
 
           <!-- 音量调节区域 -->
           <div class="icon-vol-wrapper" @mouseleave="msLeaveVol">
@@ -152,7 +153,7 @@
         <div class="listhdc">
           <h4>播放列表({{ songList.length }})</h4>
 
-          <div class="s-collect">
+          <div class="s-collect" title="暂不支持">
             <i class="ico ico-add" />
             收藏全部
           </div>
@@ -213,24 +214,16 @@
 
               <!-- 按钮区 -->
               <div class="col col-3">
-                <div class="icns">
-                  <!-- 删除 -->
-                  <i class="ico ico-del"></i>
-                  <!-- 下载 -->
-                  <i class="ico ico-dl"></i>
-                  <!-- 分享 -->
-                  <i class="ico ico-share"></i>
-                  <!-- 收藏 -->
-                  <i class="ico ico-add"></i>
-                </div>
+                <div class="icns"></div>
               </div>
 
               <!-- 歌手 -->
-              <div
+              <router-link
+                :to="`/music/artist?id=${song.author.id}`"
                 :class="['col', 'col-4', { 'col-cur': index === curSongIndex }]"
               >
                 {{ song.author.name }}
-              </div>
+              </router-link>
 
               <!-- 歌曲时长 -->
               <div
@@ -241,15 +234,15 @@
 
               <!-- 来源 -->
               <div class="col col-6">
-                <router-link
-                  to="/"
+                <span
+                  @click="linkToSrc(song.source)"
                   :class="['ico', 'ico-src', { 'ico-nosrc': !song.source }]"
                   :title="`${
                     song.source && song.source.type
                       ? `来自于${song.source.type}`
                       : '暂无来源'
                   }`"
-                ></router-link>
+                ></span>
               </div>
             </li>
           </ul>
@@ -519,6 +512,11 @@ export default {
      */
     async playlistInfo(newList, oldList) {
       /**
+       * 存储播放列表数据源到本地
+       */
+      this.setLocalTracks(newList);
+
+      /**
        * 清楚上次的定时器
        */
       clearTimeout(this.playTimeout);
@@ -529,11 +527,6 @@ export default {
        * 播放列表变化时，展示播放器 1s
        */
       this.isShowPlayer = true;
-
-      /**
-       * 展开开始播放tip
-       */
-      this.isShowStartPlayTip = true;
 
       this.playTimeout = setTimeout(() => {
         if (!this.isLocked) {
@@ -561,7 +554,7 @@ export default {
       }
 
       /**
-       * 当因为清空列表导致触发该watch时，不执行以下操作
+       * 当因为清空列表导致触发该 watch时，不执行以下操作
        */
       if (newList && newList.length) {
         switch (this.addType) {
@@ -580,12 +573,22 @@ export default {
              * 播放添加后的播放列表的最后一首歌
              */
             this.setCurSongIndex(this.songList.length - 1);
+
+            /**
+             * 展开开始播放tip
+             */
+            this.isShowStartPlayTip = true;
             break;
           case 2:
             /**
              * 全部替换播放列表后，播放第一首歌
              */
             this.setCurSongIndex(0);
+
+            /**
+             * 展开开始播放tip
+             */
+            this.isShowStartPlayTip = true;
             break;
         }
 
@@ -660,6 +663,11 @@ export default {
      * 监听音量条高度，实时改变播放音量
      */
     volPrgsHeight(newHeight, oldHeight) {
+      /**
+       * 将改变后的音量条存入localStorage
+       */
+      this.setLocalVol(newHeight);
+
       this.$refs.audio.volume = fix(
         (newHeight - (this.maxvolPrgsHeight - this.activevolPrgsHeight)) /
           this.activevolPrgsHeight,
@@ -726,6 +734,26 @@ export default {
         this.$router.push(
           `/music/song?id=${this.songList[this.curSongIndex].id}`
         );
+      }
+    },
+
+    /**
+     * 跳转到来源页
+     */
+    linkToSrc(source) {
+      if (!source) {
+        return;
+      }
+
+      switch (source.type) {
+        case "歌手":
+          this.$router.push(`/music/artist?id=${source.id}`);
+
+        case "歌单":
+          this.$router.push(`/music/musiclist?id=${source.id}`);
+
+        default:
+          return;
       }
     },
 
@@ -1551,6 +1579,18 @@ export default {
       1: "随机",
       2: "单曲循环",
     };
+
+    /**
+     * 从localStorage中读取音量
+     * 当localStorage不存在值时，默认为最大音量 93
+     */
+    this.volPrgsHeight = this.vol || 93;
+
+    /**
+     * 从 localStorage中读取播放列表数据源
+     * 当 localStorage中不存在时，设为空数组
+     */
+    this.replacePlaylistInfo(this.tracks || []);
   },
 
   mounted() {
@@ -1798,7 +1838,7 @@ export default {
 
         .vol-prgs {
           position: absolute;
-          top: -130px;
+          top: -129px;
           left: -4px;
           width: 32px;
           height: 113px;
@@ -1863,8 +1903,6 @@ export default {
 
       .icon-addfile {
         margin-left: 20px;
-        margin-right: 13;
-        padding-right: 13px;
         border-right: 1px solid #3c3c3c;
         font-size: 20px;
         color: #a1a1a1;
@@ -2146,8 +2184,9 @@ export default {
               float: right;
               height: 16px;
               overflow: hidden;
-              margin: 7px 0 0 10px;
+              margin: 11px 0 0 10px;
               text-indent: -9999px;
+              cursor: pointer;
             }
 
             .col {
@@ -2201,36 +2240,6 @@ export default {
 
                   &:hover {
                     background-position: -51px -20px;
-                  }
-                }
-
-                .ico-dl {
-                  width: 14px;
-                  background: url("~@/assets/images/Common/playlist.png");
-                  background-position: -57px -50px;
-
-                  &:hover {
-                    background-position: -80px -50px;
-                  }
-                }
-
-                .ico-share {
-                  width: 14px;
-                  background: url("~@/assets/images/Common/playlist.png");
-                  background-position: 0px 0px;
-
-                  &:hover {
-                    background-position: 0 -20px;
-                  }
-                }
-
-                .ico-add {
-                  width: 16px;
-                  background: url("~@/assets/images/Common/playlist.png");
-                  background-position: -24px 0px;
-
-                  &:hover {
-                    background-position: -24px -20px;
                   }
                 }
               }

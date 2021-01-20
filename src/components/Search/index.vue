@@ -11,7 +11,7 @@
     </template>
 
     <!-- 搜索结果 -->
-    <div class="lay">
+    <div class="lay" v-if="songs.length || artists.length || musiclists.length">
       <div class="itm" v-if="songs.length">
         <h3 class="hd">
           <i class="icn m-icn"></i>
@@ -104,6 +104,8 @@ export default {
             this.artists = (result.artist && result.artist.artists) || [];
             this.musiclists =
               (result.playList && result.playList.playLists) || [];
+
+            this.$refs.searchBox.$parent.popOpen();
           }
         })
         .catch((e) => {

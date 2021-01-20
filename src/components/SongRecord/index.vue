@@ -26,10 +26,14 @@
 
       <!-- 操作项 -->
       <div class="opt">
-        <span class="icn-add" title="添加到播放列表" @click="handleAddSong"></span>
-        <span class="icn icn-fav" title="收藏"></span>
-        <span class="icn icn-share" title="分享"></span>
-        <span class="icn icn-dl" title="下载"></span>
+        <span
+          class="icn-add"
+          title="添加到播放列表"
+          @click="handleAddSong"
+        ></span>
+        <span class="icn icn-fav" title="收藏(暂不支持)"></span>
+        <span class="icn icn-share" title="分享(暂不支持)"></span>
+        <span class="icn icn-dl" title="下载(暂不支持)"></span>
       </div>
     </div>
 
@@ -215,6 +219,7 @@ export default {
         background-position: 0 -700px;
         overflow: hidden;
         vertical-align: middle;
+        cursor: pointer;
 
         &:hover {
           background-position: -22px -700px;
