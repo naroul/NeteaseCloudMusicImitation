@@ -10,6 +10,12 @@
 
 UI 库：未使用第三方 UI 组件库
 
+<br>
+
+---
+
+<br>
+
 ## 如何开始
 
 1. 运行网易云后端服务 详情请参考[网易云音乐 API](https://github.com/Binaryify/NeteaseCloudMusicApi 'Binaryify/NeteaseCloudMusicApi')
@@ -39,6 +45,11 @@ npm run build
 ```bash
 npm run dev
 ```
+<br>
+
+---
+
+<br>
 
 ## 实现功能
 
@@ -78,6 +89,11 @@ _ 播放模式设置
 - 用户动态、关注、粉丝（支持关注、取关、私信、评论等），数据多时，支持懒加载和下拉加载
 - 用户信息页（支持更改用户信息）
 
+<br>
+
+---
+
+<br>
 
 ## 自定义 UI 组件 及插件
 
@@ -103,6 +119,11 @@ _ 播放模式设置
 
 - 下拉加载（DropLoad） 大量数据时，一次性加载完成数据影响性能和用户体验，通过自定义指令 v-dropload 绑定滚动元素实现下拉加载功能
 
+<br>
+
+---
+
+<br>
 
 ## 项目目录结构
 
