@@ -154,7 +154,6 @@ NeteaseCloudMusicImitation
 │    │    ├─ SongList                      
 │    │    ├─ SongRecord                   
 │    │    └─ ToplistSummary                 
-│    ├─ main.js                          
 │    ├─ mixins                            
 │    │    └─ index.js  
 │    ├─ pages                           
@@ -183,17 +182,18 @@ NeteaseCloudMusicImitation
 │    │    ├─ PopOver                         
 │    │    ├─ Scroll                         
 │    │    └─ SearchBox                      
-│    └─ util                            
-│           ├─ binarySearch                  
-│           ├─ debounce                       
-│           ├─ fix                           
-│           ├─ formatLyric                   
-│           ├─ formatMsToDate                
-│           ├─ formatMsToDuration            
-│           ├─ formatMsToMinStr              
-│           ├─ formatMsToYears                
-│           ├─ formatPlayCount               
-│           ├─ getRandomInt                   
-│           ├─ isChildOfNodeById              
-│           └─ timer                         
+│    ├─ util                            
+│    │    ├─ binarySearch                  
+│    │    ├─ debounce                       
+│    │    ├─ fix                           
+│    │    ├─ formatLyric                   
+│    │    ├─ formatMsToDate                
+│    │    ├─ formatMsToDuration            
+│    │    ├─ formatMsToMinStr              
+│    │    ├─ formatMsToYears                
+│    │    ├─ formatPlayCount               
+│    │    ├─ getRandomInt                   
+│    │    ├─ isChildOfNodeById              
+│    │    └─ timer    
+│    └─ main.js                                               
 └─ webpack.config.js                     
