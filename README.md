@@ -103,94 +103,94 @@ _ 播放模式设置
 
 ## 项目目录结构
 
-NeteaseCloudMusicImitation <br>
+NeteaseCloudMusicImitation
 ├─ .babelrc                             // babel配置文件（只影响本项目代码）          
 ├─ .gitignore                           
-├─ README.md
-├─ babel.config.json                    // babel配置文件（影响整个项目代码，包括node_modules）
-├─ favicon.ico
-├─ index.html                           // 项目入口文件
-├─ package-lock.json
-├─ package.json
-├─ src
-│    ├─ App.vue                         // 根组件
-│    ├─ apis                            // 请求相关代码
-│    │    ├─ artist                         
-│    │    ├─ comment
-│    │    ├─ config.js                      // 请求相关的配置
-│    │    ├─ header
-│    │    ├─ login
-│    │    ├─ playlist
-│    │    ├─ recommend
-│    │    ├─ search
-│    │    ├─ singer
-│    │    ├─ song
-│    │    ├─ toplist
-│    │    └─ user
-│    ├─ assets                          // 静态资源（字体图标、图片、全局样式）
-│    │    ├─ fonts
-│    │    ├─ images
-│    │    └─ scss
-│    ├─ components                      // 功能组件（页面的组成部分）
-│    │    ├─ Banner                         // 轮播图
-│    │    ├─ BtnFollow                      // 关注按钮
-│    │    ├─ BtnSendMsg                     // 私信按钮
-│    │    ├─ Comment                        // 评论
-│    │    ├─ Event                          // 动态
-│    │    ├─ Gallery                        // 画廊
-│    │    ├─ Header                         // 顶部组件
-│    │    ├─ Loading                        // 加载组件
-│    │    ├─ Login                          // 登录组件
-│    │    ├─ Pagination                     // 分页
-│    │    ├─ Player                         // 播放器内核
-│    │    ├─ PlaylistSummary                // 歌单概要展示
-│    │    ├─ Profile                        // 个人简介
-│    │    ├─ PuzzleVerify                   // 拼图验证
-│    │    ├─ Resume                         // 用户简介
-│    │    ├─ Search                         // 搜索组件
-│    │    ├─ SongList                       // 歌曲列表
-│    │    ├─ SongRecord                     // 听歌记录
-│    │    └─ ToplistSummary                 // 排行榜概要展示
-│    ├─ main.js                         // webpack打包入口文件
-│    ├─ mixins                          // mixins 存放公用属性和方法的调用方式，以便组件直接使用
-│    │    └─ index.js
-│    ├─ pages                           // 页面
-│    │    ├─ Home                           // 主页
-│    │    ├─ Music                          // 音乐相关页面
-│    │    ├─ NotFound                       // 404页面
-│    │    └─ User                           // 用户相关页面
-│    ├─ plugins                         // 插件库
-│    │    ├─ DropLoad                       // 下拉加载插件
-│    │    └─ Toast                          // 提示插件
-│    ├─ router                          // 路由
-│    │    └─ index.js
-│    ├─ store                           // 公共状态管理仓库
-│    │    ├─ actions.js                     // 批量或异步操作状态
-│    │    ├─ getters.js                     // 获取公共状态
-│    │    ├─ index.js                       // 注册并抛出Vuex的store实例
-│    │    ├─ mutations.js                   // 操作状态
-│    │    └─ state.js                       // 公共状态声明和存放
-│    ├─ ui                              // UI组件库
-│    │    ├─ Dialog                         // 弹窗
-│    │    ├─ DropList                       // 下拉列表
-│    │    ├─ EditBox                        // 编辑框
-│    │    ├─ LinkLabel                      // 跳转标签
-│    │    ├─ MyButton                       // 自定义按钮
-│    │    ├─ MyInput                        // 自定义输入框
-│    │    ├─ PopOver                        // 悬浮弹窗
-│    │    ├─ Scroll                         // 滚动条
-│    │    └─ SearchBox                      // 搜索框
-│    └─ util                            // 工具函数库
-│           ├─ binarySearch                 // 二分法查询函数（数组）
-│           ├─ debounce                     // 防抖
-│           ├─ fix                          // 设置小数位
-│           ├─ formatLyric                  // 格式化歌词数据
-│           ├─ formatMsToDate               // 毫秒转化日期
-│           ├─ formatMsToDuration           // 毫秒转化时长
-│           ├─ formatMsToMinStr             // 毫秒转化分钟的字符串
-│           ├─ formatMsToYears              // 毫秒转化成年描述
-│           ├─ formatPlayCount              // 计算播放量
-│           ├─ getRandomInt                 // 获取随机整数
-│           ├─ isChildOfNodeById            // 根据id判断是否位子节点
-│           └─ timer                        // 高级定时器
-└─ webpack.config.js                    // webpack配置文件
+├─ README.md  
+├─ babel.config.json                    // babel配置文件（影响整个项目代码，包括node_modules）  
+├─ favicon.ico  
+├─ index.html                           // 项目入口文件  
+├─ package-lock.json  
+├─ package.json  
+├─ src  
+│    ├─ App.vue                         // 根组件  
+│    ├─ apis                            // 请求相关代码  
+│    │    ├─ artist                           
+│    │    ├─ comment  
+│    │    ├─ config.js                      // 请求相关的配置  
+│    │    ├─ header    
+│    │    ├─ login  
+│    │    ├─ playlist  
+│    │    ├─ recommend  
+│    │    ├─ search  
+│    │    ├─ singer    
+│    │    ├─ song   
+│    │    ├─ toplist  
+│    │    └─ user  
+│    ├─ assets                          // 静态资源（字体图标、图片、全局样式）  
+│    │    ├─ fonts  
+│    │    ├─ images  
+│    │    └─ scss  
+│    ├─ components                      // 功能组件（页面的组成部分）  
+│    │    ├─ Banner                         // 轮播图  
+│    │    ├─ BtnFollow                      // 关注按钮  
+│    │    ├─ BtnSendMsg                     // 私信按钮  
+│    │    ├─ Comment                        // 评论  
+│    │    ├─ Event                          // 动态  
+│    │    ├─ Gallery                        // 画廊  
+│    │    ├─ Header                         // 顶部组件  
+│    │    ├─ Loading                        // 加载组件  
+│    │    ├─ Login                          // 登录组件  
+│    │    ├─ Pagination                     // 分页  
+│    │    ├─ Player                         // 播放器内核  
+│    │    ├─ PlaylistSummary                // 歌单概要展示  
+│    │    ├─ Profile                        // 个人简介  
+│    │    ├─ PuzzleVerify                   // 拼图验证  
+│    │    ├─ Resume                         // 用户简介  
+│    │    ├─ Search                         // 搜索组件  
+│    │    ├─ SongList                       // 歌曲列表  
+│    │    ├─ SongRecord                     // 听歌记录  
+│    │    └─ ToplistSummary                 // 排行榜概要展示  
+│    ├─ main.js                         // webpack打包入口文件  
+│    ├─ mixins                          // mixins 存放公用属性和方法的调用方式，以便组件直接使用  
+│    │    └─ index.js  
+│    ├─ pages                           // 页面  
+│    │    ├─ Home                           // 主页  
+│    │    ├─ Music                          // 音乐相关页面  
+│    │    ├─ NotFound                       // 404页面  
+│    │    └─ User                           // 用户相关页面  
+│    ├─ plugins                         // 插件库  
+│    │    ├─ DropLoad                       // 下拉加载插件  
+│    │    └─ Toast                          // 提示插件  
+│    ├─ router                          // 路由  
+│    │    └─ index.js  
+│    ├─ store                           // 公共状态管理仓库  
+│    │    ├─ actions.js                     // 批量或异步操作状态  
+│    │    ├─ getters.js                     // 获取公共状态  
+│    │    ├─ index.js                       // 注册并抛出Vuex的store实例  
+│    │    ├─ mutations.js                   // 操作状态  
+│    │    └─ state.js                       // 公共状态声明和存放  
+│    ├─ ui                              // UI组件库  
+│    │    ├─ Dialog                         // 弹窗  
+│    │    ├─ DropList                       // 下拉列表  
+│    │    ├─ EditBox                        // 编辑框  
+│    │    ├─ LinkLabel                      // 跳转标签  
+│    │    ├─ MyButton                       // 自定义按钮  
+│    │    ├─ MyInput                        // 自定义输入框  
+│    │    ├─ PopOver                        // 悬浮弹窗  
+│    │    ├─ Scroll                         // 滚动条  
+│    │    └─ SearchBox                      // 搜索框  
+│    └─ util                            // 工具函数库  
+│           ├─ binarySearch                 // 二分法查询函数（数组）  
+│           ├─ debounce                     // 防抖  
+│           ├─ fix                          // 设置小数位  
+│           ├─ formatLyric                  // 格式化歌词数据  
+│           ├─ formatMsToDate               // 毫秒转化日期  
+│           ├─ formatMsToDuration           // 毫秒转化时长  
+│           ├─ formatMsToMinStr             // 毫秒转化分钟的字符串  
+│           ├─ formatMsToYears              // 毫秒转化成年描述  
+│           ├─ formatPlayCount              // 计算播放量  
+│           ├─ getRandomInt                 // 获取随机整数  
+│           ├─ isChildOfNodeById            // 根据id判断是否位子节点  
+│           └─ timer                        // 高级定时器  
+└─ webpack.config.js                    // webpack配置文件  
