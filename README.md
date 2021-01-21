@@ -4,7 +4,7 @@
 
 后端：[网易云音乐 API](https://github.com/Binaryify/NeteaseCloudMusicApi 'Binaryify/NeteaseCloudMusicApi')
 
-前端：webpack 4.0+, Vue 2.6+, Vue Router 3.3+, Vuex 3.5+, axios
+前端：webpack 4.0+, Vue 2.6+, Vue Router 3.3+, Vuex 3.5+, scss, axios
 
 图标库：[iconfont](https://www.iconfont.cn) 以及 网易云音乐的图片资源
 
