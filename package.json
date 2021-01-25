@@ -1,7 +1,7 @@
 {
-  "name": "my-music-player",
+  "name": "netease-cloud-music-imitation",
   "version": "1.0.0",
-  "description": "my music player",
+  "description": "NeteaseCloudMusicImitation",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --hot --open",
@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/naroul/MyMusicPlayer/issues"
   },
-  "homepage": "https://github.com/naroul/MyMusicPlayer#readme",
+  "homepage": "https://github.com/naroul/NeteaseCloudMusicImitation/blob/master/README.md",
   "devDependencies": {
     "@babel/cli": "^7.10.1",
     "@babel/core": "^7.10.2",
